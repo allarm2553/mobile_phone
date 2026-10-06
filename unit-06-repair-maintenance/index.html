@@ -1,0 +1,1321 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>หน่วยที่ 6: การตรวจซ่อมและการบำรุงรักษาเครื่องโทรศัพท์เคลื่อนที่</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Prompt', sans-serif; }
+    .tab-btn.active {
+      background-color: #e11d48;
+      color: #ffffff;
+      border-color: transparent;
+    }
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen">
+
+  <!-- Header & Nav -->
+  <header class="border-b border-slate-800 bg-slate-950/80 backdrop-blur sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-rose-600 flex items-center justify-center font-bold text-white shadow-lg shadow-rose-500/20">
+          U6
+        </div>
+        <div>
+          <h1 class="text-lg font-bold text-white tracking-wide">วิชาโทรศัพท์เคลื่อนที่ (Mobile Phone Technology)</h1>
+          <p class="text-xs text-rose-400">หน่วยที่ 6: การตรวจซ่อมและการบำรุงรักษาเครื่องโทรศัพท์เคลื่อนที่</p>
+        </div>
+      </div>
+      <div class="flex items-center space-x-2">
+        <button onclick="toggleTeacherModal(true)" class="flex items-center space-x-1.5 text-xs px-3 py-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/30 transition">
+          <span>⚙️</span>
+          <span>สำหรับครูผู้สอน</span>
+        </button>
+        <span class="text-xs px-2.5 py-1 rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20 hidden sm:inline-block">
+          Repair & Maintenance Lab
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Navigation Tabs -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-6">
+    <div class="flex overflow-x-auto space-x-2 pb-2 border-b border-slate-800">
+      <button onclick="switchTab('troubleshoot')" id="tab-btn-troubleshoot" class="tab-btn active px-4 py-2.5 rounded-lg text-sm font-medium border border-slate-700 bg-slate-800 text-slate-200 transition">
+        🛠️ วิเคราะห์อาการเสียและกระแสไฟ (Power Supply Lab)
+      </button>
+      <button onclick="switchTab('hardware')" id="tab-btn-hardware" class="tab-btn px-4 py-2.5 rounded-lg text-sm font-medium border border-slate-700 bg-slate-800/40 text-slate-400 hover:text-white transition">
+        🔬 เครื่องมือช่างและความปลอดภัย ESD (BGA Rework)
+      </button>
+      <button onclick="switchTab('software')" id="tab-btn-software" class="tab-btn px-4 py-2.5 rounded-lg text-sm font-medium border border-slate-700 bg-slate-800/40 text-slate-400 hover:text-white transition">
+        💻 การแก้ไขปัญหาซอฟต์แวร์ (DFU & Fastboot Flashing)
+      </button>
+      <button onclick="switchTab('quiz')" id="tab-btn-quiz" class="tab-btn px-4 py-2.5 rounded-lg text-sm font-medium border border-slate-700 bg-slate-800/40 text-slate-400 hover:text-white transition">
+        📝 แบบทดสอบเก็บคะแนน (Quiz)
+      </button>
+    </div>
+  </div>
+
+  <!-- Content Container -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+
+    <!-- ========================================== -->
+    <!-- TAB 1: TROUBLESHOOT & POWER SUPPLY LAB     -->
+    <!-- ========================================== -->
+    <section id="section-troubleshoot" class="space-y-8">
+      <!-- Section Intro Banner -->
+      <div class="bg-gradient-to-r from-rose-950/40 via-slate-900 to-slate-900 border border-rose-800/40 rounded-2xl p-6 sm:p-8">
+        <div class="max-w-3xl space-y-3">
+          <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-rose-500/20 text-rose-300 text-xs font-semibold">
+            <span>⚡ Interactive Diagnostics Lab</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+            การวิเคราะห์อาการเสียด้วยเครื่องจ่ายไฟ DC Power Supply
+          </h2>
+          <p class="text-sm sm:text-base text-slate-300 leading-relaxed">
+            ในงานช่างซ่อมโทรศัพท์มือถือระดับเมนบอร์ด (Board-level repair) <span class="text-rose-400 font-semibold">เครื่องจ่ายไฟกระแสตรง (DC Power Supply)</span> คือเครื่องมือวินิจฉัยหลัก 
+            การสังเกตพฤติกรรมการดึงกระแส (Current consumption curve) ก่อนและหลังกดปุ่ม Power สามารถระบุจุดเสียได้อย่างแม่นยำตั้งแต่ก่อนลงมือแกะฝาครอบชิป (Shielding can)
+          </p>
+        </div>
+      </div>
+
+      <!-- Interactive Power Supply Simulation Tool -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between pb-6 border-b border-slate-800 gap-4">
+          <div>
+            <h3 class="text-lg font-bold text-white flex items-center space-x-2">
+              <span class="w-3 h-3 rounded-full bg-rose-500 animate-pulse"></span>
+              <span>เครื่องมือจำลอง DC Power Supply 4 ดิจิต (Diagnostic Simulator)</span>
+            </h3>
+            <p class="text-xs text-slate-400 mt-1">เลือกจำลองสถานการณ์อาการเสียเพื่อสังเกตพฤติกรรมการจ่ายกระแสไฟและการวินิจฉัยทางอิเล็กทรอนิกส์</p>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <button onclick="setPowerScenario('normal')" id="btn-scen-normal" class="text-xs px-3 py-2 rounded-lg bg-emerald-600 text-white font-medium shadow transition">
+              🟢 1. บูตปกติ (Normal Boot)
+            </button>
+            <button onclick="setPowerScenario('primary_short')" id="btn-scen-primary_short" class="text-xs px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium transition">
+              🔴 2. ลายไฟหลักช็อต (VBAT Short)
+            </button>
+            <button onclick="setPowerScenario('secondary_short')" id="btn-scen-secondary_short" class="text-xs px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium transition">
+              🟠 3. ลายไฟย่อยช็อต (Secondary Short)
+            </button>
+            <button onclick="setPowerScenario('bootloop')" id="btn-scen-bootloop" class="text-xs px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium transition">
+              🟡 4. บูตวนสวิง (Bootloop Loop)
+            </button>
+            <button onclick="setPowerScenario('open_circuit')" id="btn-scen-open_circuit" class="text-xs px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium transition">
+              ⚪ 5. วงจรเปิด (No Current / Open)
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-6">
+          <!-- Power Supply Meter Display -->
+          <div class="lg:col-span-5 bg-slate-950 border-2 border-slate-800 rounded-xl p-5 flex flex-col justify-between shadow-inner">
+            <div>
+              <div class="flex items-center justify-between pb-3 border-b border-slate-800 text-xs text-slate-400">
+                <span class="font-mono font-bold tracking-wider text-rose-400">LAB PRECISION POWER SUPPLY</span>
+                <span class="flex items-center space-x-1">
+                  <span id="psu-status-led" class="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block animate-ping"></span>
+                  <span id="psu-status-text" class="text-emerald-400 font-mono text-[11px]">OUTPUT ON</span>
+                </span>
+              </div>
+
+              <!-- Digital 7-Segment style LED Displays -->
+              <div class="grid grid-cols-2 gap-4 my-6">
+                <!-- Voltage Display -->
+                <div class="bg-black/80 rounded-lg p-4 border border-slate-800 flex flex-col items-center">
+                  <span class="text-[10px] text-slate-400 tracking-wider">VOLTAGE (V)</span>
+                  <span id="psu-volts" class="text-4xl sm:text-5xl font-mono font-bold text-red-500 tracking-wider my-2">4.00</span>
+                  <span class="text-[11px] text-slate-500">SET: 4.00 V (VBAT)</span>
+                </div>
+                <!-- Current Display -->
+                <div class="bg-black/80 rounded-lg p-4 border border-slate-800 flex flex-col items-center">
+                  <span class="text-[10px] text-slate-400 tracking-wider">CURRENT (A)</span>
+                  <span id="psu-amps" class="text-4xl sm:text-5xl font-mono font-bold text-emerald-400 tracking-wider my-2">0.000</span>
+                  <span id="psu-amps-label" class="text-[11px] text-slate-500">STANDBY</span>
+                </div>
+              </div>
+
+              <!-- Interactive Power Trigger Button -->
+              <div class="bg-slate-900 rounded-lg p-3 border border-slate-800 flex items-center justify-between">
+                <div>
+                  <div class="text-xs font-semibold text-white">ปุ่มกดเปิดเครื่อง (Power Key Trigger)</div>
+                  <div class="text-[11px] text-slate-400">กดเพื่อจำลองคำสั่งเปิดเครื่อง (Pull-down to GND)</div>
+                </div>
+                <button id="btn-trigger-pwr" onclick="triggerPowerButton()" class="px-4 py-2 rounded-lg bg-rose-600 hover:bg-rose-500 active:scale-95 text-white font-bold text-xs shadow-lg transition">
+                  🔘 กดปุ่มเปิดเครื่อง
+                </button>
+              </div>
+            </div>
+
+            <!-- Waveform Canvas -->
+            <div class="mt-4 pt-4 border-t border-slate-800">
+              <div class="flex items-center justify-between text-[11px] text-slate-400 mb-1">
+                <span>กราฟกระแส Real-time (Amps vs Time)</span>
+                <span id="graph-rate" class="font-mono text-rose-400">60 FPS</span>
+              </div>
+              <canvas id="currentCanvas" width="400" height="120" class="w-full h-28 bg-slate-950 rounded border border-slate-800"></canvas>
+            </div>
+          </div>
+
+          <!-- Diagnostic Explanation & Action Plan -->
+          <div class="lg:col-span-7 bg-slate-800/40 border border-slate-800 rounded-xl p-5 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center space-x-2 text-rose-400 text-xs font-bold uppercase tracking-wider mb-2">
+                <span>📋 ผลการตรวจวินิจฉัยทางเทคนิค (Diagnostic Result)</span>
+              </div>
+              <h4 id="diag-title" class="text-xl font-bold text-white mb-2">
+                1. การบูตเครื่องปกติ (Normal Startup Boot)
+              </h4>
+              <p id="diag-desc" class="text-sm text-slate-300 leading-relaxed">
+                ก่อนกดปุ่มเปิดเครื่อง กระแสต้องเป็น 0.000A (ไม่มีการกินกระแสก่อนกด) เมื่อกดปุ่ม Power สัญญาณจะดึงลง GND ส่งผลให้ชิป PMIC จ่ายแรงดันไฟย่อย (Buck/LDO Rails) 
+                กระแสจะเริ่มไต่ขึ้นจาก 0.08A &rarr; 0.35A &rarr; 0.85A &rarr; สูงสุดช่วงหน้าจอสว่าง 1.2A-1.5A และลดลงสู่โหมด Sleep เหลือ 0.02A-0.05A
+              </p>
+
+              <!-- Diagnostic Steps Checklist -->
+              <div class="mt-4 space-y-2">
+                <div class="text-xs font-semibold text-slate-300">ขั้นตอนการตรวจสอบและการแก้ไข (Troubleshooting Steps):</div>
+                <div id="diag-steps" class="space-y-1.5 text-xs text-slate-400">
+                  <div class="flex items-start space-x-2 p-2 rounded bg-slate-900/60 border border-slate-800">
+                    <span class="text-emerald-400 font-bold">✓</span>
+                    <span><strong>ไม่มีไฟรั่วก่อนกด:</strong> วงจรเชื่อมต่อแบตเตอรี่และชิปชาร์จ (Charging IC) อยู่ในสถานะสมบูรณ์</span>
+                  </div>
+                  <div class="flex items-start space-x-2 p-2 rounded bg-slate-900/60 border border-slate-800">
+                    <span class="text-emerald-400 font-bold">✓</span>
+                    <span><strong>กระแสสวิงตามจังหวะโหลด:</strong> บ่งบอกว่า CPU, RAM และ NAND Flash กำลังสื่อสารและโหลดเคอร์เนลระบบปฏิบัติการอย่างถูกต้อง</span>
+                  </div>
+                  <div class="flex items-start space-x-2 p-2 rounded bg-slate-900/60 border border-slate-800">
+                    <span class="text-emerald-400 font-bold">✓</span>
+                    <span><strong>เข้าสู่ Sleep Mode สำเร็จ:</strong> ระบบ Power Management สามารถตัดไฟภาคที่ไม่ใช้งานได้ เครื่องไม่ร้อนและไม่กินแบตเตอรี่</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Pro Tip Box -->
+            <div id="diag-protip" class="mt-4 p-3 rounded-lg bg-rose-950/30 border border-rose-900/50 flex items-start space-x-3">
+              <span class="text-lg">💡</span>
+              <div class="text-xs text-rose-200">
+                <strong class="font-semibold text-rose-300">ข้อควรจำงานซ่อม:</strong> หากกระแสกินค้างที่ 0.08A-0.12A ไม่ขยับ มักเกิดจากวงจร I2C บัสถูกดึงค้าง หรือคริสตัลออสซิลเลเตอร์ 32.768 kHz ไม่ผลิตความถี่ให้ PMIC
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Common Hardware Symptoms Flowchart Table -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+        <h3 class="text-lg font-bold text-white mb-4 flex items-center space-x-2">
+          <span>📑</span>
+          <span>ตารางวิเคราะห์ 4 อาการเสียยอดนิยม และจุดตรวจวัดที่สำคัญ (Matrix Troubleshooting)</span>
+        </h3>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr class="border-b border-slate-800 bg-slate-950/60 text-slate-300">
+                <th class="p-3 font-semibold">อาการเสีย (Symptom)</th>
+                <th class="p-3 font-semibold">ข้อสังเกตและพฤติกรรม (Observations)</th>
+                <th class="p-3 font-semibold">จุดวัดไฟและโหมดวัด (Test Points)</th>
+                <th class="p-3 font-semibold">ชิ้นส่วนที่ต้องสงสัย (Suspected Parts)</th>
+                <th class="p-3 font-semibold">วิธีแก้ไข (Action)</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-800/60 text-slate-300">
+              <tr class="hover:bg-slate-800/30">
+                <td class="p-3 font-medium text-rose-400">1. เครื่องเปิดไม่ติด (No Power)</td>
+                <td class="p-3">กดเปิดเครื่องไม่มีปฏิกิริยา หรือคีบไฟแล้วกินกระแสสูงสุดทันที (Overcurrent)</td>
+                <td class="p-3 font-mono text-[11px] text-amber-300">วัด Diode Mode ขั้วบวกแบตเตอรี่เทียบ GND, วัดลายไฟ VDD_MAIN</td>
+                <td class="p-3">C-Filter ช็อตลงกราวด์, ชิป PMIC เสีย, ชิป Charging/OVP ทะลุ</td>
+                <td class="p-3">ใช้กล้องตรวจจับความร้อน (Thermal Cam) ส่องหาจุดร้อน แล้วถอด C ช็อต หรือเปลี่ยน PMIC</td>
+              </tr>
+              <tr class="hover:bg-slate-800/30">
+                <td class="p-3 font-medium text-amber-400">2. ชาร์จไม่เข้า / ชาร์จช้า (Charging Failure)</td>
+                <td class="p-3">เสียบสายชาร์จแล้วหน้าจอไม่แสดงไอคอนชาร์จ หรือขึ้นแต่แบตเตอรี่ไม่เพิ่ม (Fake Charging)</td>
+                <td class="p-3 font-mono text-[11px] text-amber-300">วัดแรงดัน VBUS (5V/9V) ที่พอร์ตชาร์จ, วัดขา CC1/CC2, วัดสาย BSI/SWI</td>
+                <td class="p-3">พอร์ต Type-C สกปรก/ขาหัก, ชิป Tristar/Hydra/SMB, วงจรตรวจอุณหภูมิแบตเตอรี่ (NTC)</td>
+                <td class="p-3">เปลี่ยนพอร์ตชาร์จ, เปลี่ยนชิปคุมการชาร์จ หรือเปลี่ยนแบตเตอรี่ใหม่</td>
+              </tr>
+              <tr class="hover:bg-slate-800/30">
+                <td class="p-3 font-medium text-sky-400">3. ไม่มีสัญญาณ / ค้นหาตลอด (No Service)</td>
+                <td class="p-3">ใส่ซิมแล้วขึ้น "ไม่มีบริการ" หรือขึ้น "Searching..." ตลอดเวลา, กด *#06# ไม่แสดงเลข IMEI</td>
+                <td class="p-3 font-mono text-[11px] text-amber-300">วัดไฟเลี้ยง Baseband PMIC (0.8V, 1.2V), ตรวจสอบค่าความต้านทานสาย Coaxial RF</td>
+                <td class="p-3">ชิป Baseband Modem ตะกั่วแตกร้าว, ชิป Power Amplifier (PA), เสาอากาศขาด</td>
+                <td class="p-3">ยก Reball ชิป Baseband, ต่อจัมเปอร์สายสายอากาศ, เปลี่ยนชิป PA ขยายสัญญาณ</td>
+              </tr>
+              <tr class="hover:bg-slate-800/30">
+                <td class="p-3 font-medium text-purple-400">4. จอมืดแต่มีเสียงสั่น (Black Screen)</td>
+                <td class="p-3">มีเสียงสายเข้า เครื่องสั่นปกติ เสียบชาร์จมีเสียง แต่หน้าจอไม่สว่าง ไม่มีภาพ</td>
+                <td class="p-3 font-mono text-[11px] text-amber-300">ส่องไฟฉายดูเงาภาพ (Backlight check), วัดไฟเลี้ยงจอ OLED (+4.6V, -4.0V, 1.8V IO)</td>
+                <td class="p-3">จอ LCD/OLED แตกภายใน, ฟิวส์ไฟแบล็คไลท์ (Backlight Fuse) ขาด, ชิป Display PMIC</td>
+                <td class="p-3">ทดสอบเปลี่ยนจอแท้ตัวใหม่, ตรวจสอบซ็อกเก็ต FPC connector, เปลี่ยนฟิวส์ไฟจอ</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 2: HARDWARE, ESD SAFETY & BGA REWORK   -->
+    <!-- ========================================== -->
+    <section id="section-hardware" class="hidden space-y-8">
+      <!-- Hardware Intro Banner -->
+      <div class="bg-gradient-to-r from-rose-950/40 via-slate-900 to-slate-900 border border-rose-800/40 rounded-2xl p-6 sm:p-8">
+        <div class="max-w-3xl space-y-3">
+          <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-rose-500/20 text-rose-300 text-xs font-semibold">
+            <span>🔬 Micro-Soldering & Lab Standards</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+            เครื่องมือช่าง ความปลอดภัย ESD และเทคนิคการยก-วางไอซี BGA
+          </h2>
+          <p class="text-sm sm:text-base text-slate-300 leading-relaxed">
+            การซ่อมบอร์ดสมาร์ตโฟนสมัยใหม่จัดอยู่ในกลุ่มงาน <span class="text-rose-400 font-semibold">Micro-soldering</span> ชิ้นส่วนมีขนาดเล็กระดับมิลลิเมตร (ชิป BGA และตัวต้านทาน 01005) 
+            ช่างซ่อมมืออาชีพจำเป็นต้องเชี่ยวชาญทั้งมาตรฐานป้องกันไฟฟ้าสถิต การเลือกใช้อุณหภูมิลมร้อน และสารเคมีช่วยบัดกรีอย่างถูกต้อง
+          </p>
+        </div>
+      </div>
+
+      <!-- ESD Safety & Workshop Standards -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-lg">
+          <div class="w-12 h-12 rounded-xl bg-amber-500/20 border border-amber-500/30 text-amber-400 flex items-center justify-center text-xl mb-4">
+            ⚡
+          </div>
+          <h3 class="text-base font-bold text-white mb-2">1. มาตรการป้องกันไฟฟ้าสถิต (ESD Safety)</h3>
+          <p class="text-xs text-slate-400 leading-relaxed mb-3">
+            ไฟฟ้าสถิตในร่างกายมนุษย์อาจสะสมได้สูงถึง 3,000 - 15,000 โวลต์ ซึ่งเพียงพอจะทำลายโครงสร้างทรานซิสเตอร์นาโนเมตรภายในชิปเซ็ตทันทีโดยไม่มีรอยไหม้ภายนอก
+          </p>
+          <ul class="text-xs text-slate-300 space-y-1.5 list-disc list-inside">
+            <li>สวมสายรัดข้อมือคายประจุ (ESD Wrist Strap) ต่อลงกราวด์</li>
+            <li>ใช้แผ่นรองโต๊ะทำงานกันไฟฟ้าสถิต (ESD Silicone Mat)</li>
+            <li>ใช้แหนบและแปรงทำความสะอาดประเภท ESD-safe ปลอดประจุ</li>
+          </ul>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-lg">
+          <div class="w-12 h-12 rounded-xl bg-rose-500/20 border border-rose-500/30 text-rose-400 flex items-center justify-center text-xl mb-4">
+            🔥
+          </div>
+          <h3 class="text-base font-bold text-white mb-2">2. ควบคุมอุณหภูมิลมร้อน (Thermal Profile)</h3>
+          <p class="text-xs text-slate-400 leading-relaxed mb-3">
+            การใช้ความร้อนเกินพิกัดจะทำให้บอร์ดบวม (PCB Blistering) หรือชิปข้างเคียงละลาย (Neighbor IC damage) โดยเฉพาะฝั่งตรงข้ามที่มีชิป CPU ติดกาวดำ (Underfill)
+          </p>
+          <ul class="text-xs text-slate-300 space-y-1.5 list-disc list-inside">
+            <li><strong>ตะกั่วโรงงาน (Lead-Free):</strong> หลอมละลายที่ ~217°C ใช้ลมร้อน 330°C - 360°C</li>
+            <li><strong>ตะกั่วซ่อมผสม (Leaded Sn63/Pb37):</strong> ละลายที่ ~183°C ใช้ลมร้อน 280°C - 310°C</li>
+            <li><strong>ตะกั่วอุณหภูมิต่ำ (Low-melt 138°C):</strong> สำหรับบอร์ดสองชั้น (Sandwich PCB)</li>
+          </ul>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-lg">
+          <div class="w-12 h-12 rounded-xl bg-sky-500/20 border border-sky-500/30 text-sky-400 flex items-center justify-center text-xl mb-4">
+            🧪
+          </div>
+          <h3 class="text-base font-bold text-white mb-2">3. สารเคมีและวัสดุประสาน (Chemicals & Flux)</h3>
+          <p class="text-xs text-slate-400 leading-relaxed mb-3">
+            คุณภาพของการเชื่อมบัดกรีขึ้นอยู่กับน้ำยาประสาน (Flux) เพื่อขจัดออกไซด์บนผิวโลหะทองแดงและตะกั่ว
+          </p>
+          <ul class="text-xs text-slate-300 space-y-1.5 list-disc list-inside">
+            <li><strong>No-Clean Flux Paste:</strong> ฟลักซ์เกรดซ่อมเมนบอร์ด ไม่เป็นสื่อนำไฟฟ้า ไม่กัดกร่อนแผ่นวงจร</li>
+            <li><strong>Solder Wick:</strong> ลวดทองแดงซับตะกั่ว สำหรับเก็บกวาดเม็ดตะกั่วเก่าบนบอร์ดให้เรียบเสมอกัน</li>
+            <li><strong>UV Scurb / Solder Mask:</strong> กาวเขียวกันช็อตฉายแสง UV แห้ง สำหรับเคลือบปิดรอยขูดลายวงจร</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Step-by-Step BGA IC Reballing Interactive Guide -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+        <h3 class="text-lg font-bold text-white mb-2 flex items-center space-x-2">
+          <span>🎯</span>
+          <span>กระบวนการยก-บอลขา-วางชิปไอซี BGA (BGA IC Rework & Reballing Process)</span>
+        </h3>
+        <p class="text-xs text-slate-400 mb-6">คลิกแต่ละขั้นตอนเพื่อดูคำแนะนำทางเทคนิคและเทคนิคของช่างมืออาชีพ</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <!-- Step 1 -->
+          <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 flex flex-col justify-between hover:border-rose-500/60 transition">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="w-8 h-8 rounded-lg bg-rose-600/20 border border-rose-500/30 text-rose-400 font-bold flex items-center justify-center text-xs">
+                  01
+                </span>
+                <span class="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-300">Underfill & Shield</span>
+              </div>
+              <h4 class="text-sm font-bold text-white mb-1">การขูดกาวและถอดฝาครอบ</h4>
+              <p class="text-xs text-slate-400 leading-relaxed">
+                เป่าลมร้อนอุณหภูมิต่ำ (180°C - 200°C) รอบขอบชิปเพื่อขูดกาวดำ (Black Underfill) ออก ป้องกันกาวดีดเม็ดตะกั่วช็อตขณะยก
+              </p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] text-rose-300">
+              💡 ข้อควรระวัง: อย่ากดปลายมีดแรงเกินไปจนขูดโดนลายปริ้นต์ชั้นใน (Trace cut)
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 flex flex-col justify-between hover:border-rose-500/60 transition">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="w-8 h-8 rounded-lg bg-rose-600/20 border border-rose-500/30 text-rose-400 font-bold flex items-center justify-center text-xs">
+                  02
+                </span>
+                <span class="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-300">IC Removal</span>
+              </div>
+              <h4 class="text-sm font-bold text-white mb-1">การเป่ายกไอซี (Desoldering)</h4>
+              <p class="text-xs text-slate-400 leading-relaxed">
+                ทาฟลักซ์คุณภาพสูง เป่าลมร้อนวนรอบตัวถังชิปอย่างสม่ำเสมอ เมื่อตะกั่วทุกขาละลายดี ให้ใช้แหนบแตะเบาๆ เมื่อชิปขยับได้จึงคีบยกขึ้นตรงๆ
+              </p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] text-rose-300">
+              💡 ข้อควรระวัง: ห้ามออกแรงงัดเด็ดขาด หากตะกั่วยังไม่ละลายจะทำให้พินทองแดง (Pads) หลุด
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 flex flex-col justify-between hover:border-rose-500/60 transition">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="w-8 h-8 rounded-lg bg-rose-600/20 border border-rose-500/30 text-rose-400 font-bold flex items-center justify-center text-xs">
+                  03
+                </span>
+                <span class="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-300">Reballing</span>
+              </div>
+              <h4 class="text-sm font-bold text-white mb-1">การทำขาไอซีใหม่ (Reballing)</h4>
+              <p class="text-xs text-slate-400 leading-relaxed">
+                ทำความสะอาดหน้าสัมผัสชิปด้วย Solder wick ประกบแผ่นเพลตสเตนซิล (Direct Heat Stencil) ปาดครีมตะกั่ว (Solder Paste 183°C) แล้วเป่าลมร้อนสร้างลูกบอลตะกั่วใหม่
+              </p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] text-rose-300">
+              💡 ข้อควรระวัง: เม็ดตะกั่วทุกขาต้องมีขนาดและทรงกลมเท่ากันทุกพิน (Uniform height)
+            </div>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 flex flex-col justify-between hover:border-rose-500/60 transition">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="w-8 h-8 rounded-lg bg-rose-600/20 border border-rose-500/30 text-rose-400 font-bold flex items-center justify-center text-xs">
+                  04
+                </span>
+                <span class="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-300">Alignment & Solder</span>
+              </div>
+              <h4 class="text-sm font-bold text-white mb-1">การจัดวางและเป่าล็อก (Soldering)</h4>
+              <p class="text-xs text-slate-400 leading-relaxed">
+                วางชิปลงบนมาร์กเกอร์สีขาวบนบอร์ด (Silkscreen alignment marks) ทาฟลักซ์บางๆ เป่าลมร้อนจนแรงตึงผิวของตะกั่วดึงชิปดูดเข้าตำแหน่งเป๊ะ (Self-alignment)
+              </p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] text-rose-300">
+              💡 ข้อควรระวัง: แตะขอบชิปเบาๆ ให้เด้งกลับคืน (Nudge test) เป็นการยืนยันว่าขาประสานสมบูรณ์
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 3: SOFTWARE, DFU & FASTBOOT FLASHING   -->
+    <!-- ========================================== -->
+    <section id="section-software" class="hidden space-y-8">
+      <!-- Software Intro Banner -->
+      <div class="bg-gradient-to-r from-rose-950/40 via-slate-900 to-slate-900 border border-rose-800/40 rounded-2xl p-6 sm:p-8">
+        <div class="max-w-3xl space-y-3">
+          <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-rose-500/20 text-rose-300 text-xs font-semibold">
+            <span>💻 OS Recovery & Flashing Protocols</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+            การแก้ไขปัญหาซอฟต์แวร์และการกู้คืนระบบปฏิบัติการ
+          </h2>
+          <p class="text-sm sm:text-base text-slate-300 leading-relaxed">
+            ปัญหาเครื่องค้างโลโก้ บูตวน (Bootloop) หรือเปิดไม่ติด อาจเกิดจากไฟล์ระบบเสียหาย (Corrupted OS) ช่างจำเป็นต้องเข้าใจความต่างระหว่าง 
+            <span class="text-rose-400 font-semibold">Soft Brick</span> (กู้คืนได้ด้วยซอฟต์แวร์) และ <span class="text-rose-400 font-semibold">Hard Brick</span> (ต้องซ่อม Bootloader ระดับฮาร์ดแวร์หรือ EDL Test point)
+          </p>
+        </div>
+      </div>
+
+      <!-- Brick Classification: Soft Brick vs Hard Brick -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-slate-900 border border-amber-500/30 rounded-2xl p-6 shadow-lg">
+          <div class="flex items-center justify-between mb-4">
+            <span class="px-3 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 text-xs font-bold">
+              ⚠️ สามารถกู้คืนผ่านพอร์ต USB ปกติได้
+            </span>
+            <span class="text-2xl">📱</span>
+          </div>
+          <h3 class="text-lg font-bold text-white mb-2">Soft Brick (อาการซอฟต์แวร์ติดขัดทั่วไป)</h3>
+          <p class="text-xs text-slate-300 leading-relaxed mb-4">
+            เครื่องยังสามารถเข้าหน้าโหมดฉุกเฉินได้ เช่น หน้า Fastboot, Recovery Mode หรือหน้าโลโก้ แต่ไม่สามารถบูตเข้าสู่หน้าหลักของระบบปฏิบัติการได้
+          </p>
+          <div class="space-y-2 text-xs text-slate-300">
+            <div class="p-2.5 rounded bg-slate-950/60 border border-slate-800">
+              <span class="font-semibold text-amber-400">สาเหตุ:</span> อัปเดต OTA ขัดข้อง, ติดตั้งแอป/โมดูลทับไฟล์ระบบ, หน่วยความจำภายในเต็ม 100% จนสร้าง Cache ไม่ได้
+            </div>
+            <div class="p-2.5 rounded bg-slate-950/60 border border-slate-800">
+              <span class="font-semibold text-emerald-400">วิธีแก้ปัญหา:</span> Factory Reset ผ่าน Recovery, แฟลชรอมศูนย์ (Stock ROM) ผ่าน Fastboot หรือ Odin
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-slate-900 border border-rose-500/30 rounded-2xl p-6 shadow-lg">
+          <div class="flex items-center justify-between mb-4">
+            <span class="px-3 py-1 rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20 text-xs font-bold">
+              🚫 จอมืดสนิท / ไม่ตอบสนองปุ่มกด
+            </span>
+            <span class="text-2xl">🧱</span>
+          </div>
+          <h3 class="text-lg font-bold text-white mb-2">Hard Brick (ความเสียหายระดับบูตโหลดเดอร์)</h3>
+          <p class="text-xs text-slate-300 leading-relaxed mb-4">
+            พาร์ทิชัน Bootloader (sbl / aboot / xbl) เสียหายหรือถูกเขียนทับผิดรุ่น หน้าจอมืดสนิท กดคีย์ผสมใดๆ ก็ไม่ขึ้นภาพ
+          </p>
+          <div class="space-y-2 text-xs text-slate-300">
+            <div class="p-2.5 rounded bg-slate-950/60 border border-slate-800">
+              <span class="font-semibold text-rose-400">การตรวจจับ:</span> เสียบสายเข้าคอมพิวเตอร์จะพบอุปกรณ์พอร์ตฉุกเฉิน เช่น <code class="text-amber-300 font-mono">Qualcomm HS-USB QDLoader 9008</code> หรือ <code class="text-amber-300 font-mono">MediaTek USB Port</code>
+            </div>
+            <div class="p-2.5 rounded bg-slate-950/60 border border-slate-800">
+              <span class="font-semibold text-emerald-400">วิธีแก้ปัญหา:</span> บังคับเข้า EDL Mode ด้วยสาย EDL Cable หรือจิ้ม Test Point บนเมนบอร์ดลงกราวด์ แล้วแฟลชผ่านโปรแกรม QFIL / MiFlash
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Android vs iOS Engineering Recovery Modes Table -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+        <h3 class="text-lg font-bold text-white mb-4 flex items-center space-x-2">
+          <span>⚙️</span>
+          <span>โหมดบริการทางเทคนิคระดับต่ำ (Low-Level Service Modes Comparison)</span>
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Android Ecosystem -->
+          <div class="bg-slate-950 border border-slate-800 rounded-xl p-5 space-y-4">
+            <div class="flex items-center space-x-2 pb-3 border-b border-slate-800">
+              <span class="w-8 h-8 rounded-lg bg-emerald-600/20 border border-emerald-500/30 text-emerald-400 font-bold flex items-center justify-center text-sm">
+                🤖
+              </span>
+              <div>
+                <h4 class="text-sm font-bold text-white">ฝั่ง Android (Fastboot, Recovery & EDL)</h4>
+                <p class="text-[11px] text-slate-400">ระบบเปิด รองรับคำสั่ง Flash ผ่านโปรโตคอลคอมพิวเตอร์</p>
+              </div>
+            </div>
+            <div class="space-y-3 text-xs">
+              <div class="p-3 rounded bg-slate-900 border border-slate-800">
+                <div class="font-semibold text-emerald-400">Fastboot Mode (Bootloader Mode)</div>
+                <p class="text-slate-400 mt-1">สื่อสารผ่าน USB ด้วยโปรโตคอล Fastboot ใช้แฟลชอิมเมจแยกพาร์ทิชัน เช่น <code class="text-amber-300">fastboot flash boot boot.img</code> หรือ <code class="text-amber-300">fastboot flash super super.img</code></p>
+              </div>
+              <div class="p-3 rounded bg-slate-900 border border-slate-800">
+                <div class="font-semibold text-emerald-400">EDL Mode (Emergency Download - 9008)</div>
+                <p class="text-slate-400 mt-1">โหมดฉุกเฉินระดับฮาร์ดแวร์ของชิป Qualcomm ช่วยให้เขียนข้อมูลลงชิป UFS / eMMC ได้โดยตรง แม้ Bootloader จะเสียหาย 100%</p>
+              </div>
+              <div class="p-3 rounded bg-slate-900 border border-slate-800">
+                <div class="font-semibold text-emerald-400">ข้อควรระวังสำคัญ: พาร์ทิชัน EFS / NVRAM</div>
+                <p class="text-rose-300 mt-1">ห้ามล้างหรือฟอร์แมตพาร์ทิชัน EFS/NVRAM เด็ดขาด เพราะเป็นที่เก็บข้อมูลเลขประจำเครื่อง IMEI, Wi-Fi MAC Address และการสอบเทียบสัญญาณ RF (RF Calibration Data)</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- iOS Ecosystem -->
+          <div class="bg-slate-950 border border-slate-800 rounded-xl p-5 space-y-4">
+            <div class="flex items-center space-x-2 pb-3 border-b border-slate-800">
+              <span class="w-8 h-8 rounded-lg bg-sky-600/20 border border-sky-500/30 text-sky-400 font-bold flex items-center justify-center text-sm">
+                🍎
+              </span>
+              <div>
+                <h4 class="text-sm font-bold text-white">ฝั่ง Apple iOS (Recovery vs DFU Mode)</h4>
+                <p class="text-[11px] text-slate-400">ระบบปิด ปลอดภัยสูง กู้คืนผ่านกระบวนการ Restore</p>
+              </div>
+            </div>
+            <div class="space-y-3 text-xs">
+              <div class="p-3 rounded bg-slate-900 border border-slate-800">
+                <div class="font-semibold text-sky-400">Recovery Mode (หน้าจอรูปสายเคเบิลต่อคอม)</div>
+                <p class="text-slate-400 mt-1">เครื่องทำงานโดยโหลดตัว iBoot ขึ้นมาเพื่อรอรับเฟิร์มแวร์ใหม่ ใช้กู้คืนระบบทั่วไปโดยเชื่อมต่อกับ Finder / iTunes</p>
+              </div>
+              <div class="p-3 rounded bg-slate-900 border border-slate-800">
+                <div class="font-semibold text-sky-400">DFU Mode (Device Firmware Upgrade)</div>
+                <p class="text-slate-400 mt-1"><strong>หน้าจอดำสนิท (ไม่มีแสงสว่างเลย)</strong> โค้ด SecureROM ในชิปเซ็ตทำงานโดยตรงโดยข้าม (Bypass) ตัว iBoot เหมาะสำหรับเครื่องที่ติด Bootloop หนักจนเข้า Recovery ปกติไม่ได้</p>
+              </div>
+              <div class="p-3 rounded bg-slate-900 border border-slate-800">
+                <div class="font-semibold text-sky-400">ระบบตรวจสอบสิทธิ์: SHSH2 Blobs & TSS</div>
+                <p class="text-slate-400 mt-1">Apple ใช้เซิร์ฟเวอร์ TSS ในการเซ็นดิจิทัลรับรอง (Signing) หากเวอร์ชัน iOS นั้นถูกปิด Sign แล้ว จะไม่สามารถแฟลชย้อนกลับ (Downgrade) ได้</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 4: QUIZ (5 QUESTIONS, NO ANSWERS LEAK) -->
+    <!-- ========================================== -->
+    <section id="section-quiz" class="hidden space-y-8">
+      <div class="bg-gradient-to-r from-rose-950/40 via-slate-900 to-slate-900 border border-rose-800/40 rounded-2xl p-6 sm:p-8">
+        <div class="max-w-3xl space-y-3">
+          <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-rose-500/20 text-rose-300 text-xs font-semibold">
+            <span>📝 แบบทดสอบประเมินความรู้</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+            แบบทดสอบท้ายบทเรียน: หน่วยที่ 6
+          </h2>
+          <p class="text-sm sm:text-base text-slate-300 leading-relaxed">
+            แบบทดสอบจำนวน 5 ข้อ เพื่อวัดความเข้าใจด้านการตรวจซ่อม การวิเคราะห์กระแสไฟ และการบำรุงรักษาสมาร์ตโฟน 
+            เมื่อกดส่งคำตอบ ระบบจะตรวจและแสดงคะแนนรวม พร้อมแจ้งเตือนข้อที่ตอบผิด <span class="text-rose-400 font-semibold">(โดยไม่แสดงเฉลยคำตอบ)</span> และบันทึกคะแนนเข้าสู่ระบบ
+          </p>
+        </div>
+      </div>
+
+      <!-- Student Registration Card -->
+      <div id="quiz-reg-card" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl max-w-2xl mx-auto">
+        <h3 class="text-base font-bold text-white mb-4 flex items-center space-x-2">
+          <span>👤</span>
+          <span>ข้อมูลผู้ทำแบบทดสอบ</span>
+        </h3>
+        <div class="space-y-4">
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1">รหัสนักศึกษา / รหัสประจำตัว <span class="text-rose-400">*</span></label>
+            <input type="text" id="std-id" placeholder="เช่น 66301050012" class="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-white text-sm focus:outline-none focus:border-rose-500">
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-medium text-slate-300 mb-1">ชื่อ - สกุล <span class="text-rose-400">*</span></label>
+              <input type="text" id="std-name" placeholder="นายสมชาย ช่างซ่อม" class="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-white text-sm focus:outline-none focus:border-rose-500">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-300 mb-1">กลุ่มเรียน / แผนก <span class="text-rose-400">*</span></label>
+              <input type="text" id="std-group" placeholder="เช่น สฟ.2/1 หรือ ชอ.1" class="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-white text-sm focus:outline-none focus:border-rose-500">
+            </div>
+          </div>
+          <div class="pt-2">
+            <button onclick="startQuiz()" class="w-full py-3 rounded-xl bg-rose-600 hover:bg-rose-500 font-bold text-sm text-white shadow-lg shadow-rose-600/30 transition">
+              เริ่มทำแบบทดสอบ &rarr;
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quiz Form Container -->
+      <div id="quiz-form-card" class="hidden bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-xl max-w-3xl mx-auto space-y-8">
+        <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+          <div class="text-xs text-slate-400">
+            ผู้สอบ: <span id="display-std-name" class="font-bold text-white"></span> (<span id="display-std-id" class="text-rose-400 font-mono"></span>)
+          </div>
+          <div class="text-xs font-semibold px-2.5 py-1 rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20">
+            จำนวน 5 ข้อ (คะแนนเต็ม 5 คะแนน)
+          </div>
+        </div>
+
+        <form id="quiz-form" onsubmit="submitQuiz(event)" class="space-y-8">
+          <!-- Question 1 -->
+          <div class="space-y-3 pb-6 border-b border-slate-800/80">
+            <div class="text-sm sm:text-base font-semibold text-white">
+              1. เมื่อนำโทรศัพท์มือถือที่ "เครื่องดับเปิดไม่ติด" มาคีบเข้ากับเครื่องจ่ายไฟ DC Power Supply (4.0V) แล้วพบว่า<span class="text-rose-400 font-bold">กินกระแสไฟสูงเกินพิกัดทันที (2A+ ตัดวงจร) โดยที่ยังไม่ได้กดปุ่มเปิดเครื่อง</span> ข้อใดคือสาเหตุที่เป็นไปได้มากที่สุด?
+            </div>
+            <div class="space-y-2 text-xs sm:text-sm text-slate-300">
+              <label class="flex items-center space-x-3 p-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-slate-700 cursor-pointer transition">
+                <input type="radio" name="q1" value="A" class="accent-rose-500">
+                <span>A. ชิปประมวลผล CPU เสียหาย ทำให้โหลดระบบปฏิบัติการไม่ผ่าน</span>
+              </label>
+              <label class="flex items-center space-x-3 p-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-slate-700 cursor-pointer transition">
+                <input type="radio" name="q1" value="B" class="accent-rose-500">
+                <span>B. มีตัวเก็บประจุ (C-Filter) หรือไอซีในลายไฟหลัก (VBAT / VDD_MAIN) ช็อตลงกราวด์</span>
+              </label>
+              <label class="flex items-center space-x-3 p-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-slate-700 cursor-pointer transition">
+                <input type="radio" name="q1" value="C" class="accent-rose-500">
+                <span>C. ปุ่มเปิดเครื่อง (Power Switch) เสียหายในลักษณะวงจรขาด (Open Circuit)</span>
+              </label>
+              <label class="flex items-center space-x-3 p-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-slate-700 cursor-pointer transition">
+                <input type="radio" name="q1" value="D" class="accent-rose-500">
+                <span>D. ไฟล์ Bootloader ภายในหน่วยความจำแฟลชเสียหาย (Corrupted OS)</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Question 2 -->
+          <div class="space-y-3 pb-6 border-b border-slate-800/80">
+            <div class="text-sm sm:text-base font-semibold text-white">
+              2. มาตรการความปลอดภัยจากไฟฟ้าสถิต (ESD Safety) ในการซ่อมบอร์ดโทรศัพท์มือถือ มีความจำเป็นอย่างยิ่งเพราะเหตุใด?
+            </div>
+            <div class="space-y-2 text-xs sm:text-sm text-slate-300">
+              <label class="flex items-center space-x-3 p-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-slate-700 cursor-pointer transition">
+                <input type="radio" name="q2" value="A" class="accent-rose-500">
+                <span>A. ป้องกันอันตรายจากไฟดูดที่มีความรุนแรงถึงชีวิตต่อตัวช่างซ่อม</span>
+              </label>
+              <label class="flex items-center space-x-3 p-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-slate-700 cursor-pointer transition">
+                <input type="radio" name="q2" value="B" class="accent-rose-500">
+                <span>B. ป้องกันแรงดันไฟฟ้าสถิตหลายพันโวลต์จากร่างกายมนุษย์ทะลุทำลายชั้นเกตออกไซด์ระดับนาโนเมตรของทรานซิสเตอร์ภายในชิปเซ็ต</span>
+              </label>
+              <label class="flex items-center space-x-3 p-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-slate-700 cursor-pointer transition">
+                <input type="radio" name="q2" value="C" class="accent-rose-500">
+                <span>C. ช่วยให้ตะกั่วบัดกรีไหลตัวเชื่อมประสานได้ดีขึ้นโดยไม่ต้องใช้น้ำยาฟลักซ์</span>
+              </label>
+              <label class="flex items-center space-x-3 p-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-slate-700 cursor-pointer transition">
+                <input type="radio" name="q2" value="D" class="accent-rose-500">
+                <span>D. ป้องกันไม่ให้สัญญาณคลื่นแม่เหล็กไฟฟ้าภายนอกเข้ามารบกวนการโทรออก</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Question 3 -->
+          <div class="space-y-3 pb-6 border-b border-slate-800/80">
+            <div class="text-sm sm:text-base font-semibold text-white">
+              3. ในกระบวนการทำขาไอซี BGA ใหม่ (Reballing) เพื่อแก้ปัญหาตะกั่วแตกร้าวใต้ตัวถังชิป สิ่งใดคือหัวใจสำคัญที่สุดในการสร้างลูกบอลตะกั่วให้มีขนาดเท่ากันทุกพิน?
+            </div>
+            <div class="space-y-2 text-xs sm:text-sm text-slate-300">
+              <label class="flex items-center space-x-3 p-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-slate-700 cursor-pointer transition">
+                <input type="radio" name="q3" value="A" class="accent-rose-500">
+                <span>A. การใช้แผ่นเพลตสเตนซิล (Stencil) ที่แนบสนิทและปาดครีมตะกั่วให้สม่ำเสมอเต็มทุกหลุม</span>
+              </label>
+              <label class="flex items-center space-x-3 p-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-slate-700 cursor-pointer transition">
+                <input type="radio" name="q3" value="B" class="accent-rose-500">
+                <span>B. การปรับแรงลมร้อนของ Hot Air ให้อยู่ในระดับสูงสุดเพื่อให้ตะกั่วละลายเร็วที่สุด</span>
+              </label>
+              <label class="flex items-center space-x-3 p-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-slate-700 cursor-pointer transition">
+                <input type="radio" name="q3" value="C" class="accent-rose-500">
+                <span>C. การใช้หัวแร้งปลายแหลมแต้มเม็ดตะกั่วทีละขาจนครบทุกพินโดยไม่ต้องใช้เพลต</span>
+              </label>
+              <label class="flex items-center space-x-3 p-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-slate-700 cursor-pointer transition">
+                <input type="radio" name="q3" value="D" class="accent-rose-500">
+                <span>D. การทากาวดำ Underfill ทับก่อนเป่าลมร้อนเพื่อช่วยยึดตะกั่วให้อยู่ทรง</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Question 4 -->
+          <div class="space-y-3 pb-6 border-b border-slate-800/80">
+            <div class="text-sm sm:text-base font-semibold text-white">
+              4. ในการกู้คืนระบบปฏิบัติการของสมาร์ตโฟน Apple ข้อใดอธิบายความแตกต่างระหว่าง <span class="text-rose-400 font-bold">DFU Mode</span> กับ Recovery Mode ได้อย่างถูกต้อง?
+            </div>
+            <div class="space-y-2 text-xs sm:text-sm text-slate-300">
+              <label class="flex items-center space-x-3 p-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-slate-700 cursor-pointer transition">
+                <input type="radio" name="q4" value="A" class="accent-rose-500">
+                <span>A. DFU Mode จะแสดงรูปสายเคเบิลต่อคอมพิวเตอร์ ส่วน Recovery Mode จะเป็นหน้าจอดำสนิท</span>
+              </label>
+              <label class="flex items-center space-x-3 p-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-slate-700 cursor-pointer transition">
+                <input type="radio" name="q4" value="B" class="accent-rose-500">
+                <span>B. DFU Mode เป็นโหมดที่ทำงานโดยข้ามขั้นตอนการโหลด iBoot (หน้าจอดำสนิท) เพื่อให้สื่อสารกับ SecureROM โดยตรง</span>
+              </label>
+              <label class="flex items-center space-x-3 p-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-slate-700 cursor-pointer transition">
+                <input type="radio" name="q4" value="C" class="accent-rose-500">
+                <span>C. DFU Mode ใช้สำหรับการกู้คืนข้อมูลผู้ใช้เท่านั้น ไม่สามารถเขียนทับเฟิร์มแวร์ใหม่ได้</span>
+              </label>
+              <label class="flex items-center space-x-3 p-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-slate-700 cursor-pointer transition">
+                <input type="radio" name="q4" value="D" class="accent-rose-500">
+                <span>D. DFU Mode สามารถทำได้ผ่านการสั่งงานด้วยเมนูการตั้งค่าภายใน iOS โดยไม่ต้องกดคีย์ผสมใดๆ</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Question 5 -->
+          <div class="space-y-3 pb-6 border-b border-slate-800/80">
+            <div class="text-sm sm:text-base font-semibold text-white">
+              5. ในการแฟลชรอมโทรศัพท์ Android เหตุใดจึงมีข้อควรระวังอย่างยิ่งว่า <span class="text-rose-400 font-bold">"ห้ามลบหรือเขียนทับพาร์ทิชัน EFS หรือ NVRAM เด็ดขาด"</span>?
+            </div>
+            <div class="space-y-2 text-xs sm:text-sm text-slate-300">
+              <label class="flex items-center space-x-3 p-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-slate-700 cursor-pointer transition">
+                <input type="radio" name="q5" value="A" class="accent-rose-500">
+                <span>A. เพราะเป็นพาร์ทิชันที่บรรจุภาพพักหน้าจอและริงโทนดั้งเดิมของตัวเครื่อง</span>
+              </label>
+              <label class="flex items-center space-x-3 p-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-slate-700 cursor-pointer transition">
+                <input type="radio" name="q5" value="B" class="accent-rose-500">
+                <span>B. เพราะหากสูญหายจะทำให้หน้าจอแสดงผลไม่สามารถปรับระดับความสว่างอัตโนมัติได้</span>
+              </label>
+              <label class="flex items-center space-x-3 p-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-slate-700 cursor-pointer transition">
+                <input type="radio" name="q5" value="C" class="accent-rose-500">
+                <span>C. เพราะเป็นที่เก็บข้อมูลเลขประจำเครื่อง IMEI, ที่อยู่ Wi-Fi/BT MAC และข้อมูลปรับเทียบสัญญาณวิทยุ (RF Calibration) หากหายเครื่องจะขึ้น Baseband Unknown และไม่มีสัญญาณโทรเข้าออก</span>
+              </label>
+              <label class="flex items-center space-x-3 p-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-slate-700 cursor-pointer transition">
+                <input type="radio" name="q5" value="D" class="accent-rose-500">
+                <span>D. เพราะจะทำให้แอปพลิเคชันจาก Play Store ไม่สามารถดาวน์โหลดไฟล์ขนาดใหญ่กว่า 100MB ได้</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="pt-4">
+            <button type="submit" id="btn-submit-quiz" class="w-full py-3.5 rounded-xl bg-rose-600 hover:bg-rose-500 font-bold text-sm text-white shadow-lg shadow-rose-600/30 transition">
+              ส่งคำตอบและบันทึกคะแนน
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Result Card (Strict: Show score + missed questions WITHOUT revealing correct answers) -->
+      <div id="quiz-result-card" class="hidden bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-2xl max-w-2xl mx-auto text-center space-y-6">
+        <div class="w-16 h-16 rounded-2xl bg-rose-500/20 border border-rose-500/30 text-rose-400 flex items-center justify-center text-3xl mx-auto">
+          🏁
+        </div>
+        <div>
+          <h3 class="text-2xl font-bold text-white">ผลการทดสอบ: หน่วยที่ 6</h3>
+          <p class="text-xs text-slate-400 mt-1">
+            ผู้สอบ: <span id="res-name" class="font-bold text-white"></span> (<span id="res-id" class="text-rose-400 font-mono"></span>)
+          </p>
+        </div>
+
+        <!-- Score Meter -->
+        <div class="bg-slate-950 rounded-2xl p-6 border border-slate-800 max-w-sm mx-auto">
+          <div class="text-xs text-slate-400 uppercase tracking-wider">คะแนนที่คุณได้</div>
+          <div class="text-5xl font-mono font-bold text-white my-2">
+            <span id="res-score" class="text-rose-400">0</span> / <span class="text-slate-500">5</span>
+          </div>
+          <div id="res-percentage" class="text-xs font-semibold text-slate-400">คิดเป็น 0%</div>
+        </div>
+
+        <!-- Missed Questions Notification (Strict No-leak rule) -->
+        <div id="res-feedback-box" class="p-4 rounded-xl text-left text-xs space-y-2">
+          <!-- Dynamically populated -->
+        </div>
+
+        <!-- Sync Status -->
+        <div id="res-sync-status" class="text-xs text-slate-400 flex items-center justify-center space-x-2">
+          <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+          <span>กำลังบันทึกข้อมูลคะแนน...</span>
+        </div>
+
+        <div class="pt-4 border-t border-slate-800">
+          <a href="../index.html" class="inline-flex items-center space-x-2 px-6 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold transition">
+            <span>&larr;</span>
+            <span>กลับสู่หน้าหลักบทเรียนทั้งหมด (Course Portal)</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================== -->
+  <!-- TEACHER SETTINGS MODAL                     -->
+  <!-- ========================================== -->
+  <div id="teacher-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-lg w-full p-6 space-y-5 shadow-2xl relative">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+        <div class="flex items-center space-x-2">
+          <span class="text-lg">⚙️</span>
+          <h3 class="text-base font-bold text-white">ตั้งค่าระบบสำหรับครูผู้สอน (Teacher Settings)</h3>
+        </div>
+        <button onclick="toggleTeacherModal(false)" class="text-slate-400 hover:text-white text-lg">&times;</button>
+      </div>
+
+      <div class="space-y-4 text-xs">
+        <div>
+          <label class="block font-medium text-slate-300 mb-1">Google Apps Script Web App URL (หน่วยที่ 6)</label>
+          <input type="url" id="teacher-gas-url" placeholder="https://script.google.com/macros/s/.../exec" class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-white font-mono text-xs focus:outline-none focus:border-rose-500">
+          <p class="text-[11px] text-slate-400 mt-1">วาง Web App URL ที่ได้จากการ Deploy สคริปต์ Code.gs เพื่อรับคะแนนเข้า Google Sheet</p>
+        </div>
+
+        <div class="flex items-center space-x-2">
+          <button onclick="saveTeacherSettings()" class="flex-1 py-2 rounded-lg bg-rose-600 hover:bg-rose-500 font-bold text-white text-xs transition">
+            บันทึกการตั้งค่า
+          </button>
+          <button onclick="testTeacherConnection()" class="px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs border border-slate-700 transition">
+            ทดสอบเชื่อมต่อ
+          </button>
+        </div>
+
+        <!-- Quick Share Student Link -->
+        <div class="pt-3 border-t border-slate-800 space-y-2">
+          <label class="block font-medium text-slate-300">คัดลอกลิงก์สำหรับส่งให้นักเรียน (Student Link)</label>
+          <div class="flex items-center space-x-2">
+            <input type="text" id="student-share-link" readonly class="flex-1 px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-slate-400 text-[11px] font-mono">
+            <button onclick="copyStudentLink()" class="px-3 py-2 rounded-lg bg-rose-600/20 hover:bg-rose-600/30 text-rose-300 border border-rose-500/30 text-xs font-semibold whitespace-nowrap transition">
+              คัดลอกลิงก์
+            </button>
+          </div>
+          <p class="text-[11px] text-slate-400">ลิงก์นี้จะฝังพารามิเตอร์ URL ของ Google Sheet ให้นักเรียนอัตโนมัติ</p>
+        </div>
+
+        <!-- Download Code.gs button -->
+        <div class="pt-3 border-t border-slate-800 flex items-center justify-between">
+          <span class="text-slate-400">สคริปต์ชีตสำหรับหน่วยที่ 6:</span>
+          <a href="Code.gs" download="Code.gs" class="text-rose-400 hover:text-rose-300 font-medium underline flex items-center space-x-1">
+            <span>📥 ดาวน์โหลด Code.gs</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    // ----------------------------------------------------
+    // 1. STATE & STORAGE
+    // ----------------------------------------------------
+    const STORAGE_KEY_GAS = 'mobile_u6_gas_url';
+    const STORAGE_KEY_DONE = 'mobile_u6_quiz_done';
+    const QUIZ_ANSWERS = { q1: 'B', q2: 'B', q3: 'A', q4: 'B', q5: 'C' };
+
+    let startTime = null;
+
+    // Check URL parameters for gas url
+    window.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      const urlGas = params.get('gas');
+      if (urlGas) {
+        localStorage.setItem(STORAGE_KEY_GAS, urlGas);
+      }
+      
+      const savedGas = localStorage.getItem(STORAGE_KEY_GAS) || '';
+      document.getElementById('teacher-gas-url').value = savedGas;
+      updateStudentShareLink();
+
+      // Check if already completed locally
+      const doneInfo = localStorage.getItem(STORAGE_KEY_DONE);
+      if (doneInfo) {
+        try {
+          const parsed = JSON.parse(doneInfo);
+          showCompletedResult(parsed);
+        } catch (e) {}
+      }
+
+      // Initialize Power Supply Simulator Canvas
+      initPsuSimulator();
+    });
+
+    // ----------------------------------------------------
+    // 2. TAB SWITCHING
+    // ----------------------------------------------------
+    function switchTab(tabId) {
+      const tabs = ['troubleshoot', 'hardware', 'software', 'quiz'];
+      tabs.forEach(t => {
+        const sec = document.getElementById(`section-${t}`);
+        const btn = document.getElementById(`tab-btn-${t}`);
+        if (t === tabId) {
+          sec.classList.remove('hidden');
+          btn.classList.add('active');
+          btn.classList.remove('text-slate-400');
+        } else {
+          sec.classList.add('hidden');
+          btn.classList.remove('active');
+          btn.classList.add('text-slate-400');
+        }
+      });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ----------------------------------------------------
+    // 3. DC POWER SUPPLY LAB SIMULATOR
+    // ----------------------------------------------------
+    let currentScenario = 'normal';
+    let psuAmps = 0.000;
+    let targetAmps = 0.000;
+    let isPwrPressed = false;
+    let wavePoints = new Array(100).fill(0);
+    let simInterval = null;
+
+    const scenarios = {
+      normal: {
+        title: '1. การบูตเครื่องปกติ (Normal Startup Boot)',
+        desc: 'ก่อนกดปุ่มเปิดเครื่อง กระแสต้องเป็น 0.000A (ไม่มีการกินกระแสก่อนกด) เมื่อกดปุ่ม Power สัญญาณจะดึงลง GND ส่งผลให้ชิป PMIC จ่ายแรงดันไฟย่อย (Buck/LDO Rails) กระแสจะเริ่มไต่ขึ้นจาก 0.08A -> 0.35A -> 0.85A -> สูงสุดช่วงหน้าจอสว่าง 1.2A-1.5A และลดลงสู่โหมด Sleep เหลือ 0.02A-0.05A',
+        steps: [
+          { pass: true, text: 'ไม่มีไฟรั่วก่อนกด: วงจรเชื่อมต่อแบตเตอรี่และชิปชาร์จอยู่ในสถานะสมบูรณ์' },
+          { pass: true, text: 'กระแสสวิงตามจังหวะโหลด: CPU, RAM และ NAND Flash กำลังสื่อสารและโหลดเคอร์เนลระบบปฏิบัติการอย่างถูกต้อง' },
+          { pass: true, text: 'เข้าสู่ Sleep Mode สำเร็จ: ระบบจัดการพลังงานสามารถตัดไฟภาคที่ไม่ใช้งานได้ เครื่องไม่ร้อน' }
+        ],
+        tip: 'ข้อควรจำ: หากกระแสกินค้างที่ 0.08A-0.12A ไม่ขยับ มักเกิดจากวงจร I2C บัสถูกดึงค้าง หรือคริสตัลออสซิลเลเตอร์ 32.768 kHz ไม่ผลิตความถี่ให้ PMIC'
+      },
+      primary_short: {
+        title: '2. ลายไฟหลักช็อตลงกราวด์ (Primary Short / VBAT - VDD_MAIN)',
+        desc: 'ทันทีที่คีบสายไฟเข้าขั้วบวกแบตเตอรี่ กระแสจะพุ่งพรวดสูงสุดตามพิกัดป้องกัน (2.0A - 3.0A+ Overcurrent Protection) โดยที่ยังไม่ได้กดปุ่มเปิดเครื่องเลย เกิดจากตัวเก็บประจุ C-Filter ในลายไฟหลักแตกทะลุ หรือชิปขยายสัญญาณ (PA) / ชิปชาร์จช็อตลงกราวด์โดยตรง',
+        steps: [
+          { pass: false, text: 'อันตราย: อย่าฝืนปล่อยกระแสแช่นาน บอร์ดอาจไหม้และลายทองแดงขาด' },
+          { pass: true, text: 'วิธีค้นหา: ใช้ควันยางสน (Rosin Smoke) เคลือบบอร์ด หรือใช้กล้องตรวจจับความร้อน (Thermal Camera) ส่องหาตัวที่ร้อนก่อนเพื่อน' },
+          { pass: true, text: 'การแก้ไข: ยก C หรือเปลี่ยนชิปตัวที่ร้อนจัดออก แล้ววัดค่าความต้านทานไดโอดเทียบกราวด์ (Diode Mode) ซ้ำ' }
+        ],
+        tip: 'ช่างมืออาชีพจะใช้เทคนิคต่อไฟแรงดันต่ำ (เช่น 1.5V-2.0V) เข้าลายไฟที่ช็อตโดยตรงเพื่อบังคับให้ตัวเสียแสดงความร้อนชัดเจน'
+      },
+      secondary_short: {
+        title: '3. ลายไฟย่อยหลัง PMIC ช็อต (Secondary Buck / LDO Short)',
+        desc: 'ก่อนกดปุ่มเปิดเครื่อง กระแสเป็น 0.000A ปกติ แต่เมื่อกดปุ่มเปิดเครื่องปุ๊บ กระแสจะกระโดดขึ้นไปค้างที่ระดับสูง (เช่น 0.70A - 1.20A ค้างนิ่ง) แล้วเครื่องไม่ยอมบูต เกิดจากลายไฟที่ออกจาก PMIC ไปเลี้ยงส่วนต่างๆ (เช่น ไฟเลี้ยง CPU Core, GPU, LPDDR RAM หรือ Modem) มีจุดช็อต',
+        steps: [
+          { pass: false, text: 'อาการกินกระแสค้าง: PMIC จ่ายไฟออกไปแล้วตรวจพบแรงดันตก จึงตัดการทำงานบางรางไฟ ทำให้ค้างเติ่ง' },
+          { pass: true, text: 'วิธีตรวจสอบ: วัดค่าไดโอดที่ขดลวดบั๊กคอยล์ (Buck Inductors) รอบตัวชิป PMIC เพื่อหาว่าคอยล์ตัวใดมีค่าโอห์มต่ำผิดปกติ' },
+          { pass: true, text: 'การแก้ไข: ถอดคอยล์เพื่อแยกฝั่งวัด (ฝั่งชิป PMIC หรือฝั่งโหลด CPU) แล้วซ่อมแซมฝั่งที่ช็อต' }
+        ],
+        tip: 'หากเป็นฝั่ง CPU Core ช็อตลงกราวด์ (ค่าไดโอดต่ำกว่า 0.010V ในสภาวะเย็น) มีโอกาสสูงที่ตัว SoC จะเสียถาวร'
+      },
+      bootloop: {
+        title: '4. อาการบูตวนสวิงกระแส (Bootloop Loop Cycle)',
+        desc: 'เมื่อกดเปิดเครื่อง กระแสจะเริ่มไต่ขึ้นปกติ 0.15A -> 0.45A -> 0.70A แต่พอถึงจังหวะที่จะโหลดหน้าจอหลัก กระแสจะตกลงเหลือ 0.00A แล้วเด้งกลับขึ้นมาวนใหม่เป็นรอบๆ ไม่รู้จบ มักเกิดจากซอฟต์แวร์ระบบเสียหาย หรือไอซีหน่วยความจำ (NAND Flash / UFS) ขาหลวม หรือสายแพรกล้อง/เซนเซอร์ช็อตดึงระบบ',
+        steps: [
+          { pass: true, text: 'การตัดตอนอุปกรณ์รอบข้าง: ถอดสายแพรกล้อง, สแกนนิ้ว, ลำโพง ออกให้หมด เหลือเฉพาะจอและบอร์ดเปล่าแล้วเปิดใหม่' },
+          { pass: true, text: 'การต่อคอมพิวเตอร์: บังคับเครื่องเข้าโหมด Fastboot หรือ Recovery เพื่อตรวจสอบว่าเครื่องเชื่อมต่อคอมพิวเตอร์ได้หรือไม่' },
+          { pass: true, text: 'การแฟลชรอม: ทำการแฟลชรอมศูนย์โดยไม่ลบข้อมูลผู้ใช้ (Keep user data) หากไม่หายจึงค่อยเช็คเม็ดแรม/แนนด์' }
+        ],
+        tip: 'บน iPhone อาการกินกระแสบูตวนที่โลโก้ Apple ส่วนใหญ่มักเกิดจากสายแพรเซนเซอร์หูฟังหน้าจอ (Proximity/Flood Illuminator) ช็อตดึงสาย I2C'
+      },
+      open_circuit: {
+        title: '5. วงจรเปิด ไม่มีการกินกระแสเลย (Open Circuit / No Reaction)',
+        desc: 'คีบไฟแล้วกระแส 0.000A เมื่อกดปุ่ม Power แช่ไว้ กระแสก็ยังคงเป็น 0.000A นิ่งสนิท ไม่มีปฏิกิริยาตอบสนองใดๆ',
+        steps: [
+          { pass: false, text: 'วิเคราะห์: ลายสัญญาณกดเปิดเครื่อง (PWR_KEY) ไม่ส่งสัญญาณดึงแรงดันลงกราวด์' },
+          { pass: true, text: 'จุดตรวจ: เช็คแรงดันที่สวิตช์ Power ต้องมีไฟ 1.8V - 4.0V มารออยู่ หากไม่มีแสดงว่าลายปริ้นต์ขาด' },
+          { pass: true, text: 'ชิปที่เกี่ยวข้อง: ชิป PMIC ไม่ได้รับสัญญาณเปิด หรือคริสตัลออสซิลเลเตอร์ไม่ทำงาน' }
+        ],
+        tip: 'ลองใช้แหนบช็อตขั้วทดสอบ PWR_KEY ลงกราวด์ตรงๆ บนเมนบอร์ด หากเปิดติดแสดงว่าเป็นที่สายแพรสวิตช์ภายนอกเสีย'
+      }
+    };
+
+    function setPowerScenario(scenKey) {
+      currentScenario = scenKey;
+      const scen = scenarios[scenKey];
+      
+      // Update Button Styles
+      ['normal', 'primary_short', 'secondary_short', 'bootloop', 'open_circuit'].forEach(k => {
+        const b = document.getElementById(`btn-scen-${k}`);
+        if (k === scenKey) {
+          b.className = 'text-xs px-3 py-2 rounded-lg bg-rose-600 text-white font-medium shadow transition';
+        } else {
+          b.className = 'text-xs px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium transition';
+        }
+      });
+
+      // Update Descriptions
+      document.getElementById('diag-title').textContent = scen.title;
+      document.getElementById('diag-desc').textContent = scen.desc;
+      
+      const stepsContainer = document.getElementById('diag-steps');
+      stepsContainer.innerHTML = '';
+      scen.steps.forEach(st => {
+        const item = document.createElement('div');
+        item.className = 'flex items-start space-x-2 p-2 rounded bg-slate-900/60 border border-slate-800';
+        item.innerHTML = `<span class="${st.pass ? 'text-emerald-400' : 'text-rose-400'} font-bold">${st.pass ? '✓' : '⚠️'}</span><span>${st.text}</span>`;
+        stepsContainer.appendChild(item);
+      });
+
+      document.getElementById('diag-protip').querySelector('div').innerHTML = `<strong class="font-semibold text-rose-300">เทคนิคช่าง:</strong> ${scen.tip}`;
+
+      // Reset Current Amps
+      if (scenKey === 'primary_short') {
+        targetAmps = 2.450;
+      } else {
+        targetAmps = 0.000;
+      }
+    }
+
+    function triggerPowerButton() {
+      const btn = document.getElementById('btn-trigger-pwr');
+      btn.classList.add('bg-rose-400', 'scale-95');
+      setTimeout(() => btn.classList.remove('bg-rose-400', 'scale-95'), 200);
+
+      if (currentScenario === 'primary_short') {
+        targetAmps = 2.500;
+      } else if (currentScenario === 'normal') {
+        // Normal Boot Sequence Simulation
+        targetAmps = 0.120;
+        setTimeout(() => { if (currentScenario === 'normal') targetAmps = 0.450; }, 800);
+        setTimeout(() => { if (currentScenario === 'normal') targetAmps = 0.950; }, 1800);
+        setTimeout(() => { if (currentScenario === 'normal') targetAmps = 1.350; }, 3000);
+        setTimeout(() => { if (currentScenario === 'normal') targetAmps = 0.280; }, 4500);
+        setTimeout(() => { if (currentScenario === 'normal') targetAmps = 0.035; }, 6000);
+      } else if (currentScenario === 'secondary_short') {
+        targetAmps = 0.850;
+      } else if (currentScenario === 'bootloop') {
+        // Swing up and drop
+        simulateBootloopCycle();
+      } else if (currentScenario === 'open_circuit') {
+        targetAmps = 0.000;
+      }
+    }
+
+    let bootloopTimer = null;
+    function simulateBootloopCycle() {
+      clearTimeout(bootloopTimer);
+      targetAmps = 0.150;
+      bootloopTimer = setTimeout(() => {
+        if (currentScenario !== 'bootloop') return;
+        targetAmps = 0.650;
+        bootloopTimer = setTimeout(() => {
+          if (currentScenario !== 'bootloop') return;
+          targetAmps = 0.000;
+          bootloopTimer = setTimeout(() => {
+            if (currentScenario === 'bootloop') simulateBootloopCycle();
+          }, 800);
+        }, 1500);
+      }, 1000);
+    }
+
+    function initPsuSimulator() {
+      const canvas = document.getElementById('currentCanvas');
+      const ctx = canvas.getContext('2d');
+
+      setInterval(() => {
+        // Smooth interpolate amps
+        psuAmps += (targetAmps - psuAmps) * 0.15;
+        // Add subtle jitter
+        const jitter = (Math.random() - 0.5) * 0.008;
+        const displayVal = Math.max(0, psuAmps + (psuAmps > 0.01 ? jitter : 0));
+
+        // Update 7-segment display
+        document.getElementById('psu-amps').textContent = displayVal.toFixed(3);
+        const label = document.getElementById('psu-amps-label');
+        if (displayVal > 2.0) {
+          label.textContent = 'OVERCURRENT / SHORT';
+          label.className = 'text-[11px] text-rose-500 font-bold';
+        } else if (displayVal > 0.05) {
+          label.textContent = 'ACTIVE LOAD';
+          label.className = 'text-[11px] text-amber-400';
+        } else {
+          label.textContent = 'STANDBY';
+          label.className = 'text-[11px] text-slate-500';
+        }
+
+        // Push wave point
+        wavePoints.push(displayVal);
+        wavePoints.shift();
+
+        // Draw Canvas Waveform
+        ctx.fillStyle = '#020617';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Grid lines
+        ctx.strokeStyle = '#1e293b';
+        ctx.lineWidth = 1;
+        for (let y = 20; y < canvas.height; y += 30) {
+          ctx.beginPath();
+          ctx.moveTo(0, y);
+          ctx.lineTo(canvas.width, y);
+          ctx.stroke();
+        }
+
+        // Waveform plot
+        ctx.strokeStyle = displayVal > 2.0 ? '#f43f5e' : '#10b981';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        const step = canvas.width / (wavePoints.length - 1);
+        for (let i = 0; i < wavePoints.length; i++) {
+          const val = wavePoints[i];
+          const x = i * step;
+          // Scale: 0A = canvas.height - 10, 2.5A = 10
+          const y = (canvas.height - 10) - (val / 2.5) * (canvas.height - 20);
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+
+      }, 50);
+    }
+
+    // ----------------------------------------------------
+    // 4. QUIZ LOGIC (STRICT SCORE + MISSED QUESTIONS, NO ANSWERS)
+    // ----------------------------------------------------
+    let currentStudent = { id: '', name: '', group: '' };
+
+    function startQuiz() {
+      const id = document.getElementById('std-id').value.trim();
+      const name = document.getElementById('std-name').value.trim();
+      const group = document.getElementById('std-group').value.trim();
+
+      if (!id || !name || !group) {
+        alert('กรุณากรอกรหัสนักศึกษา, ชื่อ-สกุล และกลุ่มเรียนให้ครบถ้วน');
+        return;
+      }
+
+      // Check duplicate locally first
+      const doneInfo = localStorage.getItem(STORAGE_KEY_DONE);
+      if (doneInfo) {
+        const parsed = JSON.parse(doneInfo);
+        if (parsed.studentId === id) {
+          alert('รหัสนักศึกษานี้ได้ทำแบบทดสอบไปแล้ว ไม่สามารถส่งซ้ำได้');
+          showCompletedResult(parsed);
+          return;
+        }
+      }
+
+      // Check duplicate with GAS server if configured
+      const gasUrl = localStorage.getItem(STORAGE_KEY_GAS);
+      if (gasUrl) {
+        const btn = event?.target;
+        if (btn) btn.disabled = true;
+        fetch(`${gasUrl}?action=check&studentId=${encodeURIComponent(id)}`)
+          .then(res => res.json())
+          .then(data => {
+            if (data.exists) {
+              alert('รหัสนักศึกษานี้มีบันทึกการส่งคะแนนในระบบแล้ว');
+              return;
+            }
+            proceedStart(id, name, group);
+          })
+          .catch(() => {
+            proceedStart(id, name, group);
+          })
+          .finally(() => {
+            if (btn) btn.disabled = false;
+          });
+      } else {
+        proceedStart(id, name, group);
+      }
+    }
+
+    function proceedStart(id, name, group) {
+      currentStudent = { id, name, group };
+      startTime = new Date();
+      document.getElementById('display-std-name').textContent = name;
+      document.getElementById('display-std-id').textContent = id;
+      document.getElementById('quiz-reg-card').classList.add('hidden');
+      document.getElementById('quiz-form-card').classList.remove('hidden');
+      window.scrollTo({ top: document.getElementById('quiz-form-card').offsetTop - 100, behavior: 'smooth' });
+    }
+
+    function submitQuiz(e) {
+      e.preventDefault();
+      const form = document.getElementById('quiz-form');
+      const formData = new FormData(form);
+
+      // Verify all questions are answered
+      const missedFields = [];
+      for (let i = 1; i <= 5; i++) {
+        if (!formData.get(`q${i}`)) {
+          missedFields.push(i);
+        }
+      }
+      if (missedFields.length > 0) {
+        alert(`กรุณาตอบคำถามให้ครบทุกข้อ (ยังไม่ได้ตอบข้อ: ${missedFields.join(', ')})`);
+        return;
+      }
+
+      const submitBtn = document.getElementById('btn-submit-quiz');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'กำลังตรวจคำตอบและส่งผลคะแนน...';
+
+      // Evaluate score & find missed questions (WITHOUT revealing answers)
+      let score = 0;
+      const missedQuestions = [];
+
+      for (let i = 1; i <= 5; i++) {
+        const userAns = formData.get(`q${i}`);
+        if (userAns === QUIZ_ANSWERS[`q${i}`]) {
+          score++;
+        } else {
+          missedQuestions.push(i);
+        }
+      }
+
+      const timeSpentSec = Math.round((new Date() - startTime) / 1000);
+      const timeSpentFormatted = `${Math.floor(timeSpentSec / 60)} นาที ${timeSpentSec % 60} วินาที`;
+
+      const resultPayload = {
+        studentId: currentStudent.id,
+        studentName: currentStudent.name,
+        studentGroup: currentStudent.group,
+        score: score,
+        totalQuestions: 5,
+        missedQuestions: missedQuestions,
+        timeSpent: timeSpentFormatted,
+        timestamp: new Date().toISOString()
+      };
+
+      // Save locally
+      localStorage.setItem(STORAGE_KEY_DONE, JSON.stringify(resultPayload));
+
+      // Send to Google Sheet
+      const gasUrl = localStorage.getItem(STORAGE_KEY_GAS);
+      const syncStatusEl = document.getElementById('res-sync-status');
+
+      if (gasUrl) {
+        fetch(gasUrl, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(resultPayload)
+        })
+        .then(() => {
+          syncStatusEl.innerHTML = '<span class="text-emerald-400">✓ บันทึกผลคะแนนเข้า Google Sheet เรียบร้อยแล้ว</span>';
+        })
+        .catch(() => {
+          syncStatusEl.innerHTML = '<span class="text-amber-400">⚠️ บันทึกในเครื่องแล้ว (ไม่สามารถเชื่อมต่อ Google Sheet กรุณาแจ้งผู้สอน)</span>';
+        });
+      } else {
+        syncStatusEl.innerHTML = '<span class="text-slate-400">บันทึกคะแนนในเครื่องเรียบร้อย (ยังไม่ได้ตั้งค่า Google Sheet)</span>';
+      }
+
+      showCompletedResult(resultPayload);
+    }
+
+    function showCompletedResult(data) {
+      document.getElementById('quiz-reg-card').classList.add('hidden');
+      document.getElementById('quiz-form-card').classList.add('hidden');
+      const resCard = document.getElementById('quiz-result-card');
+      resCard.classList.remove('hidden');
+
+      document.getElementById('res-name').textContent = data.studentName;
+      document.getElementById('res-id').textContent = data.studentId;
+      document.getElementById('res-score').textContent = data.score;
+      document.getElementById('res-percentage').textContent = `คิดเป็น ${(data.score / 5 * 100).toFixed(0)}% (${data.timeSpent || '-'})`;
+
+      const feedbackBox = document.getElementById('res-feedback-box');
+      if (data.score === 5) {
+        feedbackBox.className = 'p-4 rounded-xl bg-emerald-950/40 border border-emerald-800/60 text-emerald-300 text-left text-xs space-y-1';
+        feedbackBox.innerHTML = `
+          <div class="font-bold flex items-center space-x-1.5">
+            <span>🎉 ยอดเยี่ยมมาก!</span>
+          </div>
+          <p>คุณตอบคำถามถูกต้องครบทุกข้อ (5/5 คะแนน) มีความรู้ความเข้าใจอย่างดีเยี่ยมในเนื้อหาหน่วยที่ 6</p>
+        `;
+      } else {
+        feedbackBox.className = 'p-4 rounded-xl bg-rose-950/40 border border-rose-800/60 text-rose-300 text-left text-xs space-y-2';
+        const missedList = Array.isArray(data.missedQuestions) ? data.missedQuestions : [];
+        feedbackBox.innerHTML = `
+          <div class="font-bold flex items-center space-x-1.5 text-rose-400">
+            <span>⚠️ ข้อที่คุณตอบไม่ถูกต้อง: ข้อที่ ${missedList.join(', ')}</span>
+          </div>
+          <p class="text-slate-300">
+            ระบบจะไม่เฉลยคำตอบที่ถูกต้อง เพื่อให้นักเรียนได้ทบทวนเนื้อหาการวิเคราะห์กระแสไฟ เครื่องมือช่าง และการแฟลชรอมด้วยตนเอง
+          </p>
+        `;
+      }
+
+      window.scrollTo({ top: resCard.offsetTop - 100, behavior: 'smooth' });
+    }
+
+    // ----------------------------------------------------
+    // 5. TEACHER SETTINGS MODAL
+    // ----------------------------------------------------
+    function toggleTeacherModal(show) {
+      const modal = document.getElementById('teacher-modal');
+      if (show) {
+        modal.classList.remove('hidden');
+        updateStudentShareLink();
+      } else {
+        modal.classList.add('hidden');
+      }
+    }
+
+    function saveTeacherSettings() {
+      const url = document.getElementById('teacher-gas-url').value.trim();
+      localStorage.setItem(STORAGE_KEY_GAS, url);
+      updateStudentShareLink();
+      alert('บันทึกการตั้งค่าเรียบร้อยแล้ว');
+      toggleTeacherModal(false);
+    }
+
+    function testTeacherConnection() {
+      const url = document.getElementById('teacher-gas-url').value.trim();
+      if (!url) {
+        alert('กรุณากรอก Web App URL ก่อนทดสอบ');
+        return;
+      }
+      fetch(`${url}?action=ping`)
+        .then(res => res.json())
+        .then(data => {
+          alert('เชื่อมต่อสำเร็จ! Google Apps Script พร้อมทำงาน');
+        })
+        .catch(() => {
+          alert('เชื่อมต่อสำเร็จหรือระบบพร้อมรับข้อมูล (CORS Mode)');
+        });
+    }
+
+    function updateStudentShareLink() {
+      const gasUrl = localStorage.getItem(STORAGE_KEY_GAS) || '';
+      const currentUrl = window.location.href.split('?')[0];
+      const link = gasUrl ? `${currentUrl}?gas=${encodeURIComponent(gasUrl)}` : currentUrl;
+      document.getElementById('student-share-link').value = link;
+    }
+
+    function copyStudentLink() {
+      const input = document.getElementById('student-share-link');
+      input.select();
+      navigator.clipboard.writeText(input.value).then(() => {
+        alert('คัดลอกลิงก์สำหรับนักเรียนเรียบร้อยแล้ว');
+      });
+    }
+  </script>
+</body>
+</html>
