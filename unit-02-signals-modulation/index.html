@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>หน่วยที่ 2: ระบบสัญญาณและการมอดูเลชันในระบบโทรศัพท์เคลื่อนที่</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Prompt', sans-serif; }
+    .tab-btn.active {
+      background-color: #0284c7;
+      color: #ffffff;
+      border-color: transparent;
+    }
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen">
+
+  <!-- Header & Nav -->
+  <header class="border-b border-slate-800 bg-slate-950/80 backdrop-blur sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-sky-600 flex items-center justify-center font-bold text-white shadow-lg shadow-sky-500/20">
+          U2
+        </div>
+        <div>
+          <h1 class="text-lg font-bold text-white tracking-wide">วิชาโทรศัพท์เคลื่อนที่ (Mobile Phone Technology)</h1>
+          <p class="text-xs text-sky-400">หน่วยที่ 2: ระบบสัญญาณและการมอดูเลชันในระบบโทรศัพท์เคลื่อนที่</p>
+        </div>
+      </div>
+      <div class="flex items-center space-x-2">
+        <button onclick="toggleTeacherModal(true)" class="flex items-center space-x-1.5 text-xs px-3 py-1.5 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 transition">
+          <span>⚙️</span>
+          <span>สำหรับครูผู้สอน</span>
+        </button>
+        <span class="text-xs px-2.5 py-1 rounded-full bg-sky-500/10 text-sky-400 border border-sky-500/20 hidden sm:inline-block">
+          Interactive Signal Lab
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Navigation Tabs -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-6">
+    <div class="flex overflow-x-auto space-x-2 pb-2 border-b border-slate-800">
+      <button onclick="switchTab('spectrum')" id="tab-btn-spectrum" class="tab-btn active px-4 py-2.5 rounded-lg text-sm font-medium border border-slate-700 bg-slate-800 text-slate-200 transition">
+        📡 สเปกตรัมและความถี่ (Spectrum Bands)
+      </button>
+      <button onclick="switchTab('modulation')" id="tab-btn-modulation" class="tab-btn px-4 py-2.5 rounded-lg text-sm font-medium border border-slate-700 bg-slate-800/40 text-slate-400 hover:text-white transition">
+        〰️ การมอดูเลชัน (Modulation & Constellation)
+      </button>
+      <button onclick="switchTab('multiple-access')" id="tab-btn-multiple-access" class="tab-btn px-4 py-2.5 rounded-lg text-sm font-medium border border-slate-700 bg-slate-800/40 text-slate-400 hover:text-white transition">
+        👥 การเข้าถึงหลายทาง (FDMA / TDMA / CDMA / OFDMA)
+      </button>
+      <button onclick="switchTab('quiz')" id="tab-btn-quiz" class="tab-btn px-4 py-2.5 rounded-lg text-sm font-medium border border-slate-700 bg-slate-800/40 text-slate-400 hover:text-white transition">
+        📝 แบบทดสอบเก็บคะแนน (Quiz)
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Content Area -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+
+    <!-- ========================================== -->
+    <!-- TAB 1: Spectrum & Frequency Bands -->
+    <!-- ========================================== -->
+    <section id="tab-spectrum" class="space-y-6">
+      <div class="bg-slate-800/50 border border-slate-700/60 rounded-2xl p-6">
+        <h2 class="text-xl font-bold text-white mb-2">คลื่นความถี่วิทยุในระบบโทรศัพท์เคลื่อนที่ (RF Spectrum Allocation)</h2>
+        <p class="text-slate-400 text-sm">ทำความเข้าใจคุณลักษณะคลื่นความถี่ 3 ย่านหลัก: คลื่นย่านต่ำ (Low-Band), ย่านกลาง (Mid-Band) และย่านสูง (High-Band / mmWave)</p>
+      </div>
+
+      <!-- Interactive Spectrum Visual Graphic -->
+      <div class="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 border border-slate-700/80 rounded-2xl p-6 shadow-xl">
+        <h3 class="text-sm font-semibold text-sky-400 mb-3 flex items-center space-x-2">
+          <span>📊</span>
+          <span>แผนผังเปรียบเทียบคุณสมบัติย่านความถี่ (Frequency Trade-offs)</span>
+        </h3>
+        
+        <div class="w-full overflow-x-auto py-2">
+          <svg viewBox="0 0 900 170" class="w-full min-w-[750px] h-auto select-none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="bandLow" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.3"/>
+                <stop offset="100%" stop-color="#0284c7" stop-opacity="0.3"/>
+              </linearGradient>
+              <linearGradient id="bandMid" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#10b981" stop-opacity="0.3"/>
+                <stop offset="100%" stop-color="#059669" stop-opacity="0.3"/>
+              </linearGradient>
+              <linearGradient id="bandHigh" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#8b5cf6" stop-opacity="0.3"/>
+                <stop offset="100%" stop-color="#7c3aed" stop-opacity="0.3"/>
+              </linearGradient>
+            </defs>
+
+            <!-- Base Spectrum Line -->
+            <line x1="50" y1="125" x2="850" y2="125" stroke="#475569" stroke-width="3" stroke-linecap="round"/>
+
+            <!-- 1. Low Band Block -->
+            <rect x="50" y="30" width="240" height="85" rx="12" fill="url(#bandLow)" stroke="#38bdf8" stroke-width="1.8"/>
+            <text x="170" y="55" fill="#38bdf8" font-size="13" font-weight="bold" text-anchor="middle">Low-Band (&lt; 1 GHz)</text>
+            <text x="170" y="75" fill="#e2e8f0" font-size="11" text-anchor="middle">700 MHz, 850 MHz, 900 MHz</text>
+            <text x="170" y="98" fill="#93c5fd" font-size="10.5" text-anchor="middle">ครอบคลุมไกลสุดขีด • ทะลุทะลวงอาคารสูง</text>
+            <circle cx="170" cy="125" r="5" fill="#38bdf8"/>
+            <text x="170" y="145" fill="#94a3b8" font-size="10" text-anchor="middle">Coverage Layer</text>
+
+            <!-- 2. Mid Band Block -->
+            <rect x="320" y="30" width="260" height="85" rx="12" fill="url(#bandMid)" stroke="#34d399" stroke-width="1.8"/>
+            <text x="450" y="55" fill="#34d399" font-size="13" font-weight="bold" text-anchor="middle">Mid-Band (1 - 6 GHz)</text>
+            <text x="450" y="75" fill="#e2e8f0" font-size="11" text-anchor="middle">1800, 2100, 2600 MHz, 3.5 GHz (C-Band)</text>
+            <text x="450" y="98" fill="#a7f3d0" font-size="10.5" text-anchor="middle">สมดุลระหว่างความเร็วและความครอบคลุม (Golden Band)</text>
+            <circle cx="450" cy="125" r="5" fill="#34d399"/>
+            <text x="450" y="145" fill="#94a3b8" font-size="10" text-anchor="middle">Capacity Layer</text>
+
+            <!-- 3. High Band Block (mmWave) -->
+            <rect x="610" y="30" width="240" height="85" rx="12" fill="url(#bandHigh)" stroke="#a78bfa" stroke-width="1.8"/>
+            <text x="730" y="55" fill="#c084fc" font-size="13" font-weight="bold" text-anchor="middle">High-Band / mmWave (24+ GHz)</text>
+            <text x="730" y="75" fill="#e2e8f0" font-size="11" text-anchor="middle">24 GHz, 26 GHz, 28 GHz</text>
+            <text x="730" y="98" fill="#ddd6fe" font-size="10.5" text-anchor="middle">ความเร็วสูงสุดระดับ Gbps • รัศมีสั้น (&lt; 200m)</text>
+            <circle cx="730" cy="125" r="5" fill="#c084fc"/>
+            <text x="730" y="145" fill="#94a3b8" font-size="10" text-anchor="middle">High-Throughput Layer</text>
+          </svg>
+        </div>
+      </div>
+
+      <!-- 3 Band Cards Detail -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-slate-800/40 border border-slate-700/80 rounded-2xl p-6 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs px-2.5 py-1 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20 font-medium">ย่านความถี่ต่ำ</span>
+            <span class="text-xs text-slate-400">Coverage</span>
+          </div>
+          <h4 class="text-lg font-bold text-white">Low-Band (ต่ำกว่า 1 GHz)</h4>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            จุดเด่นคือความยาวคลื่นยาว สามารถเดินทางผ่านสิ่งกีดขวาง ทะลุทะลวงกำแพงอาคารได้ดีมาก และเดินทางได้ไกลหลายสิบกิโลเมตร เหมาะสำหรับพื้นที่ชนบทหรือสร้างความครอบคลุมทั่วประเทศ (เช่น คลื่น 700 MHz, 900 MHz)
+          </p>
+          <div class="pt-2 text-xs text-blue-300">ความเร็ว: ~10 - 50 Mbps</div>
+        </div>
+
+        <div class="bg-slate-800/40 border border-slate-700/80 rounded-2xl p-6 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs px-2.5 py-1 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium">ย่านความถี่กลาง</span>
+            <span class="text-xs text-slate-400">Capacity</span>
+          </div>
+          <h4 class="text-lg font-bold text-white">Mid-Band (1 GHz – 6 GHz)</h4>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            เป็นย่านยอดนิยมสำหรับการใช้งานในตัวเมืองและชุมชนหนาแน่น แบนด์วิดท์กว้างพอที่จะรองรับผู้ใช้จำนวนมากพร้อมกัน และยังคงมีระยะส่งสัญญาณในระดับ 1-3 กิโลเมตร (เช่น คลื่น 1800 MHz, 2100 MHz, 2600 MHz)
+          </p>
+          <div class="pt-2 text-xs text-emerald-300">ความเร็ว: ~100 - 500 Mbps</div>
+        </div>
+
+        <div class="bg-slate-800/40 border border-slate-700/80 rounded-2xl p-6 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs px-2.5 py-1 rounded bg-purple-500/10 text-purple-400 border border-purple-500/20 font-medium">ย่านความถี่สูงพิเศษ</span>
+            <span class="text-xs text-slate-400">Ultra-Speed</span>
+          </div>
+          <h4 class="text-lg font-bold text-white">mmWave (24 GHz ขึ้นไป)</h4>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            คลื่นมิลลิเมตรมีความกว้างของช่องสัญญาณมหาศาล (แบนด์วิดท์หลายร้อย MHz) ให้ความเร็วเทียบเท่าสายไฟเบอร์ แต่ถูกดูดกลืนโดยอากาศและฝนได้ง่าย ทะลุกำแพงไม่ได้ เหมาะกับสนามกีฬา ห้างสรรพสินค้า หรือโรงงาน
+          </p>
+          <div class="pt-2 text-xs text-purple-300">ความเร็ว: ~1 - 4 Gbps</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 2: Modulation & Constellation Lab -->
+    <!-- ========================================== -->
+    <section id="tab-modulation" class="space-y-6 hidden">
+      <div class="bg-slate-800/50 border border-slate-700/60 rounded-2xl p-6">
+        <h2 class="text-xl font-bold text-white mb-2">การมอดูเลชันของระบบโทรศัพท์เคลื่อนที่ (Modulation Techniques)</h2>
+        <p class="text-slate-400 text-sm">การผสมสัญญาณข้อมูลดิจิทัลเข้ากับคลื่นพาหะ (Carrier) เพื่อส่งผ่านอากาศ: จาก BPSK &rarr; QPSK &rarr; 16QAM &rarr; 64QAM &rarr; 256QAM</p>
+      </div>
+
+      <!-- Modulation Interactive Simulator -->
+      <div class="bg-slate-800/40 border border-slate-700 rounded-2xl p-6 space-y-6">
+        <div class="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <h3 class="text-base font-bold text-white">ห้องทดลองกลุ่มดาวสัญญาณจำลอง (Constellation Diagram Simulator)</h3>
+            <p class="text-xs text-slate-400">เลือกรูปแบบการมอดูเลชันเพื่อดูกลุ่มดาวจุดสัญญาณ (I/Q Plane) และจำนวนบิตต่อสัญลักษณ์ (Bits per Symbol)</p>
+          </div>
+          <div class="flex items-center space-x-2">
+            <button onclick="selectMod('BPSK')" id="btn-mod-BPSK" class="mod-btn px-3 py-1.5 rounded-lg border border-slate-700 text-xs font-semibold bg-slate-800 text-slate-300 hover:text-white transition">BPSK</button>
+            <button onclick="selectMod('QPSK')" id="btn-mod-QPSK" class="mod-btn px-3 py-1.5 rounded-lg border border-sky-500 text-xs font-semibold bg-sky-600/20 text-white transition">QPSK</button>
+            <button onclick="selectMod('16QAM')" id="btn-mod-16QAM" class="mod-btn px-3 py-1.5 rounded-lg border border-slate-700 text-xs font-semibold bg-slate-800 text-slate-300 hover:text-white transition">16-QAM</button>
+            <button onclick="selectMod('64QAM')" id="btn-mod-64QAM" class="mod-btn px-3 py-1.5 rounded-lg border border-slate-700 text-xs font-semibold bg-slate-800 text-slate-300 hover:text-white transition">64-QAM</button>
+            <button onclick="selectMod('256QAM')" id="btn-mod-256QAM" class="mod-btn px-3 py-1.5 rounded-lg border border-slate-700 text-xs font-semibold bg-slate-800 text-slate-300 hover:text-white transition">256-QAM</button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+          <!-- Canvas for Constellation Diagram -->
+          <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 flex flex-col items-center justify-center">
+            <span class="text-xs text-slate-400 mb-2">ระนาบ I (In-Phase) และ Q (Quadrature)</span>
+            <canvas id="constellationCanvas" width="280" height="280" class="rounded-lg shadow-inner bg-slate-900/80"></canvas>
+            <span class="text-[11px] text-slate-500 mt-2">* จุดแสดงเวกเตอร์แอมพลิจูดและเฟสของแต่ละสัญลักษณ์</span>
+          </div>
+
+          <!-- Mod Details Box -->
+          <div id="mod-details-box" class="space-y-4 text-sm">
+            <!-- Injected by JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Comparison of Modulation Types -->
+      <div class="bg-slate-800/40 border border-slate-700 rounded-2xl p-6">
+        <h3 class="text-base font-bold text-white mb-3">ความสัมพันธ์ระหว่างสัญญาณรบกวน (SNR) และระดับการมอดูเลชัน</h3>
+        <p class="text-xs text-slate-300 leading-relaxed">
+          ในระบบมือถือ 4G และ 5G มีระบบ <strong>Adaptive Modulation and Coding (AMC)</strong> ที่สถานีฐานจะปรับเปลี่ยนการมอดูเลชันอัตโนมัติ:
+        </p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4 text-xs">
+          <div class="bg-slate-900/60 border border-slate-800 p-4 rounded-xl">
+            <span class="text-amber-400 font-bold block mb-1">📶 เมื่ออยู่ไกลเสา หรือสัญญาณอ่อน (Low SNR)</span>
+            <p class="text-slate-400">ระบบจะลดระดับลงมาใช้ <strong>QPSK หรือ 16-QAM</strong> เพื่อความทนทานต่อสัญญาณรบกวน แม้ความเร็วจะช้าลงแต่ข้อมูลจะไม่หลุด</p>
+          </div>
+          <div class="bg-slate-900/60 border border-slate-800 p-4 rounded-xl">
+            <span class="text-emerald-400 font-bold block mb-1">🚀 เมื่ออยู่ใกล้เสา สัญญาณชัดเจน (High SNR)</span>
+            <p class="text-slate-400">ระบบจะอัปเกรดเป็น <strong>64-QAM หรือ 256-QAM</strong> เพื่ออัดบิตข้อมูลได้สูงสุดถึง 8 บิตต่อสัญลักษณ์ ส่งผลให้ได้ความเร็วเน็ตพุ่งสูงสุด</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 3: Multiple Access Schemes (FDMA to OFDMA) -->
+    <!-- ========================================== -->
+    <section id="tab-multiple-access" class="space-y-6 hidden">
+      <div class="bg-slate-800/50 border border-slate-700/60 rounded-2xl p-6">
+        <h2 class="text-xl font-bold text-white mb-2">เทคนิคการเข้าถึงช่องสัญญาณร่วมกัน (Multiple Access)</h2>
+        <p class="text-slate-400 text-sm">เปรียบเทียบวิธีการจัดสรรคลื่นความถี่และเวลาให้กับผู้ใช้งานหลายๆ คนพร้อมกันในแต่ละยุค</p>
+      </div>
+
+      <!-- Multiple Access Visual Diagram Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+        <!-- 1. FDMA -->
+        <div class="bg-slate-800/40 border border-slate-700 rounded-2xl p-6 space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold px-2.5 py-1 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">ยุค 1G (AMPS)</span>
+            <span class="text-xs text-slate-400 font-mono">Frequency Division</span>
+          </div>
+          <h3 class="text-lg font-bold text-white">FDMA (Frequency Division Multiple Access)</h3>
+          <!-- SVG illustration for FDMA -->
+          <div class="h-28 bg-slate-950/80 rounded-xl p-3 border border-slate-800 flex items-center justify-center">
+            <svg viewBox="0 0 240 70" class="w-full h-full">
+              <!-- Y Axis: Freq, X Axis: Time -->
+              <line x1="25" y1="60" x2="230" y2="60" stroke="#64748b" stroke-width="1.5"/>
+              <line x1="25" y1="60" x2="25" y2="10" stroke="#64748b" stroke-width="1.5"/>
+              <text x="20" y="10" fill="#94a3b8" font-size="8" text-anchor="end">Freq</text>
+              <text x="230" y="68" fill="#94a3b8" font-size="8">Time</text>
+              <!-- User Slots divided by frequency bands -->
+              <rect x="35" y="15" width="180" height="9" fill="#f59e0b" rx="2"/>
+              <text x="125" y="22" fill="#fff" font-size="7" text-anchor="middle">User 1 (ความถี่ f1)</text>
+              <rect x="35" y="28" width="180" height="9" fill="#3b82f6" rx="2"/>
+              <text x="125" y="35" fill="#fff" font-size="7" text-anchor="middle">User 2 (ความถี่ f2)</text>
+              <rect x="35" y="41" width="180" height="9" fill="#10b981" rx="2"/>
+              <text x="125" y="48" fill="#fff" font-size="7" text-anchor="middle">User 3 (ความถี่ f3)</text>
+            </svg>
+          </div>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            แบ่งแบนด์วิดท์ออกเป็นช่องความถี่ย่อยๆ ผู้ใช้แต่ละคนได้ช่องความถี่เฉพาะของตนเองตลอดเวลาใช้งาน สิ้นเปลืองความถี่มากหากไม่มีการสนทนา
+          </p>
+        </div>
+
+        <!-- 2. TDMA -->
+        <div class="bg-slate-800/40 border border-slate-700 rounded-2xl p-6 space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold px-2.5 py-1 rounded bg-blue-500/20 text-blue-300 border border-blue-500/30">ยุค 2G (GSM)</span>
+            <span class="text-xs text-slate-400 font-mono">Time Division</span>
+          </div>
+          <h3 class="text-lg font-bold text-white">TDMA (Time Division Multiple Access)</h3>
+          <!-- SVG illustration for TDMA -->
+          <div class="h-28 bg-slate-950/80 rounded-xl p-3 border border-slate-800 flex items-center justify-center">
+            <svg viewBox="0 0 240 70" class="w-full h-full">
+              <line x1="25" y1="60" x2="230" y2="60" stroke="#64748b" stroke-width="1.5"/>
+              <line x1="25" y1="60" x2="25" y2="10" stroke="#64748b" stroke-width="1.5"/>
+              <text x="20" y="10" fill="#94a3b8" font-size="8" text-anchor="end">Freq</text>
+              <text x="230" y="68" fill="#94a3b8" font-size="8">Time</text>
+              <!-- User Slots divided by time on same carrier -->
+              <rect x="35" y="20" width="35" height="30" fill="#3b82f6" rx="2"/>
+              <text x="52" y="38" fill="#fff" font-size="7" text-anchor="middle">U1 (t1)</text>
+              <rect x="75" y="20" width="35" height="30" fill="#10b981" rx="2"/>
+              <text x="92" y="38" fill="#fff" font-size="7" text-anchor="middle">U2 (t2)</text>
+              <rect x="115" y="20" width="35" height="30" fill="#f59e0b" rx="2"/>
+              <text x="132" y="38" fill="#fff" font-size="7" text-anchor="middle">U3 (t3)</text>
+              <rect x="155" y="20" width="35" height="30" fill="#8b5cf6" rx="2"/>
+              <text x="172" y="38" fill="#fff" font-size="7" text-anchor="middle">U4 (t4)</text>
+            </svg>
+          </div>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            ใช้ความถี่เดียวกัน แต่สลับเวลากันส่งข้อมูลเป็นสล็อตเวลา (Time Slot) เช่น ในมาตรฐาน GSM แบ่ง 1 ความถี่ให้ผู้ใช้คุยพร้อมกันได้ 8 สล็อต
+          </p>
+        </div>
+
+        <!-- 3. CDMA -->
+        <div class="bg-slate-800/40 border border-slate-700 rounded-2xl p-6 space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold px-2.5 py-1 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">ยุค 3G (WCDMA)</span>
+            <span class="text-xs text-slate-400 font-mono">Code Division</span>
+          </div>
+          <h3 class="text-lg font-bold text-white">CDMA (Code Division Multiple Access)</h3>
+          <!-- SVG illustration for CDMA -->
+          <div class="h-28 bg-slate-950/80 rounded-xl p-3 border border-slate-800 flex items-center justify-center">
+            <svg viewBox="0 0 240 70" class="w-full h-full">
+              <line x1="25" y1="60" x2="230" y2="60" stroke="#64748b" stroke-width="1.5"/>
+              <line x1="25" y1="60" x2="25" y2="10" stroke="#64748b" stroke-width="1.5"/>
+              <text x="20" y="10" fill="#94a3b8" font-size="8" text-anchor="end">Freq</text>
+              <text x="230" y="68" fill="#94a3b8" font-size="8">Time</text>
+              <!-- Spread Spectrum with orthogonal codes -->
+              <rect x="35" y="18" width="180" height="35" fill="#047857" opacity="0.4" rx="4"/>
+              <path d="M40 35 Q55 20, 70 35 T100 35 T130 35 T160 35 T190 35" fill="none" stroke="#34d399" stroke-width="2"/>
+              <text x="125" y="48" fill="#a7f3d0" font-size="8" text-anchor="middle">ทุกคู่สายส่งพร้อมกันทุกความถี่ แยกด้วยรหัสจำเพาะ (Code)</text>
+            </svg>
+          </div>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            ผู้ใช้ทุกคนส่งสัญญาณในแถบความถี่กว้างพร้อมกันในเวลาเดียวกัน โดยข้อมูลจะถูกเข้ารหัสด้วยรหัสเฉพาะ (Orthogonal Code) ทำให้แยกข้อมูลออกจากกันได้
+          </p>
+        </div>
+
+        <!-- 4. OFDMA -->
+        <div class="bg-slate-800/40 border border-slate-700 rounded-2xl p-6 space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold px-2.5 py-1 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30">ยุค 4G/5G (LTE & NR)</span>
+            <span class="text-xs text-slate-400 font-mono">Orthogonal Frequency</span>
+          </div>
+          <h3 class="text-lg font-bold text-white">OFDMA (Orthogonal Freq. Div. Multiple Access)</h3>
+          <!-- SVG illustration for OFDMA -->
+          <div class="h-28 bg-slate-950/80 rounded-xl p-3 border border-slate-800 flex items-center justify-center">
+            <svg viewBox="0 0 240 70" class="w-full h-full">
+              <line x1="25" y1="60" x2="230" y2="60" stroke="#64748b" stroke-width="1.5"/>
+              <line x1="25" y1="60" x2="25" y2="10" stroke="#64748b" stroke-width="1.5"/>
+              <text x="20" y="10" fill="#94a3b8" font-size="8" text-anchor="end">Freq</text>
+              <text x="230" y="68" fill="#94a3b8" font-size="8">Time</text>
+              <!-- Subcarrier grid -->
+              <rect x="35" y="15" width="40" height="18" fill="#8b5cf6" rx="2"/>
+              <rect x="80" y="15" width="60" height="18" fill="#3b82f6" rx="2"/>
+              <rect x="145" y="15" width="70" height="18" fill="#10b981" rx="2"/>
+              <rect x="35" y="36" width="70" height="18" fill="#ec4899" rx="2"/>
+              <rect x="110" y="36" width="55" height="18" fill="#f59e0b" rx="2"/>
+              <rect x="170" y="36" width="45" height="18" fill="#8b5cf6" rx="2"/>
+              <text x="125" y="65" fill="#c084fc" font-size="7" text-anchor="middle">ตารางจัดสรรคลื่นย่อยแบบ Orthogonal ในมิติความถี่และเวลา</text>
+            </svg>
+          </div>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            แบ่งความถี่ออกเป็นคลื่นพาหะย่อยนับพันคลื่นที่มีคุณสมบัติตั้งฉากทางคณิตศาสตร์ (Orthogonal) สัญญาณซ้อนทับกันได้โดยไม่กวนกัน เพิ่มประสิทธิภาพคลื่นสูงสุด
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 4: Quiz -->
+    <!-- ========================================== -->
+    <section id="tab-quiz" class="space-y-6 hidden">
+      <div class="bg-slate-800/50 border border-slate-700/60 rounded-2xl p-6">
+        <h2 class="text-xl font-bold text-white mb-2">แบบทดสอบท้ายหน่วยการเรียนรู้ที่ 2</h2>
+        <p class="text-slate-400 text-sm">ทดสอบความเข้าใจเกี่ยวกับระบบสัญญาณ ย่านความถี่ การมอดูเลชัน และเทคนิคการเข้าถึงช่องสัญญาณ (5 ข้อ)</p>
+      </div>
+
+      <!-- Student Info Form -->
+      <div class="bg-slate-800/40 border border-slate-700/80 rounded-2xl p-6">
+        <h3 class="text-sm font-semibold text-sky-400 mb-3 flex items-center space-x-2">
+          <span>👤</span>
+          <span>ข้อมูลผู้ทำแบบทดสอบ (สำหรับบันทึกคะแนน)</span>
+        </h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">รหัสนักศึกษา / เลขประจำตัว</label>
+            <div class="relative">
+              <input type="text" id="student-id" placeholder="เช่น 66309010001" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white focus:outline-none focus:border-sky-500 transition">
+              <span id="student-id-spinner" class="hidden absolute right-3 top-2.5 text-xs text-amber-400 animate-spin">⏳</span>
+            </div>
+            <p id="student-id-status" class="text-xs mt-1.5 hidden"></p>
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">ชื่อ - นามสกุล</label>
+            <input type="text" id="student-name" placeholder="เช่น สมชาย ใจดี" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white focus:outline-none focus:border-sky-500 transition">
+          </div>
+        </div>
+      </div>
+
+      <div id="quiz-container" class="space-y-4">
+        <!-- Injected via JavaScript -->
+      </div>
+
+      <div class="flex items-center justify-between pt-4">
+        <button onclick="calculateQuizScore()" class="px-6 py-3 rounded-xl bg-sky-600 hover:bg-sky-500 font-semibold text-white shadow-lg shadow-sky-600/30 transition">
+          ตรวจคำตอบและประเมินผล
+        </button>
+        <button onclick="resetQuiz()" class="px-4 py-2 rounded-xl border border-slate-700 hover:bg-slate-800 text-slate-300 text-sm transition">
+          ทำใหม่อีกครั้ง
+        </button>
+      </div>
+
+      <!-- Quiz Score Modal/Banner -->
+      <div id="quiz-result-card" class="hidden bg-slate-800 border border-slate-700 rounded-2xl p-6 transition space-y-4">
+        <div>
+          <h3 class="text-lg font-bold text-white" id="quiz-result-title"></h3>
+          <p class="text-sm text-slate-300 mt-1" id="quiz-result-detail"></p>
+        </div>
+
+        <!-- Submit to Google Sheet Action -->
+        <div id="submit-sheet-section" class="pt-3 border-t border-slate-700/80 flex flex-wrap items-center justify-between gap-3">
+          <div class="text-xs text-slate-400" id="sheet-status-text">
+            💡 กดปุ่มด้านขวาเพื่อส่งผลคะแนนเข้าสู่ระบบ Google Sheet ของอาจารย์ผู้สอน
+          </div>
+          <button id="btn-send-sheet" onclick="sendScoreToGoogleSheet()" class="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 font-medium text-white text-sm shadow-lg shadow-emerald-600/20 flex items-center space-x-2 transition">
+            <span>📊</span>
+            <span>ส่งคะแนนไปยัง Google Sheet</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Teacher Settings Modal -->
+  <div id="teacher-modal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-xl w-full p-6 shadow-2xl relative space-y-5">
+      
+      <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+        <div class="flex items-center space-x-2.5">
+          <div class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold">
+            ⚙️
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-white">ตั้งค่าสำหรับครูผู้สอน (หน่วยที่ 2)</h3>
+            <p class="text-xs text-slate-400">เชื่อมต่อ Google Sheet สำหรับจัดเก็บคะแนนของนักศึกษา</p>
+          </div>
+        </div>
+        <button onclick="toggleTeacherModal(false)" class="text-slate-400 hover:text-white p-1 text-lg leading-none">
+          &times;
+        </button>
+      </div>
+
+      <!-- Google Apps Script URL Input -->
+      <div class="space-y-2">
+        <label class="block text-xs font-medium text-slate-300">
+          Google Apps Script Web App URL (ลิงก์เว็บแอปที่ Deploy จากชีต)
+        </label>
+        <input type="url" id="teacher-sheet-url" placeholder="https://script.google.com/macros/s/.../exec" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white focus:outline-none focus:border-amber-500 transition font-mono">
+        <p class="text-[11px] text-slate-500 leading-relaxed">
+          * ระบบจะบันทึก URL ไว้ใน Local Storage ของบราวเซอร์นี้อัตโนมัติ เพื่อใช้นักเรียนส่งคะแนน
+        </p>
+      </div>
+
+      <!-- Student Web App Link for sharing -->
+      <div class="space-y-2 pt-2 border-t border-slate-800">
+        <label class="block text-xs font-medium text-sky-300 flex items-center justify-between">
+          <span>🔗 ลิงก์สำหรับส่งให้นักศึกษาเข้าเรียน / ทำแบบทดสอบ</span>
+          <span id="copy-badge" class="text-[11px] text-emerald-400 font-normal hidden">✓ คัดลอกสำเร็จ!</span>
+        </label>
+        <div class="flex items-center space-x-2">
+          <input type="text" id="student-share-link" readonly class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-xs text-slate-300 font-mono focus:outline-none">
+          <button onclick="copyStudentLink()" class="px-4 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-medium text-xs whitespace-nowrap shadow-md shadow-sky-600/30 flex items-center space-x-1.5 transition">
+            <span>📋</span>
+            <span>คัดลอกลิงก์</span>
+          </button>
+        </div>
+        <p class="text-[11px] text-slate-500 leading-relaxed">
+          * เมื่อโฮสต์ขึ้น GitHub Pages คุณครูสามารถกดปุ่มนี้เพื่อคัดลอกส่งเข้า LINE/Google Classroom ให้นักเรียนได้ทันที
+        </p>
+      </div>
+
+      <!-- Buttons -->
+      <div class="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-800">
+        <a href="Code.gs" download="Code.gs" class="inline-flex items-center space-x-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-sky-400 border border-slate-700 text-xs font-medium transition">
+          <span>📥</span>
+          <span>ดาวน์โหลด Code.gs</span>
+        </a>
+
+        <div class="flex items-center space-x-2">
+          <button onclick="toggleTeacherModal(false)" class="px-4 py-2 rounded-xl border border-slate-700 text-slate-400 hover:bg-slate-800 text-xs transition">
+            ปิด
+          </button>
+          <button onclick="saveTeacherSettings()" class="px-5 py-2 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-medium text-xs shadow-md transition">
+            บันทึกการตั้งค่า
+          </button>
+        </div>
+      </div>
+
+      <!-- Guide Box -->
+      <div class="bg-slate-950/60 border border-slate-800 p-4 rounded-xl text-xs space-y-2 text-slate-400">
+        <div class="font-semibold text-slate-200">📖 ขั้นตอนเตรียม Google Sheet:</div>
+        <ol class="list-decimal list-inside space-y-1 leading-relaxed">
+          <li>เปิด Google Sheet เดิมหรือชีตใหม่</li>
+          <li>ไปที่เมนู <strong>ส่วนขยาย (Extensions) &gt; Apps Script</strong></li>
+          <li>กดปุ่ม <strong>"ดาวน์โหลด Code.gs"</strong> นำโค้ดไปวางแทนที่</li>
+          <li>กด <strong>Deploy &gt; New deployment</strong> เลือก Web App (Who has access: <strong>Anyone</strong>)</li>
+          <li>นำ URL มาบันทึกในช่องด้านบน</li>
+        </ol>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // Tab Switcher
+    function switchTab(tabId) {
+      const tabs = ['spectrum', 'modulation', 'multiple-access', 'quiz'];
+      tabs.forEach(t => {
+        document.getElementById(`tab-${t}`).classList.add('hidden');
+        const btn = document.getElementById(`tab-btn-${t}`);
+        btn.classList.remove('active');
+        btn.classList.add('bg-slate-800/40', 'text-slate-400');
+        btn.classList.remove('bg-sky-600', 'text-white');
+      });
+      document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+      const activeBtn = document.getElementById(`tab-btn-${tabId}`);
+      activeBtn.classList.add('active', 'bg-sky-600', 'text-white');
+      activeBtn.classList.remove('bg-slate-800/40', 'text-slate-400');
+
+      if (tabId === 'modulation') {
+        drawConstellation('QPSK');
+      }
+    }
+
+    // Modulation Simulator Data
+    const modConfig = {
+      'BPSK': {
+        name: 'BPSK (Binary Phase Shift Keying)',
+        bitsPerSymbol: 1,
+        states: 2,
+        points: [{x: -1, y: 0}, {x: 1, y: 0}],
+        snrReq: 'ต่ำมาก (~ 6 dB)',
+        resistance: 'ทนทานสัญญาณรบกวนสูงสุด',
+        usage: 'ใช้ส่งสัญญาณควบคุม สัญญาณฉุกเฉิน หรือในสภาวะสัญญาณอ่อนมาก'
+      },
+      'QPSK': {
+        name: 'QPSK (Quadrature Phase Shift Keying)',
+        bitsPerSymbol: 2,
+        states: 4,
+        points: [
+          {x: -0.7, y: -0.7}, {x: 0.7, y: -0.7},
+          {x: -0.7, y: 0.7}, {x: 0.7, y: 0.7}
+        ],
+        snrReq: 'ต่ำ (~ 10 dB)',
+        resistance: 'ทนทานสัญญาณรบกวนสูง',
+        usage: 'ใช้ในขอบเซลล์ (Cell Edge) หรือขณะอุปกรณ์เคลื่อนที่ด้วยความเร็วสูง'
+      },
+      '16QAM': {
+        name: '16-QAM (16-state Quadrature Amplitude Modulation)',
+        bitsPerSymbol: 4,
+        states: 16,
+        points: generateQAMGrid(4),
+        snrReq: 'ปานกลาง (~ 16 dB)',
+        resistance: 'ทนทานปานกลาง',
+        usage: 'ใช้งานทั่วไปในพื้นที่สัญญาณครอบคลุมระดับปานกลาง (4G/5G พื้นฐาน)'
+      },
+      '64QAM': {
+        name: '64-QAM (64-state Quadrature Amplitude Modulation)',
+        bitsPerSymbol: 6,
+        states: 64,
+        points: generateQAMGrid(8),
+        snrReq: 'สูง (~ 22 dB)',
+        resistance: 'ไวต่อสัญญาณรบกวน ต้องการสัญญาณแรง',
+        usage: 'ใช้ทำความเร็วสูงใน 4G LTE-Advanced และ 5G ในเขตเมือง'
+      },
+      '256QAM': {
+        name: '256-QAM (256-state Quadrature Amplitude Modulation)',
+        bitsPerSymbol: 8,
+        states: 256,
+        points: generateQAMGrid(16),
+        snrReq: 'สูงมาก (> 28 dB)',
+        resistance: 'ต้องการสภาพช่องสัญญาณที่ใสสะอาด ไร้สัญญาณรบกวน',
+        usage: 'ใช้ทำสปีดสูงสุด (Gigabit) ใน 5G Sub-6GHz และ mmWave ระยะใกล้'
+      }
+    };
+
+    function generateQAMGrid(n) {
+      const pts = [];
+      const step = 2 / (n - 1);
+      for (let i = 0; i < n; i++) {
+        for (let j = 0; j < n; j++) {
+          pts.push({
+            x: -1 + i * step,
+            y: -1 + j * step
+          });
+        }
+      }
+      return pts;
+    }
+
+    let currentMod = 'QPSK';
+
+    function selectMod(type) {
+      currentMod = type;
+      document.querySelectorAll('.mod-btn').forEach(btn => {
+        btn.classList.remove('border-sky-500', 'bg-sky-600/20', 'text-white');
+        btn.classList.add('border-slate-700', 'bg-slate-800', 'text-slate-300');
+      });
+      const activeBtn = document.getElementById(`btn-mod-${type}`);
+      if (activeBtn) {
+        activeBtn.classList.add('border-sky-500', 'bg-sky-600/20', 'text-white');
+        activeBtn.classList.remove('border-slate-700', 'bg-slate-800', 'text-slate-300');
+      }
+
+      drawConstellation(type);
+      renderModDetails(type);
+    }
+
+    function drawConstellation(type) {
+      const canvas = document.getElementById('constellationCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width;
+      const h = canvas.height;
+      const cx = w / 2;
+      const cy = h / 2;
+      const scale = w * 0.38;
+
+      ctx.clearRect(0, 0, w, h);
+
+      // Grid Axis
+      ctx.strokeStyle = '#334155';
+      ctx.lineWidth = 1;
+
+      // Circles for amplitude reference
+      ctx.beginPath();
+      ctx.arc(cx, cy, scale * 0.5, 0, Math.PI * 2);
+      ctx.arc(cx, cy, scale * 1.0, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // I and Q Axes
+      ctx.strokeStyle = '#475569';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(15, cy); ctx.lineTo(w - 15, cy);
+      ctx.moveTo(cx, 15); ctx.lineTo(cx, h - 15);
+      ctx.stroke();
+
+      // Axis labels
+      ctx.fillStyle = '#94a3b8';
+      ctx.font = '10px sans-serif';
+      ctx.fillText('+I', w - 18, cy - 6);
+      ctx.fillText('+Q', cx + 6, 20);
+
+      // Draw constellation points
+      const info = modConfig[type];
+      const radius = type === '256QAM' ? 2 : (type === '64QAM' ? 3.5 : 5);
+
+      info.points.forEach(pt => {
+        const px = cx + pt.x * scale;
+        const py = cy - pt.y * scale;
+
+        ctx.fillStyle = '#38bdf8';
+        ctx.beginPath();
+        ctx.arc(px, py, radius, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.strokeStyle = '#0284c7';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      });
+    }
+
+    function renderModDetails(type) {
+      const item = modConfig[type];
+      const box = document.getElementById('mod-details-box');
+      box.innerHTML = `
+        <div class="border-b border-slate-700/80 pb-3">
+          <span class="text-xs font-semibold px-2.5 py-1 rounded bg-sky-500/20 text-sky-400 border border-sky-500/30">
+            ${item.bitsPerSymbol} Bits / Symbol (${item.states} รูปแบบ)
+          </span>
+          <h4 class="text-base font-bold text-white mt-2">${item.name}</h4>
+        </div>
+        <div class="space-y-2 text-xs">
+          <div class="flex justify-between py-1 border-b border-slate-800">
+            <span class="text-slate-400">จำนวนบิตใน 1 สัญลักษณ์:</span>
+            <span class="font-bold text-emerald-400">${item.bitsPerSymbol} บิต</span>
+          </div>
+          <div class="flex justify-between py-1 border-b border-slate-800">
+            <span class="text-slate-400">ระดับสัญญาณรบกวนที่ต้องการ (SNR):</span>
+            <span class="font-medium text-white">${item.snrReq}</span>
+          </div>
+          <div class="flex justify-between py-1 border-b border-slate-800">
+            <span class="text-slate-400">ความทนทานต่อคลื่นกวน:</span>
+            <span class="font-medium text-sky-300">${item.resistance}</span>
+          </div>
+        </div>
+        <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-800 text-xs text-slate-300">
+          <strong class="text-white block mb-1">💡 การนำไปใช้งานจริง:</strong>
+          ${item.usage}
+        </div>
+      `;
+    }
+
+    // Quiz Questions Data (5 Questions)
+    const quizQuestions = [
+      {
+        q: '1. คลื่นความถี่ย่าน Low-Band (เช่น 700 MHz, 900 MHz) มีคุณสมบัติเด่นในข้อใด?',
+        options: [
+          'ส่งข้อมูลได้เร็วระดับ 10 Gbps',
+          'ครอบคลุมพื้นที่ได้ไกล ทะลุทะลวงสิ่งกีดขวางและอาคารได้ดีมาก',
+          'แบนด์วิดท์กว้างหลายร้อย MHz',
+          'เหมาะสำหรับใช้เฉพาะในห้องแล็บหรือระยะไม่เกิน 50 เมตร'
+        ],
+        answer: 1,
+        explain: 'Low-Band มีความยาวคลื่นยาว เดินทางได้ไกล และทะลุกำแพงอาคารได้ดีที่สุด'
+      },
+      {
+        q: '2. การมอดูเลชันแบบ 64-QAM สามารถส่งข้อมูลได้กี่บิตต่อหนึ่งสัญลักษณ์ (Bits per Symbol)?',
+        options: ['2 บิต', '4 บิต', '6 บิต (2^6 = 64)', '8 บิต'],
+        answer: 2,
+        explain: '64-QAM มี 64 สถานะ ซึ่งเท่ากับ 2 ยกกำลัง 6 ดังนั้นจึงส่งได้ 6 บิตต่อ 1 สัญลักษณ์'
+      },
+      {
+        q: '3. ในระบบ 4G และ 5G เมื่อโทรศัพท์เคลื่อนที่อยู่ไกลเสาส่ง หรือมีสัญญาณรบกวนมาก ระบบจะเลือกการมอดูเลชันแบบใด?',
+        options: [
+          '256-QAM เพื่อเร่งความเร็วสูงสุด',
+          'QPSK หรือ 16-QAM เพื่อความทนทานต่อสัญญาณรบกวน',
+          'ปิดระบบรับส่งข้อมูลทันที',
+          'OFDMA แอนะล็อก'
+        ],
+        answer: 1,
+        explain: 'ระบบ Adaptive Modulation จะลดระดับลงมาใช้ QPSK เมื่อสัญญาณอ่อน เพื่อไม่ให้ข้อมูลสูญหาย'
+      },
+      {
+        q: '4. เทคนิคการเข้าถึงช่องสัญญาณแบบใด ที่แบ่งแถบความถี่ออกเป็นคลื่นพาหะย่อยๆ ที่ตั้งฉากกัน (Orthogonal) ซึ่งเป็นหัวใจหลักของ 4G LTE และ 5G NR?',
+        options: ['FDMA', 'TDMA', 'CDMA', 'OFDMA'],
+        answer: 3,
+        explain: 'OFDMA เป็นเทคโนโลยีมัลติเพล็กซ์ที่ใช้ใน 4G และ 5G เพื่อจัดสรรคลื่นพาหะย่อยแบบตั้งฉากกัน'
+      },
+      {
+        q: '5. คลื่นความถี่สูงพิเศษย่าน mmWave (24 GHz - 28 GHz) เหมาะสมกับการใช้งานในลักษณะใดมากที่สุด?',
+        options: [
+          'กระจายสัญญาณข้ามภูเขาและทุ่งนาในชนบท',
+          'ส่งสัญญาณระยะไกลกว่า 50 กิโลเมตร',
+          'พื้นที่หนาแน่นสูง (Hotspot) เช่น สนามกีฬา คอนเสิร์ต หรือโรงงานอัจฉริยะ ที่ต้องการสปีดระดับกิกะบิต',
+          'วิทยุกระจายเสียงคลื่นสั้น AM'
+        ],
+        answer: 2,
+        explain: 'mmWave มีแบนด์วิดท์สูงมากแต่ส่งได้ระยะสั้น จึงเหมาะกับ Hotspot ที่มีคนหนาแน่นมาก'
+      }
+    ];
+
+    // Render Quiz
+    function renderQuiz() {
+      const container = document.getElementById('quiz-container');
+      container.innerHTML = quizQuestions.map((item, idx) => `
+        <div class="bg-slate-800/40 border border-slate-700/80 rounded-xl p-5">
+          <p class="font-medium text-white text-sm mb-3">${item.q}</p>
+          <div class="space-y-2">
+            ${item.options.map((opt, optIdx) => `
+              <label class="flex items-center space-x-3 p-2.5 rounded-lg bg-slate-900/40 hover:bg-slate-900/80 border border-slate-800 cursor-pointer text-xs sm:text-sm text-slate-300 transition">
+                <input type="radio" name="question-${idx}" value="${optIdx}" class="text-sky-500 focus:ring-sky-500 bg-slate-800 border-slate-700">
+                <span>${opt}</span>
+              </label>
+            `).join('')}
+          </div>
+          <div id="quiz-explain-${idx}" class="hidden mt-3 text-xs p-3 rounded-lg"></div>
+        </div>
+      `).join('');
+    }
+
+    // Calculate Quiz Score (บอกคะแนนและข้อที่ผิด ไม่แสดงเฉลย)
+    function calculateQuizScore() {
+      let score = 0;
+      let wrongQuestions = [];
+      let unansweredQuestions = [];
+
+      quizQuestions.forEach((item, idx) => {
+        const selected = document.querySelector(`input[name="question-${idx}"]:checked`);
+        const explainBox = document.getElementById(`quiz-explain-${idx}`);
+        explainBox.classList.remove('hidden', 'bg-emerald-950/40', 'border-emerald-700/50', 'text-emerald-300', 'bg-rose-950/40', 'border-rose-700/50', 'text-rose-300');
+        
+        if (!selected) {
+          unansweredQuestions.push(idx + 1);
+          explainBox.classList.add('bg-amber-950/40', 'border', 'border-amber-700/50', 'text-amber-300');
+          explainBox.innerHTML = `⚠️ ข้อนี้ยังไม่ได้เลือกคำตอบ`;
+        } else if (parseInt(selected.value) === item.answer) {
+          score++;
+          explainBox.classList.add('bg-emerald-950/40', 'border', 'border-emerald-700/50', 'text-emerald-300');
+          explainBox.innerHTML = `✓ ตอบถูกต้อง`;
+        } else {
+          wrongQuestions.push(idx + 1);
+          explainBox.classList.add('bg-rose-950/40', 'border', 'border-rose-700/50', 'text-rose-300');
+          explainBox.innerHTML = `✗ ข้อนี้ตอบไม่ถูกต้อง (ลองทบทวนเนื้อหาแล้วเลือกใหม่)`;
+        }
+      });
+
+      const resultCard = document.getElementById('quiz-result-card');
+      const title = document.getElementById('quiz-result-title');
+      const detail = document.getElementById('quiz-result-detail');
+
+      resultCard.classList.remove('hidden');
+      title.innerText = `คะแนนที่คุณได้: ${score} / ${quizQuestions.length} คะแนน`;
+
+      if (wrongQuestions.length === 0 && unansweredQuestions.length === 0) {
+        title.className = "text-lg font-bold text-emerald-400";
+        detail.innerHTML = `🎉 <strong>ยอดเยี่ยมมาก!</strong> คุณตอบถูกครบทุกข้อ (${score}/${quizQuestions.length} คะแนน)`;
+      } else {
+        title.className = score >= 3 ? "text-lg font-bold text-amber-400" : "text-lg font-bold text-rose-400";
+        
+        let feedback = [];
+        if (wrongQuestions.length > 0) {
+          feedback.push(`ข้อที่ตอบผิด ได้แก่ <strong>ข้อ ${wrongQuestions.join(', ')}</strong>`);
+        }
+        if (unansweredQuestions.length > 0) {
+          feedback.push(`ข้อที่ยังไม่ได้ทำ ได้แก่ <strong>ข้อ ${unansweredQuestions.join(', ')}</strong>`);
+        }
+        feedback.push(`กรุณาทบทวนเนื้อหาในบทเรียนเพื่อหาคำตอบที่ถูกต้อง แล้วกดส่งคะแนน`);
+        detail.innerHTML = feedback.join(' | ');
+      }
+
+      resultCard.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Teacher Settings & Google Sheet Integration
+    const TEACHER_SHEET_KEY = 'mobile_unit2_teacher_sheet_url';
+
+    function toggleTeacherModal(show) {
+      const modal = document.getElementById('teacher-modal');
+      if (show) {
+        modal.classList.remove('hidden');
+        const savedUrl = localStorage.getItem(TEACHER_SHEET_KEY) || '';
+        document.getElementById('teacher-sheet-url').value = savedUrl;
+
+        // ดึง URL สำหรับให้นักเรียน
+        const shareInput = document.getElementById('student-share-link');
+        let currentUrl = window.location.href;
+        if (currentUrl.startsWith('file:///')) {
+          currentUrl = 'https://allarm2553.github.io/mobile_phone/unit-02-signals-modulation/';
+        }
+        shareInput.value = currentUrl;
+        document.getElementById('copy-badge').classList.add('hidden');
+      } else {
+        modal.classList.add('hidden');
+      }
+    }
+
+    function copyStudentLink() {
+      const shareInput = document.getElementById('student-share-link');
+      if (!shareInput) return;
+
+      shareInput.select();
+      shareInput.setSelectionRange(0, 99999);
+
+      navigator.clipboard.writeText(shareInput.value).then(() => {
+        const badge = document.getElementById('copy-badge');
+        badge.classList.remove('hidden');
+        setTimeout(() => badge.classList.add('hidden'), 3000);
+      }).catch(() => {
+        document.execCommand('copy');
+        const badge = document.getElementById('copy-badge');
+        badge.classList.remove('hidden');
+        setTimeout(() => badge.classList.add('hidden'), 3000);
+      });
+    }
+
+    function saveTeacherSettings() {
+      const urlInput = document.getElementById('teacher-sheet-url').value.trim();
+      localStorage.setItem(TEACHER_SHEET_KEY, urlInput);
+      alert('บันทึกการตั้งค่าลิงก์ Google Sheet เรียบร้อยแล้ว!');
+      toggleTeacherModal(false);
+    }
+
+    async function sendScoreToGoogleSheet() {
+      const scriptUrl = localStorage.getItem(TEACHER_SHEET_KEY) || '';
+      const statusText = document.getElementById('sheet-status-text');
+      const sendBtn = document.getElementById('btn-send-sheet');
+
+      if (!scriptUrl) {
+        alert('⚠️ ยังไม่ได้กำหนดลิงก์ Google Sheet สำหรับเก็บคะแนน\nกรุณาแจ้งอาจารย์ผู้สอนให้กดที่ปุ่ม "⚙️ สำหรับครูผู้สอน" เพื่อตั้งค่าลิงก์ก่อนครับ');
+        toggleTeacherModal(true);
+        return;
+      }
+
+      const studentId = document.getElementById('student-id').value.trim();
+      const studentName = document.getElementById('student-name').value.trim();
+
+      if (!studentId || !studentName) {
+        alert('⚠️ กรุณากรอกรหัสนักศึกษาและชื่อ-นามสกุล ในช่องด้านบนของแบบทดสอบก่อนส่งคะแนนครับ');
+        document.getElementById('student-id').focus();
+        return;
+      }
+
+      // เช็ค Local Storage ป้องกันส่งซ้ำบนเครื่อง
+      const submittedIds = JSON.parse(localStorage.getItem('submitted_unit2_ids') || '[]');
+      if (submittedIds.includes(studentId)) {
+        alert(`❌ รหัสประจำตัว "${studentId}" เคยส่งแบบทดสอบหน่วยที่ 2 ไปแล้ว\n(ไม่อนุญาตให้ส่งคะแนนซ้ำ)`);
+        statusText.innerHTML = `❌ รหัส ${studentId} เคยส่งแบบทดสอบไปแล้ว (ไม่อนุญาตให้ส่งซ้ำ)`;
+        statusText.className = 'text-xs text-rose-400 font-semibold';
+        return;
+      }
+
+      let score = 0;
+      quizQuestions.forEach((item, idx) => {
+        const selected = document.querySelector(`input[name="question-${idx}"]:checked`);
+        if (selected && parseInt(selected.value) === item.answer) {
+          score++;
+        }
+      });
+
+      sendBtn.disabled = true;
+      sendBtn.classList.add('opacity-50', 'cursor-not-allowed');
+      statusText.innerHTML = '⏳ กำลังตรวจสอบสิทธิ์และส่งผลคะแนนเข้าสู่ระบบ Google Sheet...';
+      statusText.className = 'text-xs text-amber-400 font-medium';
+
+      const payload = {
+        studentId: studentId,
+        studentName: studentName,
+        score: score,
+        totalScore: quizQuestions.length,
+        unitTitle: 'หน่วยที่ 2: ระบบสัญญาณและการมอดูเลชันในระบบโทรศัพท์เคลื่อนที่'
+      };
+
+      try {
+        await fetch(scriptUrl, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        submittedIds.push(studentId);
+        localStorage.setItem('submitted_unit2_ids', JSON.stringify(submittedIds));
+
+        sendBtn.disabled = true;
+        sendBtn.classList.add('opacity-50', 'cursor-not-allowed');
+        sendBtn.innerHTML = '<span>🔒</span><span>ส่งคะแนนแล้วเรียบร้อย</span>';
+
+        statusText.innerHTML = `✅ บันทึกคะแนนสำเร็จ! (${studentId} ${studentName} ได้ ${score}/${quizQuestions.length} คะแนน)`;
+        statusText.className = 'text-xs text-emerald-400 font-semibold';
+
+        const idStatus = document.getElementById('student-id-status');
+        idStatus.classList.remove('hidden');
+        idStatus.className = 'text-xs mt-1.5 text-emerald-400 font-medium';
+        idStatus.innerHTML = '✅ รหัสนี้ส่งผลคะแนนเข้าสู่ระบบเรียบร้อยแล้ว';
+
+        alert(`🎉 บันทึกผลคะแนนเข้าสู่ Google Sheet ของอาจารย์เรียบร้อยแล้ว!\n\nผู้เรียน: ${studentName}\nคะแนน: ${score}/${quizQuestions.length}`);
+
+      } catch (err) {
+        console.error(err);
+        statusText.innerHTML = '❌ เกิดข้อผิดพลาดในการส่งข้อมูล โปรดตรวจสอบความถูกต้องของ URL';
+        statusText.className = 'text-xs text-rose-400 font-semibold';
+        alert('❌ เกิดข้อผิดพลาดในการส่งข้อมูล โปรดตรวจสอบ URL ของ Google Script');
+        sendBtn.disabled = false;
+        sendBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+      }
+    }
+
+    async function checkStudentDuplicateStatus() {
+      const idInput = document.getElementById('student-id');
+      const val = idInput.value.trim();
+      const statusEl = document.getElementById('student-id-status');
+      const spinnerEl = document.getElementById('student-id-spinner');
+      const sendBtn = document.getElementById('btn-send-sheet');
+
+      if (!val) {
+        statusEl.classList.add('hidden');
+        return;
+      }
+
+      const submittedIds = JSON.parse(localStorage.getItem('submitted_unit2_ids') || '[]');
+      if (submittedIds.includes(val)) {
+        statusEl.classList.remove('hidden');
+        statusEl.className = 'text-xs mt-1.5 text-rose-400 font-semibold flex items-center space-x-1';
+        statusEl.innerHTML = '<span>❌</span><span>รหัสนี้เคยส่งแบบทดสอบไปแล้ว (ไม่อนุญาตให้ส่งซ้ำ)</span>';
+        if (sendBtn) {
+          sendBtn.disabled = true;
+          sendBtn.classList.add('opacity-50', 'cursor-not-allowed');
+        }
+        return;
+      }
+
+      const scriptUrl = localStorage.getItem(TEACHER_SHEET_KEY) || '';
+      if (scriptUrl) {
+        spinnerEl.classList.remove('hidden');
+        statusEl.classList.remove('hidden');
+        statusEl.className = 'text-xs mt-1.5 text-slate-400';
+        statusEl.innerHTML = '🔍 กำลังตรวจสอบสิทธิ์รหัสนักศึกษากับระบบชีต...';
+
+        try {
+          const checkUrl = `${scriptUrl}?action=check&studentId=${encodeURIComponent(val)}`;
+          const res = await fetch(checkUrl);
+          const data = await res.json();
+          spinnerEl.classList.add('hidden');
+
+          if (data && data.duplicate) {
+            statusEl.className = 'text-xs mt-1.5 text-rose-400 font-semibold flex items-center space-x-1';
+            statusEl.innerHTML = `<span>❌</span><span>${data.message || 'รหัสนี้เคยส่งแบบทดสอบไปแล้ว'}</span>`;
+            if (sendBtn) {
+              sendBtn.disabled = true;
+              sendBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            }
+            return;
+          } else {
+            statusEl.className = 'text-xs mt-1.5 text-emerald-400 font-medium flex items-center space-x-1';
+            statusEl.innerHTML = '<span>✅</span><span>รหัสนี้มีสิทธิ์ทำและส่งแบบทดสอบ (ยังไม่เคยส่งคำตอบ)</span>';
+            if (sendBtn) {
+              sendBtn.disabled = false;
+              sendBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            }
+          }
+        } catch (e) {
+          spinnerEl.classList.add('hidden');
+          statusEl.className = 'text-xs mt-1.5 text-slate-400';
+          statusEl.innerHTML = 'ℹ️ บันทึกรหัสประจำตัวเรียบร้อย';
+        }
+      } else {
+        statusEl.classList.remove('hidden');
+        statusEl.className = 'text-xs mt-1.5 text-slate-400';
+        statusEl.innerHTML = 'ℹ️ พร้อมทำแบบทดสอบ';
+      }
+    }
+
+    function resetQuiz() {
+      document.querySelectorAll('input[type="radio"]').forEach(el => el.checked = false);
+      quizQuestions.forEach((_, idx) => {
+        const box = document.getElementById(`quiz-explain-${idx}`);
+        box.classList.add('hidden');
+      });
+      document.getElementById('quiz-result-card').classList.add('hidden');
+      document.getElementById('sheet-status-text').innerHTML = '💡 กดปุ่มด้านขวาเพื่อส่งผลคะแนนเข้าสู่ระบบ Google Sheet ของอาจารย์ผู้สอน';
+      document.getElementById('sheet-status-text').className = 'text-xs text-slate-400';
+      
+      const sendBtn = document.getElementById('btn-send-sheet');
+      if (sendBtn) {
+        sendBtn.disabled = false;
+        sendBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+        sendBtn.innerHTML = '<span>📊</span><span>ส่งคะแนนไปยัง Google Sheet</span>';
+      }
+    }
+
+    // Init
+    window.addEventListener('DOMContentLoaded', () => {
+      renderQuiz();
+      selectMod('QPSK');
+
+      const studentIdInput = document.getElementById('student-id');
+      if (studentIdInput) {
+        studentIdInput.addEventListener('blur', checkStudentDuplicateStatus);
+        studentIdInput.addEventListener('input', () => {
+          const statusEl = document.getElementById('student-id-status');
+          statusEl.classList.add('hidden');
+          const sendBtn = document.getElementById('btn-send-sheet');
+          if (sendBtn) {
+            sendBtn.disabled = false;
+            sendBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>
