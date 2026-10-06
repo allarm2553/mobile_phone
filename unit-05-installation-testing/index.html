@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>หน่วยที่ 5: การติดตั้ง การตรวจวัด และทดสอบระบบสัญญาณ</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Prompt', sans-serif; }
+    .tab-btn.active {
+      background-color: #f59e0b;
+      color: #ffffff;
+      border-color: transparent;
+    }
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen">
+
+  <!-- Header & Nav -->
+  <header class="border-b border-slate-800 bg-slate-950/80 backdrop-blur sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-amber-600 flex items-center justify-center font-bold text-white shadow-lg shadow-amber-500/20">
+          U5
+        </div>
+        <div>
+          <h1 class="text-lg font-bold text-white tracking-wide">วิชาโทรศัพท์เคลื่อนที่ (Mobile Phone Technology)</h1>
+          <p class="text-xs text-amber-400">หน่วยที่ 5: การติดตั้ง การตรวจวัด และทดสอบระบบสัญญาณ</p>
+        </div>
+      </div>
+      <div class="flex items-center space-x-2">
+        <button onclick="toggleTeacherModal(true)" class="flex items-center space-x-1.5 text-xs px-3 py-1.5 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 transition">
+          <span>⚙️</span>
+          <span>สำหรับครูผู้สอน</span>
+        </button>
+        <span class="text-xs px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 hidden sm:inline-block">
+          RF Measurement Lab
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Navigation Tabs -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-6">
+    <div class="flex overflow-x-auto space-x-2 pb-2 border-b border-slate-800">
+      <button onclick="switchTab('instruments')" id="tab-btn-instruments" class="tab-btn active px-4 py-2.5 rounded-lg text-sm font-medium border border-slate-700 bg-slate-800 text-slate-200 transition">
+        📈 เครื่องมือวัดสเปกตรัม (Spectrum Analyzer Lab)
+      </button>
+      <button onclick="switchTab('metrics')" id="tab-btn-metrics" class="tab-btn px-4 py-2.5 rounded-lg text-sm font-medium border border-slate-700 bg-slate-800/40 text-slate-400 hover:text-white transition">
+        🎯 พารามิเตอร์คุณภาพสัญญาณ (RSRP / RSRQ / SINR)
+      </button>
+      <button onclick="switchTab('drivetest')" id="tab-btn-drivetest" class="tab-btn px-4 py-2.5 rounded-lg text-sm font-medium border border-slate-700 bg-slate-800/40 text-slate-400 hover:text-white transition">
+        🚗 การทดสอบภาคสนาม (Drive Test Simulator)
+      </button>
+      <button onclick="switchTab('quiz')" id="tab-btn-quiz" class="tab-btn px-4 py-2.5 rounded-lg text-sm font-medium border border-slate-700 bg-slate-800/40 text-slate-400 hover:text-white transition">
+        📝 แบบทดสอบเก็บคะแนน (Quiz)
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Content Area -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+
+    <!-- ========================================== -->
+    <!-- TAB 1: Spectrum Analyzer Virtual Lab -->
+    <!-- ========================================== -->
+    <section id="tab-instruments" class="space-y-6">
+      <div class="bg-slate-800/50 border border-slate-700/60 rounded-2xl p-6">
+        <h2 class="text-xl font-bold text-white mb-2">เครื่องวิเคราะห์สเปกตรัมความถี่วิทยุ (Spectrum Analyzer Virtual Lab)</h2>
+        <p class="text-slate-400 text-sm">เครื่องมือสำคัญที่สุดในงานโทรคมนาคม ใช้สำหรับตรวจจับสัญญาณคลื่นพาหะ, วัดกำลังส่ง (RF Power), แบนด์วิดท์ (Bandwidth), และสัญญาณรบกวน (Harmonics/Spurious)</p>
+      </div>
+
+      <!-- Spectrum Analyzer Simulator -->
+      <div class="bg-slate-900 border border-slate-700 rounded-2xl p-6 shadow-2xl">
+        <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
+          <div>
+            <span class="text-xs font-semibold px-2.5 py-1 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30">Virtual RF Spectrum Screen</span>
+            <h3 class="text-base font-bold text-white mt-1.5">หน้าจอจำลองเครื่อง Spectrum Analyzer</h3>
+          </div>
+          
+          <!-- Controls -->
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="text-xs text-slate-400">เลือกสัญญาณทดสอบ:</span>
+            <button onclick="setSpectrumSignal('clean')" id="btn-sig-clean" class="spec-btn px-3 py-1.5 rounded-lg border border-amber-500 bg-amber-600/20 text-white text-xs font-medium transition">
+              📶 สัญญาณ 4G/5G ปกติ
+            </button>
+            <button onclick="setSpectrumSignal('interfere')" id="btn-sig-interfere" class="spec-btn px-3 py-1.5 rounded-lg border border-slate-700 bg-slate-800 text-slate-300 text-xs font-medium hover:text-white transition">
+              ⚡ มีสัญญาณรบกวน (Interference)
+            </button>
+            <button onclick="setSpectrumSignal('weak')" id="btn-sig-weak" class="spec-btn px-3 py-1.5 rounded-lg border border-slate-700 bg-slate-800 text-slate-300 text-xs font-medium hover:text-white transition">
+              📉 สัญญาณอ่อน (Low Signal)
+            </button>
+          </div>
+        </div>
+
+        <!-- Analyzer Screen (Canvas) -->
+        <div class="bg-slate-950 border-2 border-slate-800 rounded-xl p-4 flex flex-col items-center justify-center">
+          <canvas id="spectrumCanvas" width="760" height="260" class="w-full max-w-4xl h-auto rounded-lg bg-black/90 shadow-inner"></canvas>
+          
+          <!-- Screen Metrics Footer -->
+          <div class="w-full max-w-4xl grid grid-cols-2 sm:grid-cols-4 gap-2 pt-3 text-[11px] font-mono text-slate-400 border-t border-slate-800 mt-3">
+            <div>Center: <span id="spec-center" class="text-amber-400">2.600 GHz</span></div>
+            <div>Span: <span id="spec-span" class="text-amber-400">100 MHz</span></div>
+            <div>RBW: <span class="text-emerald-400">100 kHz</span></div>
+            <div>Ref Level: <span class="text-sky-400">-10.0 dBm</span></div>
+          </div>
+        </div>
+
+        <!-- Spectrum Analyzer Parameters Guide -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6 text-xs">
+          <div class="bg-slate-800/40 border border-slate-700/80 p-4 rounded-xl">
+            <strong class="text-amber-400 block mb-1">Center Frequency & Span</strong>
+            <p class="text-slate-300 leading-relaxed">
+              <strong>Center Frequency:</strong> ความถี่กึ่งกลางช่องสัญญาณที่ต้องการวัด (เช่น 2600 MHz ของ 5G Band n41)<br>
+              <strong>Span:</strong> ช่วงความถี่ความกว้างที่ต้องการสแกนดูสัญญาณรอบข้าง
+            </p>
+          </div>
+
+          <div class="bg-slate-800/40 border border-slate-700/80 p-4 rounded-xl">
+            <strong class="text-emerald-400 block mb-1">RBW & VBW</strong>
+            <p class="text-slate-300 leading-relaxed">
+              <strong>Resolution Bandwidth (RBW):</strong> ความกว้างตัวกรองความถี่ ยิ่งแคบยิ่งแยกแยะความถี่ใกล้เคียงได้ละเอียด แต่กวาดสัญญาณช้าลง<br>
+              <strong>Video Bandwidth (VBW):</strong> กรองสัญญาณรบกวนให้รูปคลื่นเนียนตา
+            </p>
+          </div>
+
+          <div class="bg-slate-800/40 border border-slate-700/80 p-4 rounded-xl">
+            <strong class="text-sky-400 block mb-1">Noise Floor (ระดับสัญญาณรบกวนพื้นฐาน)</strong>
+            <p class="text-slate-300 leading-relaxed">
+              เส้นขีดล่างสุดของหน้าจอคือระดับคลื่นรบกวนของเครื่องมือ สัญญาณที่ตรวจวัดได้จริงต้องมีความแรงสูงกว่า Noise Floor ไม่น้อยกว่า 10–20 dB จึงจะสื่อสารได้สมบูรณ์
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 2: Signal Quality Metrics (RSRP/RSRQ/SINR) -->
+    <!-- ========================================== -->
+    <section id="tab-metrics" class="space-y-6 hidden">
+      <div class="bg-slate-800/50 border border-slate-700/60 rounded-2xl p-6">
+        <h2 class="text-xl font-bold text-white mb-2">พารามิเตอร์วัดคุณภาพสัญญาณโทรศัพท์เคลื่อนที่ (Cellular RF Parameters)</h2>
+        <p class="text-slate-400 text-sm">3 ตัวชี้วัดสำคัญตามมาตรฐาน 3GPP สำหรับ 4G LTE และ 5G NR ที่วิศวกรและช่างโทรคมนาคมใช้ประเมินสัญญาณ</p>
+      </div>
+
+      <!-- 3 Metrics Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+        <!-- 1. RSRP -->
+        <div class="bg-slate-800/40 border border-slate-700 rounded-2xl p-6 space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold px-2.5 py-1 rounded bg-sky-500/20 text-sky-400 border border-sky-500/30">Signal Strength</span>
+            <span class="text-xs text-slate-400 font-mono">dBm</span>
+          </div>
+          <div>
+            <h3 class="text-lg font-bold text-white">RSRP</h3>
+            <p class="text-[11px] text-sky-300">Reference Signal Received Power</p>
+          </div>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            วัด <strong>"ความแรงของสัญญาณ"</strong> อ้างอิงจากคลื่นพาหะย่อยของสถานีฐาน:
+          </p>
+          <div class="space-y-1.5 text-xs font-mono">
+            <div class="flex justify-between p-2 rounded bg-emerald-950/40 border border-emerald-800/40 text-emerald-300">
+              <span>&gt; -80 dBm</span>
+              <span>ดีเยี่ยม (Excellent)</span>
+            </div>
+            <div class="flex justify-between p-2 rounded bg-blue-950/40 border border-blue-800/40 text-blue-300">
+              <span>-80 ถึง -90 dBm</span>
+              <span>ดี (Good)</span>
+            </div>
+            <div class="flex justify-between p-2 rounded bg-amber-950/40 border border-amber-800/40 text-amber-300">
+              <span>-90 ถึง -105 dBm</span>
+              <span>ปานกลาง (Fair)</span>
+            </div>
+            <div class="flex justify-between p-2 rounded bg-rose-950/40 border border-rose-800/40 text-rose-300">
+              <span>&lt; -105 dBm</span>
+              <span>สัญญาณอ่อนมาก (Poor)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. RSRQ -->
+        <div class="bg-slate-800/40 border border-slate-700 rounded-2xl p-6 space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold px-2.5 py-1 rounded bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">Signal Quality</span>
+            <span class="text-xs text-slate-400 font-mono">dB</span>
+          </div>
+          <div>
+            <h3 class="text-lg font-bold text-white">RSRQ</h3>
+            <p class="text-[11px] text-indigo-300">Reference Signal Received Quality</p>
+          </div>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            วัด <strong>"คุณภาพและความสะอาดของสัญญาณ"</strong> โดยนำ RSRP เทียบกับ RSSI (กำลังสัญญาณรวมทั้งช่อง):
+          </p>
+          <div class="space-y-1.5 text-xs font-mono">
+            <div class="flex justify-between p-2 rounded bg-emerald-950/40 border border-emerald-800/40 text-emerald-300">
+              <span>&gt; -10 dB</span>
+              <span>ดีเยี่ยม (Excellent)</span>
+            </div>
+            <div class="flex justify-between p-2 rounded bg-blue-950/40 border border-blue-800/40 text-blue-300">
+              <span>-10 ถึง -15 dB</span>
+              <span>ดี (Good)</span>
+            </div>
+            <div class="flex justify-between p-2 rounded bg-amber-950/40 border border-amber-800/40 text-amber-300">
+              <span>-15 ถึง -20 dB</span>
+              <span>ปานกลาง (Fair)</span>
+            </div>
+            <div class="flex justify-between p-2 rounded bg-rose-950/40 border border-rose-800/40 text-rose-300">
+              <span>&lt; -20 dB</span>
+              <span>ถูกรบกวนสูงมาก (Poor)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. SINR -->
+        <div class="bg-slate-800/40 border border-slate-700 rounded-2xl p-6 space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold px-2.5 py-1 rounded bg-teal-500/20 text-teal-400 border border-teal-500/30">Noise Ratio</span>
+            <span class="text-xs text-slate-400 font-mono">dB</span>
+          </div>
+          <div>
+            <h3 class="text-lg font-bold text-white">SINR</h3>
+            <p class="text-[11px] text-teal-300">Signal-to-Interference-plus-Noise Ratio</p>
+          </div>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            อัตราส่วนกำลังสัญญาณต่อกำลังสัญญาณรบกวน เป็นตัวชี้วัดความเร็วเน็ตจริง:
+          </p>
+          <div class="space-y-1.5 text-xs font-mono">
+            <div class="flex justify-between p-2 rounded bg-emerald-950/40 border border-emerald-800/40 text-emerald-300">
+              <span>&gt; 20 dB</span>
+              <span>เน็ตเร็วสูงสุด (256-QAM)</span>
+            </div>
+            <div class="flex justify-between p-2 rounded bg-blue-950/40 border border-blue-800/40 text-blue-300">
+              <span>13 ถึง 20 dB</span>
+              <span>ความเร็วดี (64-QAM)</span>
+            </div>
+            <div class="flex justify-between p-2 rounded bg-amber-950/40 border border-amber-800/40 text-amber-300">
+              <span>0 ถึง 13 dB</span>
+              <span>พอใช้ได้ (16-QAM)</span>
+            </div>
+            <div class="flex justify-between p-2 rounded bg-rose-950/40 border border-rose-800/40 text-rose-300">
+              <span>&lt; 0 dB</span>
+              <span>สัญญาณรบกวนมากกว่า (QPSK)</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 3: Drive Test Simulator -->
+    <!-- ========================================== -->
+    <section id="tab-drivetest" class="space-y-6 hidden">
+      <div class="bg-slate-800/50 border border-slate-700/60 rounded-2xl p-6">
+        <h2 class="text-xl font-bold text-white mb-2">การทดสอบสัญญาณภาคสนาม (Drive Test Simulator)</h2>
+        <p class="text-slate-400 text-sm">การขับรถตรวจวัดคุณภาพสัญญาณจริงบนถนนด้วยซอฟต์แวร์ทดสอบ (เช่น TEMS, NEMO) เพื่อหาจุดอับสัญญาณ (Coverage Hole) และจุดที่สายหลุด (Drop Call)</p>
+      </div>
+
+      <!-- Interactive Drive Test Road Map -->
+      <div class="bg-slate-900 border border-slate-700 rounded-2xl p-6 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <h3 class="text-base font-bold text-white">แบบจำลองเส้นทางขับรถทดสอบสัญญาณ (Drive Route)</h3>
+            <p class="text-xs text-slate-400">เลื่อนแถบจำลองระยะทางเพื่อดูการเปลี่ยนแปลงของค่าสัญญาณขณะรถวิ่งออกจากเสาส่ง</p>
+          </div>
+          <div class="flex items-center space-x-2">
+            <span class="text-xs text-slate-300">ตำแหน่งรถ:</span>
+            <input type="range" id="driveSlider" min="0" max="100" value="20" oninput="updateDriveTest(this.value)" class="w-40 sm:w-60 accent-amber-500 cursor-pointer">
+          </div>
+        </div>
+
+        <!-- SVG Map with Car and Cell Towers -->
+        <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 overflow-x-auto">
+          <svg viewBox="0 0 760 180" class="w-full min-w-[680px] h-auto select-none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Road -->
+            <rect x="20" y="80" width="720" height="40" fill="#1e293b" rx="6"/>
+            <line x1="20" y1="100" x2="740" y2="100" stroke="#fcd34d" stroke-width="2" stroke-dasharray="10 8"/>
+
+            <!-- Cell Site 1 (Left) -->
+            <g transform="translate(60, 20)">
+              <line x1="20" y1="10" x2="10" y2="60" stroke="#0284c7" stroke-width="2"/>
+              <line x1="20" y1="10" x2="30" y2="60" stroke="#0284c7" stroke-width="2"/>
+              <line x1="12" y1="35" x2="28" y2="35" stroke="#38bdf8" stroke-width="1.5"/>
+              <rect x="15" y="5" width="10" height="8" rx="2" fill="#38bdf8"/>
+              <circle cx="20" cy="4" r="2.5" fill="#ef4444"/>
+              <text x="20" y="75" fill="#38bdf8" font-size="9" font-weight="bold" text-anchor="middle">Cell Site 1</text>
+            </g>
+
+            <!-- Cell Site 2 (Right) -->
+            <g transform="translate(660, 20)">
+              <line x1="20" y1="10" x2="10" y2="60" stroke="#10b981" stroke-width="2"/>
+              <line x1="20" y1="10" x2="30" y2="60" stroke="#10b981" stroke-width="2"/>
+              <line x1="12" y1="35" x2="28" y2="35" stroke="#34d399" stroke-width="1.5"/>
+              <rect x="15" y="5" width="10" height="8" rx="2" fill="#34d399"/>
+              <circle cx="20" cy="4" r="2.5" fill="#ef4444"/>
+              <text x="20" y="75" fill="#34d399" font-size="9" font-weight="bold" text-anchor="middle">Cell Site 2</text>
+            </g>
+
+            <!-- Mountain/Building Obstacle (Center) -->
+            <g transform="translate(360, 45)">
+              <polygon points="0,35 25,5 50,35" fill="#334155" stroke="#475569" stroke-width="1.5"/>
+              <polygon points="35,35 60,15 85,35" fill="#1e293b" stroke="#475569" stroke-width="1.5"/>
+              <text x="42.5" y="48" fill="#94a3b8" font-size="8" text-anchor="middle">สิ่งกีดขวาง (จุดอับ)</text>
+            </g>
+
+            <!-- Test Vehicle (Car) -->
+            <g id="driveCar" transform="translate(160, 88)">
+              <rect x="0" y="4" width="36" height="16" rx="4" fill="#f59e0b" stroke="#fbbf24" stroke-width="1.5"/>
+              <circle cx="8" cy="20" r="3.5" fill="#000" stroke="#cbd5e1" stroke-width="1"/>
+              <circle cx="28" cy="20" r="3.5" fill="#000" stroke="#cbd5e1" stroke-width="1"/>
+              <line x1="18" y1="4" x2="18" y2="-4" stroke="#e2e8f0" stroke-width="1.5"/>
+              <circle cx="18" cy="-5" r="2" fill="#38bdf8"/>
+              <text x="18" y="15" fill="#000" font-size="7" font-weight="bold" text-anchor="middle">TEST</text>
+            </g>
+          </svg>
+        </div>
+
+        <!-- Live Telemetry Card -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 p-4 rounded-xl bg-slate-950/70 border border-slate-800 text-xs">
+          <div>
+            <span class="text-slate-400 block">สถานีที่เชื่อมต่อ:</span>
+            <span id="dt-server" class="text-sm font-bold text-sky-400">Cell Site 1</span>
+          </div>
+          <div>
+            <span class="text-slate-400 block">RSRP (ความแรง):</span>
+            <span id="dt-rsrp" class="text-sm font-bold text-emerald-400">-76 dBm (ดีเยี่ยม)</span>
+          </div>
+          <div>
+            <span class="text-slate-400 block">SINR (คุณภาพ):</span>
+            <span id="dt-sinr" class="text-sm font-bold text-emerald-400">+24 dB</span>
+          </div>
+          <div>
+            <span class="text-slate-400 block">ความเร็วทดสอบ (Throughput):</span>
+            <span id="dt-speed" class="text-sm font-bold text-amber-400">380 Mbps</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 4: Quiz -->
+    <!-- ========================================== -->
+    <section id="tab-quiz" class="space-y-6 hidden">
+      <div class="bg-slate-800/50 border border-slate-700/60 rounded-2xl p-6">
+        <h2 class="text-xl font-bold text-white mb-2">แบบทดสอบท้ายหน่วยการเรียนรู้ที่ 5</h2>
+        <p class="text-slate-400 text-sm">ทดสอบความเข้าใจเกี่ยวกับการตรวจวัดสเปกตรัม พารามิเตอร์ RSRP/RSRQ/SINR และการทำ Drive Test (5 ข้อ)</p>
+      </div>
+
+      <!-- Student Info Form -->
+      <div class="bg-slate-800/40 border border-slate-700/80 rounded-2xl p-6">
+        <h3 class="text-sm font-semibold text-amber-400 mb-3 flex items-center space-x-2">
+          <span>👤</span>
+          <span>ข้อมูลผู้ทำแบบทดสอบ (สำหรับบันทึกคะแนน)</span>
+        </h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">รหัสนักศึกษา / เลขประจำตัว</label>
+            <div class="relative">
+              <input type="text" id="student-id" placeholder="เช่น 66309010001" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white focus:outline-none focus:border-amber-500 transition">
+              <span id="student-id-spinner" class="hidden absolute right-3 top-2.5 text-xs text-amber-400 animate-spin">⏳</span>
+            </div>
+            <p id="student-id-status" class="text-xs mt-1.5 hidden"></p>
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">ชื่อ - นามสกุล</label>
+            <input type="text" id="student-name" placeholder="เช่น สมชาย ใจดี" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white focus:outline-none focus:border-amber-500 transition">
+          </div>
+        </div>
+      </div>
+
+      <div id="quiz-container" class="space-y-4">
+        <!-- Injected via JavaScript -->
+      </div>
+
+      <div class="flex items-center justify-between pt-4">
+        <button onclick="calculateQuizScore()" class="px-6 py-3 rounded-xl bg-amber-600 hover:bg-amber-500 font-semibold text-white shadow-lg shadow-amber-600/30 transition">
+          ตรวจคำตอบและประเมินผล
+        </button>
+        <button onclick="resetQuiz()" class="px-4 py-2 rounded-xl border border-slate-700 hover:bg-slate-800 text-slate-300 text-sm transition">
+          ทำใหม่อีกครั้ง
+        </button>
+      </div>
+
+      <!-- Quiz Score Modal/Banner -->
+      <div id="quiz-result-card" class="hidden bg-slate-800 border border-slate-700 rounded-2xl p-6 transition space-y-4">
+        <div>
+          <h3 class="text-lg font-bold text-white" id="quiz-result-title"></h3>
+          <p class="text-sm text-slate-300 mt-1" id="quiz-result-detail"></p>
+        </div>
+
+        <!-- Submit to Google Sheet Action -->
+        <div id="submit-sheet-section" class="pt-3 border-t border-slate-700/80 flex flex-wrap items-center justify-between gap-3">
+          <div class="text-xs text-slate-400" id="sheet-status-text">
+            💡 กดปุ่มด้านขวาเพื่อส่งผลคะแนนเข้าสู่ระบบ Google Sheet ของอาจารย์ผู้สอน
+          </div>
+          <button id="btn-send-sheet" onclick="sendScoreToGoogleSheet()" class="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 font-medium text-white text-sm shadow-lg shadow-emerald-600/20 flex items-center space-x-2 transition">
+            <span>📊</span>
+            <span>ส่งคะแนนไปยัง Google Sheet</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Teacher Settings Modal -->
+  <div id="teacher-modal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-xl w-full p-6 shadow-2xl relative space-y-5">
+      
+      <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+        <div class="flex items-center space-x-2.5">
+          <div class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold">
+            ⚙️
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-white">ตั้งค่าสำหรับครูผู้สอน (หน่วยที่ 5)</h3>
+            <p class="text-xs text-slate-400">เชื่อมต่อ Google Sheet สำหรับจัดเก็บคะแนนของนักศึกษา</p>
+          </div>
+        </div>
+        <button onclick="toggleTeacherModal(false)" class="text-slate-400 hover:text-white p-1 text-lg leading-none">
+          &times;
+        </button>
+      </div>
+
+      <!-- Google Apps Script URL Input -->
+      <div class="space-y-2">
+        <label class="block text-xs font-medium text-slate-300">
+          Google Apps Script Web App URL (ลิงก์เว็บแอปที่ Deploy จากชีต)
+        </label>
+        <input type="url" id="teacher-sheet-url" placeholder="https://script.google.com/macros/s/.../exec" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white focus:outline-none focus:border-amber-500 transition font-mono">
+        <p class="text-[11px] text-slate-500 leading-relaxed">
+          * ระบบจะบันทึก URL ไว้ใน Local Storage ของบราวเซอร์นี้อัตโนมัติ เพื่อใช้นักเรียนส่งคะแนน
+        </p>
+      </div>
+
+      <!-- Student Web App Link for sharing -->
+      <div class="space-y-2 pt-2 border-t border-slate-800">
+        <label class="block text-xs font-medium text-amber-300 flex items-center justify-between">
+          <span>🔗 ลิงก์สำหรับส่งให้นักศึกษาเข้าเรียน / ทำแบบทดสอบ</span>
+          <span id="copy-badge" class="text-[11px] text-emerald-400 font-normal hidden">✓ คัดลอกสำเร็จ!</span>
+        </label>
+        <div class="flex items-center space-x-2">
+          <input type="text" id="student-share-link" readonly class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-xs text-slate-300 font-mono focus:outline-none">
+          <button onclick="copyStudentLink()" class="px-4 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-medium text-xs whitespace-nowrap shadow-md shadow-amber-600/30 flex items-center space-x-1.5 transition">
+            <span>📋</span>
+            <span>คัดลอกลิงก์</span>
+          </button>
+        </div>
+        <p class="text-[11px] text-slate-500 leading-relaxed">
+          * เมื่อโฮสต์ขึ้น GitHub Pages คุณครูสามารถกดปุ่มนี้เพื่อคัดลอกส่งเข้า LINE/Google Classroom ให้นักเรียนได้ทันที
+        </p>
+      </div>
+
+      <!-- Buttons -->
+      <div class="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-800">
+        <a href="Code.gs" download="Code.gs" class="inline-flex items-center space-x-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-400 border border-slate-700 text-xs font-medium transition">
+          <span>📥</span>
+          <span>ดาวน์โหลด Code.gs</span>
+        </a>
+
+        <div class="flex items-center space-x-2">
+          <button onclick="toggleTeacherModal(false)" class="px-4 py-2 rounded-xl border border-slate-700 text-slate-400 hover:bg-slate-800 text-xs transition">
+            ปิด
+          </button>
+          <button onclick="saveTeacherSettings()" class="px-5 py-2 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-medium text-xs shadow-md transition">
+            บันทึกการตั้งค่า
+          </button>
+        </div>
+      </div>
+
+      <!-- Guide Box -->
+      <div class="bg-slate-950/60 border border-slate-800 p-4 rounded-xl text-xs space-y-2 text-slate-400">
+        <div class="font-semibold text-slate-200">📖 ขั้นตอนเตรียม Google Sheet:</div>
+        <ol class="list-decimal list-inside space-y-1 leading-relaxed">
+          <li>เปิด Google Sheet เดิมหรือชีตใหม่</li>
+          <li>ไปที่เมนู <strong>ส่วนขยาย (Extensions) &gt; Apps Script</strong></li>
+          <li>กดปุ่ม <strong>"ดาวน์โหลด Code.gs"</strong> นำโค้ดไปวางแทนที่</li>
+          <li>กด <strong>Deploy &gt; New deployment</strong> เลือก Web App (Who has access: <strong>Anyone</strong>)</li>
+          <li>นำ URL มาบันทึกในช่องด้านบน</li>
+        </ol>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // Tab Switcher
+    function switchTab(tabId) {
+      const tabs = ['instruments', 'metrics', 'drivetest', 'quiz'];
+      tabs.forEach(t => {
+        document.getElementById(`tab-${t}`).classList.add('hidden');
+        const btn = document.getElementById(`tab-btn-${t}`);
+        btn.classList.remove('active');
+        btn.classList.add('bg-slate-800/40', 'text-slate-400');
+        btn.classList.remove('bg-amber-600', 'text-white');
+      });
+      document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+      const activeBtn = document.getElementById(`tab-btn-${tabId}`);
+      activeBtn.classList.add('active', 'bg-amber-600', 'text-white');
+      activeBtn.classList.remove('bg-slate-800/40', 'text-slate-400');
+
+      if (tabId === 'instruments') {
+        drawSpectrum();
+      }
+    }
+
+    // Spectrum Analyzer Simulation
+    let currentSignalMode = 'clean';
+
+    function setSpectrumSignal(mode) {
+      currentSignalMode = mode;
+      document.querySelectorAll('.spec-btn').forEach(b => {
+        b.classList.remove('border-amber-500', 'bg-amber-600/20', 'text-white');
+        b.classList.add('border-slate-700', 'bg-slate-800', 'text-slate-300');
+      });
+      const active = document.getElementById(`btn-sig-${mode}`);
+      if (active) {
+        active.classList.add('border-amber-500', 'bg-amber-600/20', 'text-white');
+        active.classList.remove('border-slate-700', 'bg-slate-800', 'text-slate-300');
+      }
+      drawSpectrum();
+    }
+
+    function drawSpectrum() {
+      const canvas = document.getElementById('spectrumCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width;
+      const h = canvas.height;
+
+      // Background
+      ctx.fillStyle = '#050b14';
+      ctx.fillRect(0, 0, w, h);
+
+      // Grid Lines
+      ctx.strokeStyle = '#1e293b';
+      ctx.lineWidth = 1;
+      const xGrids = 10;
+      const yGrids = 8;
+      for (let i = 1; i < xGrids; i++) {
+        ctx.beginPath();
+        ctx.moveTo((w / xGrids) * i, 0);
+        ctx.lineTo((w / xGrids) * i, h);
+        ctx.stroke();
+      }
+      for (let j = 1; j < yGrids; j++) {
+        ctx.beginPath();
+        ctx.moveTo(0, (h / yGrids) * j);
+        ctx.lineTo(w, (h / yGrids) * j);
+        ctx.stroke();
+      }
+
+      // Draw Trace
+      ctx.beginPath();
+      ctx.strokeStyle = '#f59e0b';
+      ctx.lineWidth = 2;
+
+      const baseline = h - 35;
+      const midX = w / 2;
+
+      for (let x = 0; x <= w; x += 2) {
+        // Noise floor random jitter
+        let noise = (Math.random() - 0.5) * 8;
+        let y = baseline + noise;
+
+        if (currentSignalMode === 'clean') {
+          // Normal 5G Carrier (Bandwidth ~ 160px wide)
+          const dist = Math.abs(x - midX);
+          if (dist < 80) {
+            const peak = 160;
+            const shape = Math.cos((dist / 80) * (Math.PI / 2));
+            y -= peak * Math.pow(shape, 0.4);
+          }
+        } else if (currentSignalMode === 'interfere') {
+          // Carrier + Jammer/Spurious Spike
+          const dist = Math.abs(x - midX);
+          if (dist < 80) {
+            y -= 140 * Math.pow(Math.cos((dist / 80) * (Math.PI / 2)), 0.4);
+          }
+          // Jamming peak at right side
+          const jamDist = Math.abs(x - (midX + 130));
+          if (jamDist < 15) {
+            y -= 180 * (1 - jamDist / 15);
+          }
+        } else if (currentSignalMode === 'weak') {
+          // Low Amplitude Signal barely above noise floor
+          const dist = Math.abs(x - midX);
+          if (dist < 80) {
+            y -= 35 * Math.pow(Math.cos((dist / 80) * (Math.PI / 2)), 0.4);
+          }
+        }
+
+        if (x === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+
+      // Peak Marker
+      if (currentSignalMode !== 'weak') {
+        ctx.fillStyle = '#ef4444';
+        ctx.beginPath();
+        ctx.arc(midX, baseline - 160, 4, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#f87171';
+        ctx.font = '10px monospace';
+        ctx.fillText('Marker 1: -18.2 dBm @ 2.600 GHz', midX - 80, baseline - 170);
+      }
+    }
+
+    // Drive Test Interactive Slider
+    function updateDriveTest(val) {
+      const pct = parseInt(val);
+      const car = document.getElementById('driveCar');
+      // Translate car along x (from 40px to 660px)
+      const posX = 40 + (pct / 100) * (660 - 40);
+      car.setAttribute('transform', `translate(${posX}, 88)`);
+
+      const serverEl = document.getElementById('dt-server');
+      const rsrpEl = document.getElementById('dt-rsrp');
+      const sinrEl = document.getElementById('dt-sinr');
+      const speedEl = document.getElementById('dt-speed');
+
+      if (pct < 45) {
+        // Connected to Cell 1
+        serverEl.innerText = 'Cell Site 1 (PCI: 142)';
+        serverEl.className = 'text-sm font-bold text-sky-400';
+        const rsrp = Math.round(-70 - (pct / 45) * 35);
+        rsrpEl.innerText = `${rsrp} dBm (${rsrp > -85 ? 'ดีเยี่ยม' : 'ปานกลาง'})`;
+        sinrEl.innerText = `+${Math.max(5, Math.round(24 - (pct / 45) * 16))} dB`;
+        speedEl.innerText = `${Math.max(45, Math.round(380 - (pct / 45) * 260))} Mbps`;
+      } else if (pct >= 45 && pct <= 55) {
+        // Blind spot / Handover Zone behind mountain
+        serverEl.innerText = '⚡ กำลัง Handover...';
+        serverEl.className = 'text-sm font-bold text-amber-400 animate-pulse';
+        rsrpEl.innerText = '-108 dBm (จุดอับสัญญาณ)';
+        sinrEl.innerText = '-2 dB (รบกวนสูง)';
+        speedEl.innerText = '12 Mbps (QPSK)';
+      } else {
+        // Connected to Cell 2
+        serverEl.innerText = 'Cell Site 2 (PCI: 388)';
+        serverEl.className = 'text-sm font-bold text-emerald-400';
+        const progressFrom55 = (pct - 55) / 45;
+        const rsrp = Math.round(-100 + progressFrom55 * 30);
+        rsrpEl.innerText = `${rsrp} dBm (${rsrp > -85 ? 'ดีเยี่ยม' : 'ดี'})`;
+        sinrEl.innerText = `+${Math.round(8 + progressFrom55 * 16)} dB`;
+        speedEl.innerText = `${Math.round(80 + progressFrom55 * 320)} Mbps`;
+      }
+    }
+
+    // Quiz Questions Data (5 Questions)
+    const quizQuestions = [
+      {
+        q: '1. ปุ่มปรับค่า "RBW (Resolution Bandwidth)" บนเครื่อง Spectrum Analyzer มีผลอย่างไรต่อการแสดงผลสัญญาณ?',
+        options: [
+          'ปรับความสว่างของหน้าจอ',
+          'กำหนดความกว้างของฟิลเตอร์กรองความถี่ ยิ่งแคบยิ่งแยกแยะความถี่ใกล้เคียงได้ละเอียดยิ่งขึ้น',
+          'เพิ่มเสียงพูดในลำโพง',
+          'ตัดไฟสำรองของเสาส่ง'
+        ],
+        answer: 1,
+        explain: 'RBW เป็นตัวกำหนดความละเอียดในการแยกแยะสเปกตรัมความถี่ ยิ่งตั้งค่า RBW แคบ จะยิ่งมองเห็นสัญญาณย่อยได้คมชัด'
+      },
+      {
+        q: '2. ค่า RSRP (Reference Signal Received Power) ที่วัดได้ "-75 dBm" บ่งบอกถึงสภาพสัญญาณอย่างไร?',
+        options: [
+          'ไม่มีสัญญาณเลย สายหลุดแน่นอน',
+          'สัญญาณอ่อนมาก คุยไม่รู้เรื่อง',
+          'สัญญาณแรงและดีเยี่ยมมาก (Excellent)',
+          'สัญญาณรบกวนเกินมาตรฐาน'
+        ],
+        answer: 2,
+        explain: 'RSRP ที่ดีกว่า -80 dBm ถือเป็นระดับสัญญาณที่แรงดีเยี่ยม (Excellent Coverage)'
+      },
+      {
+        q: '3. พารามิเตอร์ SINR (Signal-to-Interference-plus-Noise Ratio) มีความสำคัญสูงสุดต่อการทำสิ่งใดในระบบ 4G/5G?',
+        options: [
+          'เป็นตัวกำหนดระดับการมอดูเลชัน (QAM) และความเร็วอินเทอร์เน็ตจริง (Data Throughput)',
+          'กำหนดขนาดหน้าจอมือถือ',
+          'ตรวจนับจำนวนเสาส่งทั่วประเทศ',
+          'วัดกระแสไฟชาร์จแบตเตอรี่'
+        ],
+        answer: 0,
+        explain: 'SINR สะท้อนถึงความสะอาดของสัญญาณ ยิ่ง SINR สูง (เกิน 20 dB) เครื่องจะใช้ 256-QAM ทำให้ได้สปีดอินเทอร์เน็ตสูงสุด'
+      },
+      {
+        q: '4. วัตถุประสงค์หลักของการทำ "Drive Test" ในงานติดตั้งและบำรุงรักษาเครือข่ายคือข้อใด?',
+        options: [
+          'ขับรถตรวจเช็กสภาพถนนและยางรถยนต์',
+          'ตรวจวัดและบันทึกคุณภาพสัญญาณจริงตามเส้นทาง เพื่อหาจุดอับสัญญาณ (Coverage Hole) และจุดที่สายหลุด (Drop Call)',
+          'โฆษณาแพ็กเกจเน็ตให้ประชาชน',
+          'ตรวจจับความเร็วของรถยนต์คันอื่น'
+        ],
+        answer: 1,
+        explain: 'Drive Test คือการนำอุปกรณ์ไปขับรถวัดสัญญาณจริงบนพื้นที่ เพื่อหาจุดบกพร่องและนำมาจูนปรับทิศทางเสาอากาศ (RF Optimization)'
+      },
+      {
+        q: '5. หากวัดค่าสัญญาณพบว่า RSRP แรงมาก (-68 dBm) แต่ SINR ติดลบ (-3 dB) และเน็ตช้ามาก มักเกิดจากสาเหตุใด?',
+        options: [
+          'แบตเตอรี่รถยนต์หมด',
+          'มีสัญญาณรบกวนสูงมาก หรือเกิดปัญหาสัญญาณรบกวนข้ามเสา (Co-Channel Interference)',
+          'สายอากาศหลุด',
+          'ซิมการ์ดหมดอายุ'
+        ],
+        answer: 1,
+        explain: 'RSRP แรงแปลว่าสัญญาณมาถึงแรง แต่ SINR ต่ำแปลว่ามีสัญญาณรบกวน (Interference) แรงพอๆ กัน ทำให้เครื่องถอดรหัสข้อมูลลำบาก'
+      }
+    ];
+
+    // Render Quiz
+    function renderQuiz() {
+      const container = document.getElementById('quiz-container');
+      container.innerHTML = quizQuestions.map((item, idx) => `
+        <div class="bg-slate-800/40 border border-slate-700/80 rounded-xl p-5">
+          <p class="font-medium text-white text-sm mb-3">${item.q}</p>
+          <div class="space-y-2">
+            ${item.options.map((opt, optIdx) => `
+              <label class="flex items-center space-x-3 p-2.5 rounded-lg bg-slate-900/40 hover:bg-slate-900/80 border border-slate-800 cursor-pointer text-xs sm:text-sm text-slate-300 transition">
+                <input type="radio" name="question-${idx}" value="${optIdx}" class="text-amber-500 focus:ring-amber-500 bg-slate-800 border-slate-700">
+                <span>${opt}</span>
+              </label>
+            `).join('')}
+          </div>
+          <div id="quiz-explain-${idx}" class="hidden mt-3 text-xs p-3 rounded-lg"></div>
+        </div>
+      `).join('');
+    }
+
+    // Calculate Quiz Score
+    function calculateQuizScore() {
+      let score = 0;
+      let wrongQuestions = [];
+      let unansweredQuestions = [];
+
+      quizQuestions.forEach((item, idx) => {
+        const selected = document.querySelector(`input[name="question-${idx}"]:checked`);
+        const explainBox = document.getElementById(`quiz-explain-${idx}`);
+        explainBox.classList.remove('hidden', 'bg-emerald-950/40', 'border-emerald-700/50', 'text-emerald-300', 'bg-rose-950/40', 'border-rose-700/50', 'text-rose-300');
+        
+        if (!selected) {
+          unansweredQuestions.push(idx + 1);
+          explainBox.classList.add('bg-amber-950/40', 'border', 'border-amber-700/50', 'text-amber-300');
+          explainBox.innerHTML = `⚠️ ข้อนี้ยังไม่ได้เลือกคำตอบ`;
+        } else if (parseInt(selected.value) === item.answer) {
+          score++;
+          explainBox.classList.add('bg-emerald-950/40', 'border', 'border-emerald-700/50', 'text-emerald-300');
+          explainBox.innerHTML = `✓ ตอบถูกต้อง`;
+        } else {
+          wrongQuestions.push(idx + 1);
+          explainBox.classList.add('bg-rose-950/40', 'border', 'border-rose-700/50', 'text-rose-300');
+          explainBox.innerHTML = `✗ ข้อนี้ตอบไม่ถูกต้อง (ลองทบทวนเนื้อหาแล้วเลือกใหม่)`;
+        }
+      });
+
+      const resultCard = document.getElementById('quiz-result-card');
+      const title = document.getElementById('quiz-result-title');
+      const detail = document.getElementById('quiz-result-detail');
+
+      resultCard.classList.remove('hidden');
+      title.innerText = `คะแนนที่คุณได้: ${score} / ${quizQuestions.length} คะแนน`;
+
+      if (wrongQuestions.length === 0 && unansweredQuestions.length === 0) {
+        title.className = "text-lg font-bold text-emerald-400";
+        detail.innerHTML = `🎉 <strong>ยอดเยี่ยมมาก!</strong> คุณตอบถูกครบทุกข้อ (${score}/${quizQuestions.length} คะแนน)`;
+      } else {
+        title.className = score >= 3 ? "text-lg font-bold text-amber-400" : "text-lg font-bold text-rose-400";
+        
+        let feedback = [];
+        if (wrongQuestions.length > 0) {
+          feedback.push(`ข้อที่ตอบผิด ได้แก่ <strong>ข้อ ${wrongQuestions.join(', ')}</strong>`);
+        }
+        if (unansweredQuestions.length > 0) {
+          feedback.push(`ข้อที่ยังไม่ได้ทำ ได้แก่ <strong>ข้อ ${unansweredQuestions.join(', ')}</strong>`);
+        }
+        feedback.push(`กรุณาทบทวนเนื้อหาในบทเรียนเพื่อหาคำตอบที่ถูกต้อง แล้วกดส่งคะแนน`);
+        detail.innerHTML = feedback.join(' | ');
+      }
+
+      resultCard.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Teacher Settings & Google Sheet Integration
+    const TEACHER_SHEET_KEY = 'mobile_unit5_teacher_sheet_url';
+
+    function toggleTeacherModal(show) {
+      const modal = document.getElementById('teacher-modal');
+      if (show) {
+        modal.classList.remove('hidden');
+        const savedUrl = localStorage.getItem(TEACHER_SHEET_KEY) || '';
+        document.getElementById('teacher-sheet-url').value = savedUrl;
+
+        const shareInput = document.getElementById('student-share-link');
+        let currentUrl = window.location.href;
+        if (currentUrl.startsWith('file:///')) {
+          currentUrl = 'https://allarm2553.github.io/mobile_phone/unit-05-installation-testing/';
+        }
+        shareInput.value = currentUrl;
+        document.getElementById('copy-badge').classList.add('hidden');
+      } else {
+        modal.classList.add('hidden');
+      }
+    }
+
+    function copyStudentLink() {
+      const shareInput = document.getElementById('student-share-link');
+      if (!shareInput) return;
+
+      shareInput.select();
+      shareInput.setSelectionRange(0, 99999);
+
+      navigator.clipboard.writeText(shareInput.value).then(() => {
+        const badge = document.getElementById('copy-badge');
+        badge.classList.remove('hidden');
+        setTimeout(() => badge.classList.add('hidden'), 3000);
+      }).catch(() => {
+        document.execCommand('copy');
+        const badge = document.getElementById('copy-badge');
+        badge.classList.remove('hidden');
+        setTimeout(() => badge.classList.add('hidden'), 3000);
+      });
+    }
+
+    function saveTeacherSettings() {
+      const urlInput = document.getElementById('teacher-sheet-url').value.trim();
+      localStorage.setItem(TEACHER_SHEET_KEY, urlInput);
+      alert('บันทึกการตั้งค่าลิงก์ Google Sheet เรียบร้อยแล้ว!');
+      toggleTeacherModal(false);
+    }
+
+    async function sendScoreToGoogleSheet() {
+      const scriptUrl = localStorage.getItem(TEACHER_SHEET_KEY) || '';
+      const statusText = document.getElementById('sheet-status-text');
+      const sendBtn = document.getElementById('btn-send-sheet');
+
+      if (!scriptUrl) {
+        alert('⚠️ ยังไม่ได้กำหนดลิงก์ Google Sheet สำหรับเก็บคะแนน\nกรุณาแจ้งอาจารย์ผู้สอนให้กดที่ปุ่ม "⚙️ สำหรับครูผู้สอน" เพื่อตั้งค่าลิงก์ก่อนครับ');
+        toggleTeacherModal(true);
+        return;
+      }
+
+      const studentId = document.getElementById('student-id').value.trim();
+      const studentName = document.getElementById('student-name').value.trim();
+
+      if (!studentId || !studentName) {
+        alert('⚠️ กรุณากรอกรหัสนักศึกษาและชื่อ-นามสกุล ในช่องด้านบนของแบบทดสอบก่อนส่งคะแนนครับ');
+        document.getElementById('student-id').focus();
+        return;
+      }
+
+      const submittedIds = JSON.parse(localStorage.getItem('submitted_unit5_ids') || '[]');
+      if (submittedIds.includes(studentId)) {
+        alert(`❌ รหัสประจำตัว "${studentId}" เคยส่งแบบทดสอบหน่วยที่ 5 ไปแล้ว\n(ไม่อนุญาตให้ส่งคะแนนซ้ำ)`);
+        statusText.innerHTML = `❌ รหัส ${studentId} เคยส่งแบบทดสอบไปแล้ว (ไม่อนุญาตให้ส่งซ้ำ)`;
+        statusText.className = 'text-xs text-rose-400 font-semibold';
+        return;
+      }
+
+      let score = 0;
+      quizQuestions.forEach((item, idx) => {
+        const selected = document.querySelector(`input[name="question-${idx}"]:checked`);
+        if (selected && parseInt(selected.value) === item.answer) {
+          score++;
+        }
+      });
+
+      sendBtn.disabled = true;
+      sendBtn.classList.add('opacity-50', 'cursor-not-allowed');
+      statusText.innerHTML = '⏳ กำลังตรวจสอบสิทธิ์และส่งผลคะแนนเข้าสู่ระบบ Google Sheet...';
+      statusText.className = 'text-xs text-amber-400 font-medium';
+
+      const payload = {
+        studentId: studentId,
+        studentName: studentName,
+        score: score,
+        totalScore: quizQuestions.length,
+        unitTitle: 'หน่วยที่ 5: การติดตั้ง การตรวจวัด และทดสอบระบบสัญญาณ'
+      };
+
+      try {
+        await fetch(scriptUrl, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        submittedIds.push(studentId);
+        localStorage.setItem('submitted_unit5_ids', JSON.stringify(submittedIds));
+
+        sendBtn.disabled = true;
+        sendBtn.classList.add('opacity-50', 'cursor-not-allowed');
+        sendBtn.innerHTML = '<span>🔒</span><span>ส่งคะแนนแล้วเรียบร้อย</span>';
+
+        statusText.innerHTML = `✅ บันทึกคะแนนสำเร็จ! (${studentId} ${studentName} ได้ ${score}/${quizQuestions.length} คะแนน)`;
+        statusText.className = 'text-xs text-emerald-400 font-semibold';
+
+        const idStatus = document.getElementById('student-id-status');
+        idStatus.classList.remove('hidden');
+        idStatus.className = 'text-xs mt-1.5 text-emerald-400 font-medium';
+        idStatus.innerHTML = '✅ รหัสนี้ส่งผลคะแนนเข้าสู่ระบบเรียบร้อยแล้ว';
+
+        alert(`🎉 บันทึกผลคะแนนเข้าสู่ Google Sheet ของอาจารย์เรียบร้อยแล้ว!\n\nผู้เรียน: ${studentName}\nคะแนน: ${score}/${quizQuestions.length}`);
+
+      } catch (err) {
+        console.error(err);
+        statusText.innerHTML = '❌ เกิดข้อผิดพลาดในการส่งข้อมูล โปรดตรวจสอบความถูกต้องของ URL';
+        statusText.className = 'text-xs text-rose-400 font-semibold';
+        alert('❌ เกิดข้อผิดพลาดในการส่งข้อมูล โปรดตรวจสอบ URL ของ Google Script');
+        sendBtn.disabled = false;
+        sendBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+      }
+    }
+
+    async function checkStudentDuplicateStatus() {
+      const idInput = document.getElementById('student-id');
+      const val = idInput.value.trim();
+      const statusEl = document.getElementById('student-id-status');
+      const spinnerEl = document.getElementById('student-id-spinner');
+      const sendBtn = document.getElementById('btn-send-sheet');
+
+      if (!val) {
+        statusEl.classList.add('hidden');
+        return;
+      }
+
+      const submittedIds = JSON.parse(localStorage.getItem('submitted_unit5_ids') || '[]');
+      if (submittedIds.includes(val)) {
+        statusEl.classList.remove('hidden');
+        statusEl.className = 'text-xs mt-1.5 text-rose-400 font-semibold flex items-center space-x-1';
+        statusEl.innerHTML = '<span>❌</span><span>รหัสนี้เคยส่งแบบทดสอบไปแล้ว (ไม่อนุญาตให้ส่งซ้ำ)</span>';
+        if (sendBtn) {
+          sendBtn.disabled = true;
+          sendBtn.classList.add('opacity-50', 'cursor-not-allowed');
+        }
+        return;
+      }
+
+      const scriptUrl = localStorage.getItem(TEACHER_SHEET_KEY) || '';
+      if (scriptUrl) {
+        spinnerEl.classList.remove('hidden');
+        statusEl.classList.remove('hidden');
+        statusEl.className = 'text-xs mt-1.5 text-slate-400';
+        statusEl.innerHTML = '🔍 กำลังตรวจสอบสิทธิ์รหัสนักศึกษากับระบบชีต...';
+
+        try {
+          const checkUrl = `${scriptUrl}?action=check&studentId=${encodeURIComponent(val)}`;
+          const res = await fetch(checkUrl);
+          const data = await res.json();
+          spinnerEl.classList.add('hidden');
+
+          if (data && data.duplicate) {
+            statusEl.className = 'text-xs mt-1.5 text-rose-400 font-semibold flex items-center space-x-1';
+            statusEl.innerHTML = `<span>❌</span><span>${data.message || 'รหัสนี้เคยส่งแบบทดสอบไปแล้ว'}</span>`;
+            if (sendBtn) {
+              sendBtn.disabled = true;
+              sendBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            }
+            return;
+          } else {
+            statusEl.className = 'text-xs mt-1.5 text-emerald-400 font-medium flex items-center space-x-1';
+            statusEl.innerHTML = '<span>✅</span><span>รหัสนี้มีสิทธิ์ทำและส่งแบบทดสอบ (ยังไม่เคยส่งคำตอบ)</span>';
+            if (sendBtn) {
+              sendBtn.disabled = false;
+              sendBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            }
+          }
+        } catch (e) {
+          spinnerEl.classList.add('hidden');
+          statusEl.className = 'text-xs mt-1.5 text-slate-400';
+          statusEl.innerHTML = 'ℹ️ บันทึกรหัสประจำตัวเรียบร้อย';
+        }
+      } else {
+        statusEl.classList.remove('hidden');
+        statusEl.className = 'text-xs mt-1.5 text-slate-400';
+        statusEl.innerHTML = 'ℹ️ พร้อมทำแบบทดสอบ';
+      }
+    }
+
+    function resetQuiz() {
+      document.querySelectorAll('input[type="radio"]').forEach(el => el.checked = false);
+      quizQuestions.forEach((_, idx) => {
+        const box = document.getElementById(`quiz-explain-${idx}`);
+        box.classList.add('hidden');
+      });
+      document.getElementById('quiz-result-card').classList.add('hidden');
+      document.getElementById('sheet-status-text').innerHTML = '💡 กดปุ่มด้านขวาเพื่อส่งผลคะแนนเข้าสู่ระบบ Google Sheet ของอาจารย์ผู้สอน';
+      document.getElementById('sheet-status-text').className = 'text-xs text-slate-400';
+      
+      const sendBtn = document.getElementById('btn-send-sheet');
+      if (sendBtn) {
+        sendBtn.disabled = false;
+        sendBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+        sendBtn.innerHTML = '<span>📊</span><span>ส่งคะแนนไปยัง Google Sheet</span>';
+      }
+    }
+
+    // Init
+    window.addEventListener('DOMContentLoaded', () => {
+      renderQuiz();
+      drawSpectrum();
+      updateDriveTest(20);
+
+      const studentIdInput = document.getElementById('student-id');
+      if (studentIdInput) {
+        studentIdInput.addEventListener('blur', checkStudentDuplicateStatus);
+        studentIdInput.addEventListener('input', () => {
+          const statusEl = document.getElementById('student-id-status');
+          statusEl.classList.add('hidden');
+          const sendBtn = document.getElementById('btn-send-sheet');
+          if (sendBtn) {
+            sendBtn.disabled = false;
+            sendBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>
