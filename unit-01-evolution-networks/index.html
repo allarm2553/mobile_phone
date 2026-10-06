@@ -555,10 +555,26 @@
         <p class="text-[11px] text-slate-500 leading-relaxed">
           * ระบบจะบันทึก URL ไว้ใน Local Storage ของบราวเซอร์นี้อัตโนมัติ เพื่อใช้นักเรียนส่งคะแนน
         </p>
+      <!-- Student Web App Link (for GitHub Pages / Web Hosting) -->
+      <div class="space-y-2 pt-2 border-t border-slate-800">
+        <label class="block text-xs font-medium text-blue-300 flex items-center justify-between">
+          <span>🔗 ลิงก์สำหรับส่งให้นักศึกษาเข้าเรียน / ทำแบบทดสอบ</span>
+          <span id="copy-badge" class="text-[11px] text-emerald-400 font-normal hidden">✓ คัดลอกสำเร็จ!</span>
+        </label>
+        <div class="flex items-center space-x-2">
+          <input type="text" id="student-share-link" readonly class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-xs text-slate-300 font-mono focus:outline-none">
+          <button onclick="copyStudentLink()" class="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-medium text-xs whitespace-nowrap shadow-md shadow-blue-600/30 flex items-center space-x-1.5 transition">
+            <span>📋</span>
+            <span>คัดลอกลิงก์</span>
+          </button>
+        </div>
+        <p class="text-[11px] text-slate-500 leading-relaxed">
+          * เมื่อโฮสต์ขึ้น GitHub Pages (เช่น <code class="text-slate-400">https://allarm2553.github.io/mobile_phone/unit-01-evolution-networks/</code>) คุณครูสามารถกดปุ่มนี้เพื่อคัดลอกส่งเข้า LINE/Google Classroom ให้นักเรียนได้ทันที
+        </p>
       </div>
 
       <!-- Buttons -->
-      <div class="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-800">
+      <div class="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-800">
         <!-- Download Code.gs Button -->
         <a href="Code.gs" download="Code.gs" class="inline-flex items-center space-x-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-blue-400 border border-slate-700 text-xs font-medium transition">
           <span>📥</span>
@@ -567,7 +583,7 @@
 
         <div class="flex items-center space-x-2">
           <button onclick="toggleTeacherModal(false)" class="px-4 py-2 rounded-xl border border-slate-700 text-slate-400 hover:bg-slate-800 text-xs transition">
-            ยกเลิก
+            ปิด
           </button>
           <button onclick="saveTeacherSettings()" class="px-5 py-2 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-medium text-xs shadow-md transition">
             บันทึกการตั้งค่า
@@ -889,9 +905,43 @@
         modal.classList.remove('hidden');
         const savedUrl = localStorage.getItem(TEACHER_SHEET_KEY) || '';
         document.getElementById('teacher-sheet-url').value = savedUrl;
+
+        // ดึง URL ของหน้าปัจจุบัน หรือ URL ของ GitHub Pages
+        const shareInput = document.getElementById('student-share-link');
+        let currentUrl = window.location.href;
+        // หากเปิดเป็น file:/// ให้ขึ้นเป็นตัวอย่าง URL บน GitHub Pages เพื่อความสะดวก
+        if (currentUrl.startsWith('file:///')) {
+          currentUrl = 'https://allarm2553.github.io/mobile_phone/unit-01-evolution-networks/';
+        }
+        shareInput.value = currentUrl;
+        document.getElementById('copy-badge').classList.add('hidden');
       } else {
         modal.classList.add('hidden');
       }
+    }
+
+    function copyStudentLink() {
+      const shareInput = document.getElementById('student-share-link');
+      if (!shareInput) return;
+
+      shareInput.select();
+      shareInput.setSelectionRange(0, 99999); // For mobile devices
+
+      navigator.clipboard.writeText(shareInput.value).then(() => {
+        const badge = document.getElementById('copy-badge');
+        badge.classList.remove('hidden');
+        setTimeout(() => {
+          badge.classList.add('hidden');
+        }, 3000);
+      }).catch(() => {
+        // Fallback for older browsers
+        document.execCommand('copy');
+        const badge = document.getElementById('copy-badge');
+        badge.classList.remove('hidden');
+        setTimeout(() => {
+          badge.classList.add('hidden');
+        }, 3000);
+      });
     }
 
     function saveTeacherSettings() {
