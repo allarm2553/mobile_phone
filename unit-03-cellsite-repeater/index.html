@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>หน่วยที่ 3: สถานีฐาน (Cell Site) และสถานีทวนสัญญาณ</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Prompt', sans-serif; }
+    .tab-btn.active {
+      background-color: #0d9488;
+      color: #ffffff;
+      border-color: transparent;
+    }
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen">
+
+  <!-- Header & Nav -->
+  <header class="border-b border-slate-800 bg-slate-950/80 backdrop-blur sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-teal-600 flex items-center justify-center font-bold text-white shadow-lg shadow-teal-500/20">
+          U3
+        </div>
+        <div>
+          <h1 class="text-lg font-bold text-white tracking-wide">วิชาโทรศัพท์เคลื่อนที่ (Mobile Phone Technology)</h1>
+          <p class="text-xs text-teal-400">หน่วยที่ 3: สถานีฐาน (Cell Site) และสถานีทวนสัญญาณ</p>
+        </div>
+      </div>
+      <div class="flex items-center space-x-2">
+        <button onclick="toggleTeacherModal(true)" class="flex items-center space-x-1.5 text-xs px-3 py-1.5 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 transition">
+          <span>⚙️</span>
+          <span>สำหรับครูผู้สอน</span>
+        </button>
+        <span class="text-xs px-2.5 py-1 rounded-full bg-teal-500/10 text-teal-400 border border-teal-500/20 hidden sm:inline-block">
+          Cell Site Lab
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Navigation Tabs -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-6">
+    <div class="flex overflow-x-auto space-x-2 pb-2 border-b border-slate-800">
+      <button onclick="switchTab('cellular')" id="tab-btn-cellular" class="tab-btn active px-4 py-2.5 rounded-lg text-sm font-medium border border-slate-700 bg-slate-800 text-slate-200 transition">
+        ⬡ แนวคิดเซลลูลาร์ (Cellular Concept & Re-use)
+      </button>
+      <button onclick="switchTab('tower')" id="tab-btn-tower" class="tab-btn px-4 py-2.5 rounded-lg text-sm font-medium border border-slate-700 bg-slate-800/40 text-slate-400 hover:text-white transition">
+        🗼 กายภาพและอุปกรณ์สถานีฐาน (Cell Site Anatomy)
+      </button>
+      <button onclick="switchTab('repeater-handover')" id="tab-btn-repeater-handover" class="tab-btn px-4 py-2.5 rounded-lg text-sm font-medium border border-slate-700 bg-slate-800/40 text-slate-400 hover:text-white transition">
+        🔁 สถานีทวนสัญญาณ & Handover
+      </button>
+      <button onclick="switchTab('quiz')" id="tab-btn-quiz" class="tab-btn px-4 py-2.5 rounded-lg text-sm font-medium border border-slate-700 bg-slate-800/40 text-slate-400 hover:text-white transition">
+        📝 แบบทดสอบเก็บคะแนน (Quiz)
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Content Area -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+
+    <!-- ========================================== -->
+    <!-- TAB 1: Cellular Concept & Frequency Reuse -->
+    <!-- ========================================== -->
+    <section id="tab-cellular" class="space-y-6">
+      <div class="bg-slate-800/50 border border-slate-700/60 rounded-2xl p-6">
+        <h2 class="text-xl font-bold text-white mb-2">แนวคิดโครงข่ายรูปหกเหลี่ยม (Cellular Concept) และการนำความถี่กลับมาใช้ซ้ำ</h2>
+        <p class="text-slate-400 text-sm">การจัดแบ่งพื้นที่ให้บริการออกเป็นเซลล์หกเหลี่ยม (Hexagonal Cells) เพื่อให้สามารถนำความถี่ชุดเดิมกลับมาใช้ซ้ำได้โดยไม่เกิดสัญญาณรบกวนร่วมช่อง (Co-channel Interference)</p>
+      </div>
+
+      <!-- Hexagonal Grid SVG Graphic -->
+      <div class="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 border border-slate-700/80 rounded-2xl p-6 shadow-xl">
+        <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
+          <div>
+            <span class="text-xs font-semibold px-2.5 py-1 rounded bg-teal-500/20 text-teal-400 border border-teal-500/30">7-Cell Cluster Pattern (N = 7)</span>
+            <h3 class="text-base font-bold text-white mt-1.5">แผนผังการจัดสรรกลุ่มความถี่ซ้ำแบบ 7 เซลล์ (Frequency Reuse Cluster)</h3>
+          </div>
+          <span class="text-xs text-slate-400">ตัวอักษร A-G แทนกลุ่มคลื่นความถี่ที่แตกต่างกัน เพื่อหลีกเลี่ยงการกวนกัน</span>
+        </div>
+
+        <div class="w-full overflow-x-auto py-2">
+          <svg viewBox="0 0 840 260" class="w-full min-w-[720px] h-auto select-none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <polygon id="hex" points="0,-42 36.4,-21 36.4,21 0,42 -36.4,21 -36.4,-21" stroke-width="2.5"/>
+            </defs>
+
+            <!-- Cluster 1 (Left) -->
+            <g transform="translate(240, 130)">
+              <!-- Center Cell A -->
+              <use href="#hex" x="0" y="0" fill="#0d9488" fill-opacity="0.25" stroke="#14b8a6"/>
+              <text x="0" y="5" fill="#5eead4" font-size="16" font-weight="bold" text-anchor="middle">A</text>
+              <circle cx="0" cy="-12" r="3" fill="#2dd4bf"/>
+
+              <!-- Cell B -->
+              <use href="#hex" x="63" y="-36.4" fill="#3b82f6" fill-opacity="0.2" stroke="#60a5fa"/>
+              <text x="63" y="-31.4" fill="#93c5fd" font-size="14" font-weight="bold" text-anchor="middle">B</text>
+
+              <!-- Cell C -->
+              <use href="#hex" x="63" y="36.4" fill="#6366f1" fill-opacity="0.2" stroke="#818cf8"/>
+              <text x="63" y="41.4" fill="#c7d2fe" font-size="14" font-weight="bold" text-anchor="middle">C</text>
+
+              <!-- Cell D -->
+              <use href="#hex" x="0" y="72.8" fill="#ec4899" fill-opacity="0.2" stroke="#f472b6"/>
+              <text x="0" y="77.8" fill="#fbcfe8" font-size="14" font-weight="bold" text-anchor="middle">D</text>
+
+              <!-- Cell E -->
+              <use href="#hex" x="-63" y="36.4" fill="#f59e0b" fill-opacity="0.2" stroke="#fbbf24"/>
+              <text x="-63" y="41.4" fill="#fde68a" font-size="14" font-weight="bold" text-anchor="middle">E</text>
+
+              <!-- Cell F -->
+              <use href="#hex" x="-63" y="-36.4" fill="#8b5cf6" fill-opacity="0.2" stroke="#a78bfa"/>
+              <text x="-63" y="-31.4" fill="#ddd6fe" font-size="14" font-weight="bold" text-anchor="middle">F</text>
+
+              <!-- Cell G -->
+              <use href="#hex" x="0" y="-72.8" fill="#10b981" fill-opacity="0.2" stroke="#34d399"/>
+              <text x="0" y="-67.8" fill="#a7f3d0" font-size="14" font-weight="bold" text-anchor="middle">G</text>
+            </g>
+
+            <!-- Re-use Cell A in adjacent Cluster (Right) -->
+            <g transform="translate(560, 130)">
+              <!-- Center Cell A (Reused) -->
+              <use href="#hex" x="0" y="0" fill="#0d9488" fill-opacity="0.25" stroke="#14b8a6"/>
+              <text x="0" y="5" fill="#5eead4" font-size="16" font-weight="bold" text-anchor="middle">A</text>
+              <circle cx="0" cy="-12" r="3" fill="#2dd4bf"/>
+
+              <!-- Surrounding cells -->
+              <use href="#hex" x="63" y="-36.4" fill="#3b82f6" fill-opacity="0.2" stroke="#60a5fa"/>
+              <text x="63" y="-31.4" fill="#93c5fd" font-size="14" font-weight="bold" text-anchor="middle">B</text>
+              <use href="#hex" x="63" y="36.4" fill="#6366f1" fill-opacity="0.2" stroke="#818cf8"/>
+              <text x="63" y="41.4" fill="#c7d2fe" font-size="14" font-weight="bold" text-anchor="middle">C</text>
+              <use href="#hex" x="0" y="72.8" fill="#ec4899" fill-opacity="0.2" stroke="#f472b6"/>
+              <text x="0" y="77.8" fill="#fbcfe8" font-size="14" font-weight="bold" text-anchor="middle">D</text>
+              <use href="#hex" x="-63" y="36.4" fill="#f59e0b" fill-opacity="0.2" stroke="#fbbf24"/>
+              <text x="-63" y="41.4" fill="#fde68a" font-size="14" font-weight="bold" text-anchor="middle">E</text>
+              <use href="#hex" x="-63" y="-36.4" fill="#8b5cf6" fill-opacity="0.2" stroke="#a78bfa"/>
+              <text x="-63" y="-31.4" fill="#ddd6fe" font-size="14" font-weight="bold" text-anchor="middle">F</text>
+              <use href="#hex" x="0" y="-72.8" fill="#10b981" fill-opacity="0.2" stroke="#34d399"/>
+              <text x="0" y="-67.8" fill="#a7f3d0" font-size="14" font-weight="bold" text-anchor="middle">G</text>
+            </g>
+
+            <!-- Re-use Distance Arrow between A and A -->
+            <path d="M 240,110 Q 400,30 560,110" fill="none" stroke="#2dd4bf" stroke-width="2.5" stroke-dasharray="6 4"/>
+            <polygon points="562,112 550,105 555,115" fill="#2dd4bf"/>
+            <text x="400" y="55" fill="#5eead4" font-size="12" font-weight="bold" text-anchor="middle">Co-channel Reuse Distance (D)</text>
+            <text x="400" y="72" fill="#94a3b8" font-size="10" text-anchor="middle">ระยะห่างปลอดภัยระหว่างเซลล์ที่ใช้คลื่นความถี่ชุดเดียวกัน</text>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Detail Concepts Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
+        <div class="bg-slate-800/40 border border-slate-700 rounded-2xl p-6 space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-teal-500/10 border border-teal-500/30 flex items-center justify-center text-teal-400 text-xl font-bold">
+            ⬡
+          </div>
+          <h4 class="font-bold text-white text-base">ทำไมต้องเป็นรูปหกเหลี่ยม?</h4>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            ในทางทฤษฎี รูปทรงเรขาคณิตที่สามารถต่อกันได้สนิทโดยไม่เกิดช่องว่าง (Tessellation) คือ สามเหลี่ยม สี่เหลี่ยม และหกเหลี่ยม โดยรูปหกเหลี่ยมมีความใกล้เคียงกับวงกลม (รูปแบบการแผ่คลื่นจริง) มากที่สุด และครอบคลุมพื้นที่ได้กว้างที่สุดโดยใช้จำนวนเสาน้อยที่สุด
+          </p>
+        </div>
+
+        <div class="bg-slate-800/40 border border-slate-700 rounded-2xl p-6 space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400 text-xl font-bold">
+            📐
+          </div>
+          <h4 class="font-bold text-white text-base">ขนาดของเซลล์ (Cell Sizing)</h4>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            • <strong>Macrocell:</strong> รัศมี 1–20 กม. ตั้งบนเสาสูง สำหรับพื้นที่กว้าง<br>
+            • <strong>Microcell:</strong> รัศมี 200ม.–1 กม. ตามแนวถนนและอาคาร<br>
+            • <strong>Picocell / Femtocell:</strong> รัศมี 10–100ม. ใช้งานภายในอาคาร ห้างสรรพสินค้า หรือสำนักงานที่คนหนาแน่น
+          </p>
+        </div>
+
+        <div class="bg-slate-800/40 border border-slate-700 rounded-2xl p-6 space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-400 text-xl font-bold">
+            ⚡
+          </div>
+          <h4 class="font-bold text-white text-base">การรบกวนร่วมช่อง (CCI)</h4>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            <strong>Co-Channel Interference:</strong> เกิดขึ้นเมื่อเซลล์ที่ใช้ความถี่เดียวกัน (เช่น เซลล์ A กับ เซลล์ A) อยู่ใกล้กันเกินไป วิธีแก้คือการควบคุมกำลังส่ง (Power Control) และการทำ <strong>Cell Sectoring</strong> (แบ่งเซลล์เป็น 3 เซกเตอร์ 120 องศา)
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 2: Cell Site Anatomy & Tower Equipment -->
+    <!-- ========================================== -->
+    <section id="tab-tower" class="space-y-6 hidden">
+      <div class="bg-slate-800/50 border border-slate-700/60 rounded-2xl p-6">
+        <h2 class="text-xl font-bold text-white mb-2">โครงสร้างกายภาพและอุปกรณ์ภายในสถานีฐาน (Cell Site Anatomy)</h2>
+        <p class="text-slate-400 text-sm">เจาะลึกอุปกรณ์ตั้งแต่ยอดเสาอากาศลงมาถึงห้องควบคุมภาคพื้นดิน (BBU, RRU, Feeder Cable, Power & Backup)</p>
+      </div>
+
+      <!-- Cell Site Anatomy Graphic -->
+      <div class="bg-slate-900 border border-slate-700 rounded-2xl p-6">
+        <h3 class="text-sm font-semibold text-teal-400 mb-4 flex items-center space-x-2">
+          <span>🗼</span>
+          <span>ไดอะแกรมอุปกรณ์บนเสาและภาคพื้นดิน (Base Station Architecture)</span>
+        </h3>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+          
+          <!-- Tower Graphic SVG -->
+          <div class="bg-slate-950 border border-slate-800 rounded-2xl p-4 flex items-center justify-center">
+            <svg viewBox="0 0 320 380" class="w-full max-w-sm h-auto select-none" xmlns="http://www.w3.org/2000/svg">
+              <!-- Background Sky gradient -->
+              <rect x="0" y="0" width="320" height="380" rx="12" fill="#030712"/>
+
+              <!-- Tower Lattice Truss -->
+              <line x1="160" y1="50" x2="110" y2="310" stroke="#0284c7" stroke-width="3"/>
+              <line x1="160" y1="50" x2="210" y2="310" stroke="#0284c7" stroke-width="3"/>
+              
+              <!-- Cross Bracing -->
+              <line x1="120" y1="260" x2="200" y2="260" stroke="#38bdf8" stroke-width="1.8"/>
+              <line x1="130" y1="210" x2="190" y2="210" stroke="#38bdf8" stroke-width="1.8"/>
+              <line x1="140" y1="160" x2="180" y2="160" stroke="#38bdf8" stroke-width="1.8"/>
+              <line x1="150" y1="110" x2="170" y2="110" stroke="#38bdf8" stroke-width="1.8"/>
+
+              <line x1="120" y1="260" x2="190" y2="210" stroke="#0284c7" stroke-width="1.2"/>
+              <line x1="130" y1="210" x2="200" y2="260" stroke="#0284c7" stroke-width="1.2"/>
+              <line x1="130" y1="210" x2="180" y2="160" stroke="#0284c7" stroke-width="1.2"/>
+              <line x1="140" y1="160" x2="190" y2="210" stroke="#0284c7" stroke-width="1.2"/>
+
+              <!-- Tower Top: Aviation Light -->
+              <circle cx="160" cy="40" r="4" fill="#ef4444"/>
+              <line x1="160" y1="40" x2="160" y2="50" stroke="#cbd5e1" stroke-width="2"/>
+
+              <!-- Sector Antennas (Panel Antennas) -->
+              <rect x="135" y="55" width="10" height="35" rx="2" fill="#38bdf8" stroke="#0ea5e9" stroke-width="1"/>
+              <rect x="175" y="55" width="10" height="35" rx="2" fill="#38bdf8" stroke="#0ea5e9" stroke-width="1"/>
+              <line x1="135" y1="65" x2="185" y2="65" stroke="#cbd5e1" stroke-width="2"/>
+
+              <!-- RRU (Remote Radio Unit) Mounted near Antenna -->
+              <rect x="145" y="95" width="14" height="18" rx="2" fill="#14b8a6" stroke="#2dd4bf" stroke-width="1"/>
+              <rect x="162" y="95" width="14" height="18" rx="2" fill="#14b8a6" stroke="#2dd4bf" stroke-width="1"/>
+
+              <!-- Microwave Dish Antenna (Backhaul) -->
+              <circle cx="130" cy="140" r="14" fill="#0f172a" stroke="#cbd5e1" stroke-width="2"/>
+              <line x1="122" y1="140" x2="138" y2="140" stroke="#e2e8f0" stroke-width="2"/>
+
+              <!-- Fiber Optic / Power Cable running down -->
+              <line x1="160" y1="113" x2="160" y2="310" stroke="#f59e0b" stroke-width="2" stroke-dasharray="3 2"/>
+
+              <!-- Ground Shelter / Equipment Cabinet -->
+              <rect x="50" y="275" width="65" height="50" rx="4" fill="#1e293b" stroke="#475569" stroke-width="2"/>
+              <text x="82.5" y="302" fill="#94a3b8" font-size="9" font-weight="bold" text-anchor="middle">Shelter</text>
+              <circle cx="62" cy="288" r="2" fill="#10b981"/>
+              <rect x="58" y="310" width="15" height="15" fill="#0f172a"/>
+
+              <!-- Concrete Base Pads -->
+              <rect x="95" y="310" width="30" height="10" rx="2" fill="#334155"/>
+              <rect x="195" y="310" width="30" height="10" rx="2" fill="#334155"/>
+
+              <!-- Ground Line -->
+              <line x1="30" y1="320" x2="290" y2="320" stroke="#64748b" stroke-width="2"/>
+
+              <!-- Labels Overlay -->
+              <text x="210" y="75" fill="#38bdf8" font-size="10" font-weight="bold">1. Sector Antenna</text>
+              <text x="210" y="105" fill="#2dd4bf" font-size="10" font-weight="bold">2. RRU (Radio Unit)</text>
+              <text x="50" y="145" fill="#e2e8f0" font-size="10" font-weight="bold">3. Microwave Dish</text>
+              <text x="180" y="225" fill="#f59e0b" font-size="9">Optical Cable</text>
+              <text x="82.5" y="340" fill="#94a3b8" font-size="10" text-anchor="middle">4. BBU & Power</text>
+            </svg>
+          </div>
+
+          <!-- Component Descriptions -->
+          <div class="space-y-4 text-xs">
+            
+            <div class="bg-slate-800/60 border border-slate-700/80 rounded-xl p-4">
+              <span class="text-sky-400 font-bold block text-sm mb-1">1. Sector Antenna (สายอากาศแบบทิศทาง)</span>
+              <p class="text-slate-300 leading-relaxed">
+                สายอากาศแผงยาวที่ติดตั้งบนยอดเสา มักติดตั้ง 3 แผงทำมุม 120 องศาเพื่อครอบคลุม 360 องศารอบเสา รองรับการปรับมุมก้ม-เงย (Electrical Tilt) เพื่อควบคุมขนาดพื้นที่ครอบคลุมสัญญาณ
+              </p>
+            </div>
+
+            <div class="bg-slate-800/60 border border-slate-700/80 rounded-xl p-4">
+              <span class="text-teal-400 font-bold block text-sm mb-1">2. RRU (Remote Radio Unit)</span>
+              <p class="text-slate-300 leading-relaxed">
+                ภาครับ-ส่งวิทยุที่ถูกยกขึ้นไปติดตั้งใกล้สายอากาศบนยอดเสา ทำหน้าที่แปลงสัญญาณดิจิทัลจาก BBU ให้เป็นคลื่นวิทยุ RF พร้อมขยายกำลังส่ง ลดการสูญเสียสัญญาณในสายนำสัญญาณ (Feeder Loss) ได้อย่างมหาศาล
+              </p>
+            </div>
+
+            <div class="bg-slate-800/60 border border-slate-700/80 rounded-xl p-4">
+              <span class="text-indigo-400 font-bold block text-sm mb-1">3. BBU (Baseband Unit) & Shelter</span>
+              <p class="text-slate-300 leading-relaxed">
+                สมองกลของสถานีฐาน ติดตั้งในตู้ควบคุมด้านล่าง ทำหน้าที่ประมวลผลสัญญาณเบสแบนด์ จัดการการเชื่อมต่อ จัดสรรช่องสัญญาณ และสื่อสารกับ Core Network ผ่านสายใยแก้วนำแสง (Fiber) หรือจานไมโครเวฟ
+              </p>
+            </div>
+
+            <div class="bg-slate-800/60 border border-slate-700/80 rounded-xl p-4">
+              <span class="text-amber-400 font-bold block text-sm mb-1">4. ระบบไฟฟ้าสำรอง (Power & Backup)</span>
+              <p class="text-slate-300 leading-relaxed">
+                ประกอบด้วย Rectifier (แปลงไฟ AC เป็น DC 48V), ธนาคารแบตเตอรี่ลิเธียม/เจลสำหรับสำรองไฟ 4–8 ชม. เมื่อไฟหลวงดับ และเครื่องกำเนิดไฟฟ้าดีเซล (Generator)
+              </p>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 3: Repeater & Handover Flow -->
+    <!-- ========================================== -->
+    <section id="tab-repeater-handover" class="space-y-6 hidden">
+      <div class="bg-slate-800/50 border border-slate-700/60 rounded-2xl p-6">
+        <h2 class="text-xl font-bold text-white mb-2">สถานีทวนสัญญาณ (Repeater) และกระบวนการส่งต่อสัญญาณ (Handover)</h2>
+        <p class="text-slate-400 text-sm">การขยายสัญญาณสู่จุดอับ และกลไกการสลับการเชื่อมต่อข้ามเซลล์ขณะผู้ใช้งานเคลื่อนที่ด้วยความเร็วสูง</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+        <!-- Repeater Concept Card -->
+        <div class="bg-slate-800/40 border border-slate-700 rounded-2xl p-6 space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold px-2.5 py-1 rounded bg-teal-500/20 text-teal-300 border border-teal-500/30">Coverage Extension</span>
+            <span class="text-xs text-slate-400 font-mono">Repeater / Booster</span>
+          </div>
+          <h3 class="text-lg font-bold text-white">หลักการทำงานของสถานีทวนสัญญาณ (Repeater)</h3>
+          
+          <!-- Repeater Flow Diagram SVG -->
+          <div class="h-36 bg-slate-950/80 rounded-xl p-3 border border-slate-800 flex items-center justify-center">
+            <svg viewBox="0 0 320 85" class="w-full h-full">
+              <!-- Base Station -->
+              <rect x="15" y="15" width="55" height="55" rx="6" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5"/>
+              <text x="42.5" y="42" fill="#38bdf8" font-size="9" font-weight="bold" text-anchor="middle">Base Station</text>
+              <text x="42.5" y="55" fill="#94a3b8" font-size="7.5" text-anchor="middle">(Cell Site)</text>
+
+              <!-- Donor Wave -->
+              <path d="M 75 42 L 125 42" stroke="#38bdf8" stroke-width="2" stroke-dasharray="3 3"/>
+              <text x="100" y="34" fill="#7dd3fc" font-size="7.5" text-anchor="middle">Donor Link</text>
+
+              <!-- Repeater Box -->
+              <rect x="130" y="20" width="60" height="45" rx="6" fill="#0f766e" stroke="#2dd4bf" stroke-width="1.5"/>
+              <text x="160" y="42" fill="#fff" font-size="9" font-weight="bold" text-anchor="middle">Repeater</text>
+              <text x="160" y="54" fill="#a7f3d0" font-size="7.5" text-anchor="middle">(Amp & Filter)</text>
+
+              <!-- Coverage Wave to Blind spot -->
+              <path d="M 195 42 L 245 42" stroke="#10b981" stroke-width="2.5"/>
+              <polygon points="248,42 240,38 240,46" fill="#10b981"/>
+              <text x="220" y="34" fill="#34d399" font-size="7.5" text-anchor="middle">Coverage</text>
+
+              <!-- Tunnel / Underground Building -->
+              <rect x="250" y="15" width="60" height="55" rx="6" fill="#1e1b4b" stroke="#818cf8" stroke-width="1.5"/>
+              <text x="280" y="40" fill="#c7d2fe" font-size="8.5" font-weight="bold" text-anchor="middle">Blind Spot</text>
+              <text x="280" y="53" fill="#94a3b8" font-size="7.5" text-anchor="middle">(อุโมงค์ / อาคาร)</text>
+            </svg>
+          </div>
+
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Repeater ไม่สร้างสัญญาณขึ้นมาใหม่ แต่จะรับสัญญาณจากเสาสถานีฐานผ่าน <strong>Donor Antenna</strong> เข้ามาขยายกำลังสัญญาณ (RF Amplifier) กรองสัญญาณรบกวน แล้วกระจายต่อผ่าน <strong>Service Antenna</strong> สู่จุดอับสัญญาณ เช่น ชั้นใต้ดิน อาคารสูง หรืออุโมงค์รถไฟ
+          </p>
+        </div>
+
+        <!-- Handover Concept Card -->
+        <div class="bg-slate-800/40 border border-slate-700 rounded-2xl p-6 space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold px-2.5 py-1 rounded bg-blue-500/20 text-blue-300 border border-blue-500/30">Seamless Mobility</span>
+            <span class="text-xs text-slate-400 font-mono">Handover / Handoff</span>
+          </div>
+          <h3 class="text-lg font-bold text-white">กระบวนการส่งต่อสัญญาณ (Handover)</h3>
+
+          <!-- Handover Flow Graphic SVG -->
+          <div class="h-36 bg-slate-950/80 rounded-xl p-3 border border-slate-800 flex items-center justify-center">
+            <svg viewBox="0 0 320 85" class="w-full h-full">
+              <!-- Cell A -->
+              <circle cx="55" cy="42" r="35" fill="#0284c7" fill-opacity="0.15" stroke="#0284c7" stroke-width="1.5"/>
+              <text x="55" y="45" fill="#38bdf8" font-size="9" font-weight="bold" text-anchor="middle">Source Cell</text>
+
+              <!-- Moving Car / Phone -->
+              <g transform="translate(145, 30)">
+                <rect x="0" y="0" width="30" height="18" rx="4" fill="#f59e0b"/>
+                <text x="15" y="12" fill="#000" font-size="7" font-weight="bold" text-anchor="middle">🚗 UE</text>
+                <path d="M 15 22 L 25 22" stroke="#fcd34d" stroke-width="2"/>
+                <polygon points="28,22 23,19 23,25" fill="#fcd34d"/>
+              </g>
+
+              <!-- Cell B -->
+              <circle cx="265" cy="42" r="35" fill="#10b981" fill-opacity="0.15" stroke="#10b981" stroke-width="1.5"/>
+              <text x="265" y="45" fill="#34d399" font-size="9" font-weight="bold" text-anchor="middle">Target Cell</text>
+
+              <!-- Signal Threshold Line -->
+              <text x="160" y="70" fill="#e2e8f0" font-size="8" text-anchor="middle">RSRP Cell B &gt; RSRP Cell A + Hysteresis</text>
+            </svg>
+          </div>
+
+          <p class="text-xs text-slate-300 leading-relaxed">
+            เมื่อผู้ใช้งานขับรถออกจากเซลล์เดิม สัญญาณจะอ่อนลงเรื่อยๆ ขณะที่เซลล์ข้างหน้าเริ่มแรงขึ้น เมื่อถึงเกณฑ์ที่กำหนด ระบบจะทำการสลับช่องสัญญาณไปยังเซลล์เป้าหมายอย่างราบรื่นโดยที่สายไม่หลุด (Seamless Connection)
+          </p>
+        </div>
+
+      </div>
+
+      <!-- Hard vs Soft Handover -->
+      <div class="bg-slate-800/40 border border-slate-700 rounded-2xl p-6">
+        <h4 class="text-base font-bold text-white mb-3">ประเภทของ Handover</h4>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+          <div class="bg-slate-900/60 border border-slate-800 p-4 rounded-xl">
+            <strong class="text-sky-400 block mb-1">1. Hard Handover ("Break-before-Make")</strong>
+            <p class="text-slate-300">
+              ตัดการเชื่อมต่อกับสถานีเดิมก่อน แล้วจึงจับสัญญาณกับสถานีใหม่ นิยมใช้ใน <strong>2G (GSM), 4G (LTE) และ 5G</strong> เพราะความเร็วในการสลับระดับมิลลิวินาที ทำให้ผู้ใช้แทบไม่รู้สึกสะดุด
+            </p>
+          </div>
+          <div class="bg-slate-900/60 border border-slate-800 p-4 rounded-xl">
+            <strong class="text-emerald-400 block mb-1">2. Soft Handover ("Make-before-Break")</strong>
+            <p class="text-slate-300">
+              เชื่อมต่อกับสถานีใหม่พร้อมกับสถานีเดิมไปพร้อมๆ กันจนกระทั่งสัญญาณใหม่เสถียร จึงตัดสถานีเก่าทิ้ง เป็นเอกลักษณ์เฉพาะของเทคโนโลยี <strong>3G (WCDMA / CDMA2000)</strong>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 4: Quiz -->
+    <!-- ========================================== -->
+    <section id="tab-quiz" class="space-y-6 hidden">
+      <div class="bg-slate-800/50 border border-slate-700/60 rounded-2xl p-6">
+        <h2 class="text-xl font-bold text-white mb-2">แบบทดสอบท้ายหน่วยการเรียนรู้ที่ 3</h2>
+        <p class="text-slate-400 text-sm">ทดสอบความเข้าใจเกี่ยวกับสถานีฐาน เซลล์ไซต์ การนำความถี่กลับมาใช้ซ้ำ สถานีทวนสัญญาณ และ Handover (5 ข้อ)</p>
+      </div>
+
+      <!-- Student Info Form -->
+      <div class="bg-slate-800/40 border border-slate-700/80 rounded-2xl p-6">
+        <h3 class="text-sm font-semibold text-teal-400 mb-3 flex items-center space-x-2">
+          <span>👤</span>
+          <span>ข้อมูลผู้ทำแบบทดสอบ (สำหรับบันทึกคะแนน)</span>
+        </h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">รหัสนักศึกษา / เลขประจำตัว</label>
+            <div class="relative">
+              <input type="text" id="student-id" placeholder="เช่น 66309010001" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white focus:outline-none focus:border-teal-500 transition">
+              <span id="student-id-spinner" class="hidden absolute right-3 top-2.5 text-xs text-amber-400 animate-spin">⏳</span>
+            </div>
+            <p id="student-id-status" class="text-xs mt-1.5 hidden"></p>
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">ชื่อ - นามสกุล</label>
+            <input type="text" id="student-name" placeholder="เช่น สมชาย ใจดี" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white focus:outline-none focus:border-teal-500 transition">
+          </div>
+        </div>
+      </div>
+
+      <div id="quiz-container" class="space-y-4">
+        <!-- Injected via JavaScript -->
+      </div>
+
+      <div class="flex items-center justify-between pt-4">
+        <button onclick="calculateQuizScore()" class="px-6 py-3 rounded-xl bg-teal-600 hover:bg-teal-500 font-semibold text-white shadow-lg shadow-teal-600/30 transition">
+          ตรวจคำตอบและประเมินผล
+        </button>
+        <button onclick="resetQuiz()" class="px-4 py-2 rounded-xl border border-slate-700 hover:bg-slate-800 text-slate-300 text-sm transition">
+          ทำใหม่อีกครั้ง
+        </button>
+      </div>
+
+      <!-- Quiz Score Modal/Banner -->
+      <div id="quiz-result-card" class="hidden bg-slate-800 border border-slate-700 rounded-2xl p-6 transition space-y-4">
+        <div>
+          <h3 class="text-lg font-bold text-white" id="quiz-result-title"></h3>
+          <p class="text-sm text-slate-300 mt-1" id="quiz-result-detail"></p>
+        </div>
+
+        <!-- Submit to Google Sheet Action -->
+        <div id="submit-sheet-section" class="pt-3 border-t border-slate-700/80 flex flex-wrap items-center justify-between gap-3">
+          <div class="text-xs text-slate-400" id="sheet-status-text">
+            💡 กดปุ่มด้านขวาเพื่อส่งผลคะแนนเข้าสู่ระบบ Google Sheet ของอาจารย์ผู้สอน
+          </div>
+          <button id="btn-send-sheet" onclick="sendScoreToGoogleSheet()" class="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 font-medium text-white text-sm shadow-lg shadow-emerald-600/20 flex items-center space-x-2 transition">
+            <span>📊</span>
+            <span>ส่งคะแนนไปยัง Google Sheet</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Teacher Settings Modal -->
+  <div id="teacher-modal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-xl w-full p-6 shadow-2xl relative space-y-5">
+      
+      <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+        <div class="flex items-center space-x-2.5">
+          <div class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold">
+            ⚙️
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-white">ตั้งค่าสำหรับครูผู้สอน (หน่วยที่ 3)</h3>
+            <p class="text-xs text-slate-400">เชื่อมต่อ Google Sheet สำหรับจัดเก็บคะแนนของนักศึกษา</p>
+          </div>
+        </div>
+        <button onclick="toggleTeacherModal(false)" class="text-slate-400 hover:text-white p-1 text-lg leading-none">
+          &times;
+        </button>
+      </div>
+
+      <!-- Google Apps Script URL Input -->
+      <div class="space-y-2">
+        <label class="block text-xs font-medium text-slate-300">
+          Google Apps Script Web App URL (ลิงก์เว็บแอปที่ Deploy จากชีต)
+        </label>
+        <input type="url" id="teacher-sheet-url" placeholder="https://script.google.com/macros/s/.../exec" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white focus:outline-none focus:border-amber-500 transition font-mono">
+        <p class="text-[11px] text-slate-500 leading-relaxed">
+          * ระบบจะบันทึก URL ไว้ใน Local Storage ของบราวเซอร์นี้อัตโนมัติ เพื่อใช้นักเรียนส่งคะแนน
+        </p>
+      </div>
+
+      <!-- Student Web App Link for sharing -->
+      <div class="space-y-2 pt-2 border-t border-slate-800">
+        <label class="block text-xs font-medium text-teal-300 flex items-center justify-between">
+          <span>🔗 ลิงก์สำหรับส่งให้นักศึกษาเข้าเรียน / ทำแบบทดสอบ</span>
+          <span id="copy-badge" class="text-[11px] text-emerald-400 font-normal hidden">✓ คัดลอกสำเร็จ!</span>
+        </label>
+        <div class="flex items-center space-x-2">
+          <input type="text" id="student-share-link" readonly class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-xs text-slate-300 font-mono focus:outline-none">
+          <button onclick="copyStudentLink()" class="px-4 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-500 text-white font-medium text-xs whitespace-nowrap shadow-md shadow-teal-600/30 flex items-center space-x-1.5 transition">
+            <span>📋</span>
+            <span>คัดลอกลิงก์</span>
+          </button>
+        </div>
+        <p class="text-[11px] text-slate-500 leading-relaxed">
+          * เมื่อโฮสต์ขึ้น GitHub Pages คุณครูสามารถกดปุ่มนี้เพื่อคัดลอกส่งเข้า LINE/Google Classroom ให้นักเรียนได้ทันที
+        </p>
+      </div>
+
+      <!-- Buttons -->
+      <div class="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-800">
+        <a href="Code.gs" download="Code.gs" class="inline-flex items-center space-x-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-teal-400 border border-slate-700 text-xs font-medium transition">
+          <span>📥</span>
+          <span>ดาวน์โหลด Code.gs</span>
+        </a>
+
+        <div class="flex items-center space-x-2">
+          <button onclick="toggleTeacherModal(false)" class="px-4 py-2 rounded-xl border border-slate-700 text-slate-400 hover:bg-slate-800 text-xs transition">
+            ปิด
+          </button>
+          <button onclick="saveTeacherSettings()" class="px-5 py-2 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-medium text-xs shadow-md transition">
+            บันทึกการตั้งค่า
+          </button>
+        </div>
+      </div>
+
+      <!-- Guide Box -->
+      <div class="bg-slate-950/60 border border-slate-800 p-4 rounded-xl text-xs space-y-2 text-slate-400">
+        <div class="font-semibold text-slate-200">📖 ขั้นตอนเตรียม Google Sheet:</div>
+        <ol class="list-decimal list-inside space-y-1 leading-relaxed">
+          <li>เปิด Google Sheet เดิมหรือชีตใหม่</li>
+          <li>ไปที่เมนู <strong>ส่วนขยาย (Extensions) &gt; Apps Script</strong></li>
+          <li>กดปุ่ม <strong>"ดาวน์โหลด Code.gs"</strong> นำโค้ดไปวางแทนที่</li>
+          <li>กด <strong>Deploy &gt; New deployment</strong> เลือก Web App (Who has access: <strong>Anyone</strong>)</li>
+          <li>นำ URL มาบันทึกในช่องด้านบน</li>
+        </ol>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // Tab Switcher
+    function switchTab(tabId) {
+      const tabs = ['cellular', 'tower', 'repeater-handover', 'quiz'];
+      tabs.forEach(t => {
+        document.getElementById(`tab-${t}`).classList.add('hidden');
+        const btn = document.getElementById(`tab-btn-${t}`);
+        btn.classList.remove('active');
+        btn.classList.add('bg-slate-800/40', 'text-slate-400');
+        btn.classList.remove('bg-teal-600', 'text-white');
+      });
+      document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+      const activeBtn = document.getElementById(`tab-btn-${tabId}`);
+      activeBtn.classList.add('active', 'bg-teal-600', 'text-white');
+      activeBtn.classList.remove('bg-slate-800/40', 'text-slate-400');
+    }
+
+    // Quiz Questions Data (5 Questions)
+    const quizQuestions = [
+      {
+        q: '1. เหตุผลหลักที่ต้องออกแบบโครงข่ายโทรศัพท์เคลื่อนที่เป็นรูปทรง "หกเหลี่ยม (Hexagon)" คืออะไร?',
+        options: [
+          'เพื่อให้เสาส่งสัญญาณราคาถูกที่สุด',
+          'เพื่อครอบคลุมพื้นที่ได้สนิทโดยไม่เกิดช่องว่าง และมีรูปร่างใกล้เคียงกับวงกลมการแผ่คลื่นจริงมากที่สุด',
+          'เป็นข้อบังคับของกฎหมายผังเมือง',
+          'เพื่อให้รองรับสายอากาศแบบเส้นลวดเท่านั้น'
+        ],
+        answer: 1,
+        explain: 'รูปหกเหลี่ยมเป็นรูปทรงเรขาคณิตที่ปูต่อกันได้สนิทโดยไม่มีช่องว่าง และมีรัศมีครอบคลุมสม่ำเสมอใกล้เคียงกับวงกลมที่สุด'
+      },
+      {
+        q: '2. อุปกรณ์ RRU (Remote Radio Unit) มีหน้าที่สำคัญอย่างไรในสถานีฐานยุคใหม่?',
+        options: [
+          'เป็นเครื่องปั่นไฟสำรองสำหรับเสาส่งสัญญาณ',
+          'ทำหน้าที่คิดค่าบริการของผู้ใช้งาน',
+          'เป็นภาครับ-ส่งคลื่นวิทยุที่ติดตั้งใกล้เสาอากาศบนยอดเสา เพื่อลดการสูญเสียสัญญาณในสายนำสัญญาณ',
+          'สำหรับดับเพลิงในห้องควบคุม'
+        ],
+        answer: 2,
+        explain: 'RRU ถูกยกขึ้นไปไว้บนยอดเสาเพื่อลดการสูญเสียกำลังส่งในสายนำสัญญาณ (Feeder Loss) โดยเชื่อมต่อกับ BBU ด้านล่างด้วยสายไฟเบอร์ออปติก'
+      },
+      {
+        q: '3. อุปกรณ์สถานีทวนสัญญาณ (Repeater) ทำหน้าที่อย่างไร?',
+        options: [
+          'สร้างสัญญาณโทรศัพท์และอินเทอร์เน็ตขึ้นมาใหม่โดยไม่ต้องพึ่งสถานีฐาน',
+          'รับสัญญาณจากเสาสถานีฐานมาขยายความแรงและกรองสัญญาณรบกวน แล้วกระจายต่อเข้าสู่จุดอับสัญญาณ เช่น ใต้อาคาร หรืออุโมงค์',
+          'แปลงสัญญาณวิทยุให้กลายเป็นสัญญาณดาวเทียม',
+          'ตัดสัญญาณรบกวนของฝ่ายตรงข้าม'
+        ],
+        answer: 1,
+        explain: 'Repeater ทำหน้าที่รับสัญญาณที่มีอยู่แล้วมาขยายกำลังและกระจายต่อในบริเวณที่สัญญาณเข้าไม่ถึง'
+      },
+      {
+        q: '4. การส่งต่อสัญญาณแบบ Hard Handover หรือ "Break-before-Make" มีลักษณะการทำงานอย่างไร?',
+        options: [
+          'เชื่อมต่อกับสถานีใหม่พร้อมกับสถานีเดิมไปตลอดเวลา',
+          'ตัดการเชื่อมต่อกับสถานีเดิมก่อนเพียงเสี้ยววินาที แล้วจึงเชื่อมต่อกับสถานีใหม่ทันที',
+          'ผู้ใช้งานต้องกดวางสายแล้วโทรใหม่เอง',
+          'ต้องรอให้แบตเตอรี่โทรศัพท์หมดก่อนจึงจะเปลี่ยนสถานี'
+        ],
+        answer: 1,
+        explain: 'Hard Handover เป็นการตัดเซลล์เก่าก่อนจับเซลล์ใหม่ ซึ่งใน 4G/5G ทำได้รวดเร็วระดับมิลลิวินาทีจนผู้ใช้ไม่รู้สึกสะดุด'
+      },
+      {
+        q: '5. ปัญหา "สัญญาณรบกวนร่วมช่อง" (Co-channel Interference - CCI) เกิดจากสาเหตุใด?',
+        options: [
+          'ฟ้าผ่าลงบนสายอากาศ',
+          'เซลล์ที่ใช้คลื่นความถี่ชุดเดียวกันอยู่ใกล้กันเกินไปจนสัญญาณแพร่ไปรบกวนกันเอง',
+          'การใช้สมาร์ตโฟนหลายยี่ห้อพร้อมกัน',
+          'สายไฟเบอร์ออปติกขาด'
+        ],
+        answer: 1,
+        explain: 'CCI เกิดขึ้นเมื่อเซลล์ที่นำความถี่ชุดเดียวกันมาใช้ซ้ำ (Reuse) อยู่ใกล้กันเกินกว่าระยะปลอดภัย'
+      }
+    ];
+
+    // Render Quiz
+    function renderQuiz() {
+      const container = document.getElementById('quiz-container');
+      container.innerHTML = quizQuestions.map((item, idx) => `
+        <div class="bg-slate-800/40 border border-slate-700/80 rounded-xl p-5">
+          <p class="font-medium text-white text-sm mb-3">${item.q}</p>
+          <div class="space-y-2">
+            ${item.options.map((opt, optIdx) => `
+              <label class="flex items-center space-x-3 p-2.5 rounded-lg bg-slate-900/40 hover:bg-slate-900/80 border border-slate-800 cursor-pointer text-xs sm:text-sm text-slate-300 transition">
+                <input type="radio" name="question-${idx}" value="${optIdx}" class="text-teal-500 focus:ring-teal-500 bg-slate-800 border-slate-700">
+                <span>${opt}</span>
+              </label>
+            `).join('')}
+          </div>
+          <div id="quiz-explain-${idx}" class="hidden mt-3 text-xs p-3 rounded-lg"></div>
+        </div>
+      `).join('');
+    }
+
+    // Calculate Quiz Score (บอกคะแนนและข้อที่ผิด ไม่แสดงเฉลย)
+    function calculateQuizScore() {
+      let score = 0;
+      let wrongQuestions = [];
+      let unansweredQuestions = [];
+
+      quizQuestions.forEach((item, idx) => {
+        const selected = document.querySelector(`input[name="question-${idx}"]:checked`);
+        const explainBox = document.getElementById(`quiz-explain-${idx}`);
+        explainBox.classList.remove('hidden', 'bg-emerald-950/40', 'border-emerald-700/50', 'text-emerald-300', 'bg-rose-950/40', 'border-rose-700/50', 'text-rose-300');
+        
+        if (!selected) {
+          unansweredQuestions.push(idx + 1);
+          explainBox.classList.add('bg-amber-950/40', 'border', 'border-amber-700/50', 'text-amber-300');
+          explainBox.innerHTML = `⚠️ ข้อนี้ยังไม่ได้เลือกคำตอบ`;
+        } else if (parseInt(selected.value) === item.answer) {
+          score++;
+          explainBox.classList.add('bg-emerald-950/40', 'border', 'border-emerald-700/50', 'text-emerald-300');
+          explainBox.innerHTML = `✓ ตอบถูกต้อง`;
+        } else {
+          wrongQuestions.push(idx + 1);
+          explainBox.classList.add('bg-rose-950/40', 'border', 'border-rose-700/50', 'text-rose-300');
+          explainBox.innerHTML = `✗ ข้อนี้ตอบไม่ถูกต้อง (ลองทบทวนเนื้อหาแล้วเลือกใหม่)`;
+        }
+      });
+
+      const resultCard = document.getElementById('quiz-result-card');
+      const title = document.getElementById('quiz-result-title');
+      const detail = document.getElementById('quiz-result-detail');
+
+      resultCard.classList.remove('hidden');
+      title.innerText = `คะแนนที่คุณได้: ${score} / ${quizQuestions.length} คะแนน`;
+
+      if (wrongQuestions.length === 0 && unansweredQuestions.length === 0) {
+        title.className = "text-lg font-bold text-emerald-400";
+        detail.innerHTML = `🎉 <strong>ยอดเยี่ยมมาก!</strong> คุณตอบถูกครบทุกข้อ (${score}/${quizQuestions.length} คะแนน)`;
+      } else {
+        title.className = score >= 3 ? "text-lg font-bold text-amber-400" : "text-lg font-bold text-rose-400";
+        
+        let feedback = [];
+        if (wrongQuestions.length > 0) {
+          feedback.push(`ข้อที่ตอบผิด ได้แก่ <strong>ข้อ ${wrongQuestions.join(', ')}</strong>`);
+        }
+        if (unansweredQuestions.length > 0) {
+          feedback.push(`ข้อที่ยังไม่ได้ทำ ได้แก่ <strong>ข้อ ${unansweredQuestions.join(', ')}</strong>`);
+        }
+        feedback.push(`กรุณาทบทวนเนื้อหาในบทเรียนเพื่อหาคำตอบที่ถูกต้อง แล้วกดส่งคะแนน`);
+        detail.innerHTML = feedback.join(' | ');
+      }
+
+      resultCard.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Teacher Settings & Google Sheet Integration
+    const TEACHER_SHEET_KEY = 'mobile_unit3_teacher_sheet_url';
+
+    function toggleTeacherModal(show) {
+      const modal = document.getElementById('teacher-modal');
+      if (show) {
+        modal.classList.remove('hidden');
+        const savedUrl = localStorage.getItem(TEACHER_SHEET_KEY) || '';
+        document.getElementById('teacher-sheet-url').value = savedUrl;
+
+        const shareInput = document.getElementById('student-share-link');
+        let currentUrl = window.location.href;
+        if (currentUrl.startsWith('file:///')) {
+          currentUrl = 'https://allarm2553.github.io/mobile_phone/unit-03-cellsite-repeater/';
+        }
+        shareInput.value = currentUrl;
+        document.getElementById('copy-badge').classList.add('hidden');
+      } else {
+        modal.classList.add('hidden');
+      }
+    }
+
+    function copyStudentLink() {
+      const shareInput = document.getElementById('student-share-link');
+      if (!shareInput) return;
+
+      shareInput.select();
+      shareInput.setSelectionRange(0, 99999);
+
+      navigator.clipboard.writeText(shareInput.value).then(() => {
+        const badge = document.getElementById('copy-badge');
+        badge.classList.remove('hidden');
+        setTimeout(() => badge.classList.add('hidden'), 3000);
+      }).catch(() => {
+        document.execCommand('copy');
+        const badge = document.getElementById('copy-badge');
+        badge.classList.remove('hidden');
+        setTimeout(() => badge.classList.add('hidden'), 3000);
+      });
+    }
+
+    function saveTeacherSettings() {
+      const urlInput = document.getElementById('teacher-sheet-url').value.trim();
+      localStorage.setItem(TEACHER_SHEET_KEY, urlInput);
+      alert('บันทึกการตั้งค่าลิงก์ Google Sheet เรียบร้อยแล้ว!');
+      toggleTeacherModal(false);
+    }
+
+    async function sendScoreToGoogleSheet() {
+      const scriptUrl = localStorage.getItem(TEACHER_SHEET_KEY) || '';
+      const statusText = document.getElementById('sheet-status-text');
+      const sendBtn = document.getElementById('btn-send-sheet');
+
+      if (!scriptUrl) {
+        alert('⚠️ ยังไม่ได้กำหนดลิงก์ Google Sheet สำหรับเก็บคะแนน\nกรุณาแจ้งอาจารย์ผู้สอนให้กดที่ปุ่ม "⚙️ สำหรับครูผู้สอน" เพื่อตั้งค่าลิงก์ก่อนครับ');
+        toggleTeacherModal(true);
+        return;
+      }
+
+      const studentId = document.getElementById('student-id').value.trim();
+      const studentName = document.getElementById('student-name').value.trim();
+
+      if (!studentId || !studentName) {
+        alert('⚠️ กรุณากรอกรหัสนักศึกษาและชื่อ-นามสกุล ในช่องด้านบนของแบบทดสอบก่อนส่งคะแนนครับ');
+        document.getElementById('student-id').focus();
+        return;
+      }
+
+      // เช็ค Local Storage ป้องกันส่งซ้ำบนเครื่อง
+      const submittedIds = JSON.parse(localStorage.getItem('submitted_unit3_ids') || '[]');
+      if (submittedIds.includes(studentId)) {
+        alert(`❌ รหัสประจำตัว "${studentId}" เคยส่งแบบทดสอบหน่วยที่ 3 ไปแล้ว\n(ไม่อนุญาตให้ส่งคะแนนซ้ำ)`);
+        statusText.innerHTML = `❌ รหัส ${studentId} เคยส่งแบบทดสอบไปแล้ว (ไม่อนุญาตให้ส่งซ้ำ)`;
+        statusText.className = 'text-xs text-rose-400 font-semibold';
+        return;
+      }
+
+      let score = 0;
+      quizQuestions.forEach((item, idx) => {
+        const selected = document.querySelector(`input[name="question-${idx}"]:checked`);
+        if (selected && parseInt(selected.value) === item.answer) {
+          score++;
+        }
+      });
+
+      sendBtn.disabled = true;
+      sendBtn.classList.add('opacity-50', 'cursor-not-allowed');
+      statusText.innerHTML = '⏳ กำลังตรวจสอบสิทธิ์และส่งผลคะแนนเข้าสู่ระบบ Google Sheet...';
+      statusText.className = 'text-xs text-amber-400 font-medium';
+
+      const payload = {
+        studentId: studentId,
+        studentName: studentName,
+        score: score,
+        totalScore: quizQuestions.length,
+        unitTitle: 'หน่วยที่ 3: สถานีฐาน (Cell Site) และสถานีทวนสัญญาณ'
+      };
+
+      try {
+        await fetch(scriptUrl, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        submittedIds.push(studentId);
+        localStorage.setItem('submitted_unit3_ids', JSON.stringify(submittedIds));
+
+        sendBtn.disabled = true;
+        sendBtn.classList.add('opacity-50', 'cursor-not-allowed');
+        sendBtn.innerHTML = '<span>🔒</span><span>ส่งคะแนนแล้วเรียบร้อย</span>';
+
+        statusText.innerHTML = `✅ บันทึกคะแนนสำเร็จ! (${studentId} ${studentName} ได้ ${score}/${quizQuestions.length} คะแนน)`;
+        statusText.className = 'text-xs text-emerald-400 font-semibold';
+
+        const idStatus = document.getElementById('student-id-status');
+        idStatus.classList.remove('hidden');
+        idStatus.className = 'text-xs mt-1.5 text-emerald-400 font-medium';
+        idStatus.innerHTML = '✅ รหัสนี้ส่งผลคะแนนเข้าสู่ระบบเรียบร้อยแล้ว';
+
+        alert(`🎉 บันทึกผลคะแนนเข้าสู่ Google Sheet ของอาจารย์เรียบร้อยแล้ว!\n\nผู้เรียน: ${studentName}\nคะแนน: ${score}/${quizQuestions.length}`);
+
+      } catch (err) {
+        console.error(err);
+        statusText.innerHTML = '❌ เกิดข้อผิดพลาดในการส่งข้อมูล โปรดตรวจสอบความถูกต้องของ URL';
+        statusText.className = 'text-xs text-rose-400 font-semibold';
+        alert('❌ เกิดข้อผิดพลาดในการส่งข้อมูล โปรดตรวจสอบ URL ของ Google Script');
+        sendBtn.disabled = false;
+        sendBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+      }
+    }
+
+    async function checkStudentDuplicateStatus() {
+      const idInput = document.getElementById('student-id');
+      const val = idInput.value.trim();
+      const statusEl = document.getElementById('student-id-status');
+      const spinnerEl = document.getElementById('student-id-spinner');
+      const sendBtn = document.getElementById('btn-send-sheet');
+
+      if (!val) {
+        statusEl.classList.add('hidden');
+        return;
+      }
+
+      const submittedIds = JSON.parse(localStorage.getItem('submitted_unit3_ids') || '[]');
+      if (submittedIds.includes(val)) {
+        statusEl.classList.remove('hidden');
+        statusEl.className = 'text-xs mt-1.5 text-rose-400 font-semibold flex items-center space-x-1';
+        statusEl.innerHTML = '<span>❌</span><span>รหัสนี้เคยส่งแบบทดสอบไปแล้ว (ไม่อนุญาตให้ส่งซ้ำ)</span>';
+        if (sendBtn) {
+          sendBtn.disabled = true;
+          sendBtn.classList.add('opacity-50', 'cursor-not-allowed');
+        }
+        return;
+      }
+
+      const scriptUrl = localStorage.getItem(TEACHER_SHEET_KEY) || '';
+      if (scriptUrl) {
+        spinnerEl.classList.remove('hidden');
+        statusEl.classList.remove('hidden');
+        statusEl.className = 'text-xs mt-1.5 text-slate-400';
+        statusEl.innerHTML = '🔍 กำลังตรวจสอบสิทธิ์รหัสนักศึกษากับระบบชีต...';
+
+        try {
+          const checkUrl = `${scriptUrl}?action=check&studentId=${encodeURIComponent(val)}`;
+          const res = await fetch(checkUrl);
+          const data = await res.json();
+          spinnerEl.classList.add('hidden');
+
+          if (data && data.duplicate) {
+            statusEl.className = 'text-xs mt-1.5 text-rose-400 font-semibold flex items-center space-x-1';
+            statusEl.innerHTML = `<span>❌</span><span>${data.message || 'รหัสนี้เคยส่งแบบทดสอบไปแล้ว'}</span>`;
+            if (sendBtn) {
+              sendBtn.disabled = true;
+              sendBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            }
+            return;
+          } else {
+            statusEl.className = 'text-xs mt-1.5 text-emerald-400 font-medium flex items-center space-x-1';
+            statusEl.innerHTML = '<span>✅</span><span>รหัสนี้มีสิทธิ์ทำและส่งแบบทดสอบ (ยังไม่เคยส่งคำตอบ)</span>';
+            if (sendBtn) {
+              sendBtn.disabled = false;
+              sendBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            }
+          }
+        } catch (e) {
+          spinnerEl.classList.add('hidden');
+          statusEl.className = 'text-xs mt-1.5 text-slate-400';
+          statusEl.innerHTML = 'ℹ️ บันทึกรหัสประจำตัวเรียบร้อย';
+        }
+      } else {
+        statusEl.classList.remove('hidden');
+        statusEl.className = 'text-xs mt-1.5 text-slate-400';
+        statusEl.innerHTML = 'ℹ️ พร้อมทำแบบทดสอบ';
+      }
+    }
+
+    function resetQuiz() {
+      document.querySelectorAll('input[type="radio"]').forEach(el => el.checked = false);
+      quizQuestions.forEach((_, idx) => {
+        const box = document.getElementById(`quiz-explain-${idx}`);
+        box.classList.add('hidden');
+      });
+      document.getElementById('quiz-result-card').classList.add('hidden');
+      document.getElementById('sheet-status-text').innerHTML = '💡 กดปุ่มด้านขวาเพื่อส่งผลคะแนนเข้าสู่ระบบ Google Sheet ของอาจารย์ผู้สอน';
+      document.getElementById('sheet-status-text').className = 'text-xs text-slate-400';
+      
+      const sendBtn = document.getElementById('btn-send-sheet');
+      if (sendBtn) {
+        sendBtn.disabled = false;
+        sendBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+        sendBtn.innerHTML = '<span>📊</span><span>ส่งคะแนนไปยัง Google Sheet</span>';
+      }
+    }
+
+    // Init
+    window.addEventListener('DOMContentLoaded', () => {
+      renderQuiz();
+
+      const studentIdInput = document.getElementById('student-id');
+      if (studentIdInput) {
+        studentIdInput.addEventListener('blur', checkStudentDuplicateStatus);
+        studentIdInput.addEventListener('input', () => {
+          const statusEl = document.getElementById('student-id-status');
+          statusEl.classList.add('hidden');
+          const sendBtn = document.getElementById('btn-send-sheet');
+          if (sendBtn) {
+            sendBtn.disabled = false;
+            sendBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>
