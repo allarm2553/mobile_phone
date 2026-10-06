@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>หน่วยที่ 1: วิวัฒนาการและประเภทโครงข่ายโทรศัพท์เคลื่อนที่</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Prompt', sans-serif; }
+    .tab-btn.active {
+      background-color: #2563eb;
+      color: #ffffff;
+      border-color: transparent;
+    }
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen">
+
+  <!-- Header & Nav -->
+  <header class="border-b border-slate-800 bg-slate-950/80 backdrop-blur sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center font-bold text-white shadow-lg shadow-blue-500/20">
+          U1
+        </div>
+        <div>
+          <h1 class="text-lg font-bold text-white tracking-wide">วิชาโทรศัพท์เคลื่อนที่ (Mobile Phone Technology)</h1>
+          <p class="text-xs text-blue-400">หน่วยที่ 1: วิวัฒนาการและประเภทโครงข่ายโทรศัพท์เคลื่อนที่</p>
+        </div>
+      </div>
+      <div class="flex items-center space-x-2">
+        <button onclick="toggleTeacherModal(true)" class="flex items-center space-x-1.5 text-xs px-3 py-1.5 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 transition">
+          <span>⚙️</span>
+          <span>สำหรับครูผู้สอน</span>
+        </button>
+        <span class="text-xs px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 hidden sm:inline-block">
+          Interactive Learning App
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Navigation Tabs -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-6">
+    <div class="flex overflow-x-auto space-x-2 pb-2 border-b border-slate-800">
+      <button onclick="switchTab('evolution')" id="tab-btn-evolution" class="tab-btn active px-4 py-2.5 rounded-lg text-sm font-medium border border-slate-700 bg-slate-800 text-slate-200 transition">
+        🚀 วิวัฒนาการ 1G - 5G/6G
+      </button>
+      <button onclick="switchTab('architecture')" id="tab-btn-architecture" class="tab-btn px-4 py-2.5 rounded-lg text-sm font-medium border border-slate-700 bg-slate-800/40 text-slate-400 hover:text-white transition">
+        🏗️ สถาปัตยกรรมโครงข่าย (Architecture)
+      </button>
+      <button onclick="switchTab('comparison')" id="tab-btn-comparison" class="tab-btn px-4 py-2.5 rounded-lg text-sm font-medium border border-slate-700 bg-slate-800/40 text-slate-400 hover:text-white transition">
+        📊 เปรียบเทียบมาตรฐานทางเทคนิค
+      </button>
+      <button onclick="switchTab('quiz')" id="tab-btn-quiz" class="tab-btn px-4 py-2.5 rounded-lg text-sm font-medium border border-slate-700 bg-slate-800/40 text-slate-400 hover:text-white transition">
+        📝 แบบทดสอบเก็บคะแนน (Quiz)
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Content Area -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+
+    <!-- TAB 1: Evolution 1G - 5G/6G -->
+    <section id="tab-evolution" class="space-y-6">
+      <div class="bg-slate-800/50 border border-slate-700/60 rounded-2xl p-6">
+        <h2 class="text-xl font-bold text-white mb-2">เส้นทางวิวัฒนาการระบบสื่อสารเคลื่อนที่</h2>
+        <p class="text-slate-400 text-sm">คลิกเลือกยุคการสื่อสารด้านล่างเพื่อสำรวจจุดเด่น เทคโนโลยีหลัก และความเร็วในการรับส่งข้อมูล</p>
+        
+        <!-- Timeline Selector Buttons -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 mt-6">
+          <button onclick="showGen('1G')" id="btn-gen-1G" class="gen-btn p-3 rounded-xl border border-blue-500 bg-blue-600/20 text-white font-semibold flex flex-col items-center">
+            <span class="text-xs text-blue-300">1980s</span>
+            <span class="text-lg">1G</span>
+            <span class="text-[11px] text-slate-400 font-normal">Analog Voice</span>
+          </button>
+          <button onclick="showGen('2G')" id="btn-gen-2G" class="gen-btn p-3 rounded-xl border border-slate-700 bg-slate-800/60 hover:bg-slate-700/50 text-slate-300 font-semibold flex flex-col items-center">
+            <span class="text-xs text-slate-400">1990s</span>
+            <span class="text-lg">2G / 2.5G</span>
+            <span class="text-[11px] text-slate-400 font-normal">Digital & SMS</span>
+          </button>
+          <button onclick="showGen('3G')" id="btn-gen-3G" class="gen-btn p-3 rounded-xl border border-slate-700 bg-slate-800/60 hover:bg-slate-700/50 text-slate-300 font-semibold flex flex-col items-center">
+            <span class="text-xs text-slate-400">2000s</span>
+            <span class="text-lg">3G</span>
+            <span class="text-[11px] text-slate-400 font-normal">Mobile Internet</span>
+          </button>
+          <button onclick="showGen('4G')" id="btn-gen-4G" class="gen-btn p-3 rounded-xl border border-slate-700 bg-slate-800/60 hover:bg-slate-700/50 text-slate-300 font-semibold flex flex-col items-center">
+            <span class="text-xs text-slate-400">2010s</span>
+            <span class="text-lg">4G (LTE)</span>
+            <span class="text-[11px] text-slate-400 font-normal">All-IP & Video</span>
+          </button>
+          <button onclick="showGen('5G')" id="btn-gen-5G" class="gen-btn p-3 rounded-xl border border-slate-700 bg-slate-800/60 hover:bg-slate-700/50 text-slate-300 font-semibold flex flex-col items-center">
+            <span class="text-xs text-slate-400">2020s</span>
+            <span class="text-lg">5G (NR)</span>
+            <span class="text-[11px] text-slate-400 font-normal">IoT & Ultra Fast</span>
+          </button>
+          <button onclick="showGen('6G')" id="btn-gen-6G" class="gen-btn p-3 rounded-xl border border-slate-700 bg-slate-800/60 hover:bg-slate-700/50 text-slate-300 font-semibold flex flex-col items-center">
+            <span class="text-xs text-purple-400">Future (2030+)</span>
+            <span class="text-lg">6G</span>
+            <span class="text-[11px] text-purple-300 font-normal">AI & Terahertz</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Detail Showcase Card -->
+      <div id="gen-detail-card" class="bg-slate-800/30 border border-slate-700 rounded-2xl p-6 sm:p-8 space-y-6">
+        <!-- Rendered by JS -->
+      </div>
+    </section>
+
+    <!-- TAB 2: Architecture -->
+    <section id="tab-architecture" class="space-y-6 hidden">
+      <div class="bg-slate-800/50 border border-slate-700/60 rounded-2xl p-6">
+        <h2 class="text-xl font-bold text-white mb-2">สถาปัตยกรรมโครงข่ายเซลลูลาร์ (Cellular Network Architecture)</h2>
+        <p class="text-slate-400 text-sm">ทำความเข้าใจการเชื่อมต่อของ 3 ส่วนประกอบหลัก: อุปกรณ์ผู้ใช้ (UE), โครงข่ายภาควิทยุ (RAN) และโครงข่ายหลัก (Core Network)</p>
+      </div>
+
+      <!-- End-to-End System Connection Visual Diagram -->
+      <div class="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 border border-slate-700/80 rounded-2xl p-6 shadow-xl overflow-hidden relative">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <span class="text-xs font-semibold px-2.5 py-1 rounded bg-blue-500/20 text-blue-400 border border-blue-500/30">Network Topology Map</span>
+            <h3 class="text-base font-bold text-white mt-1.5">แผนผังจำลองการเชื่อมโยงโครงข่ายทั้งระบบ (End-to-End Network Flow)</h3>
+          </div>
+          <span class="text-xs text-slate-400 hidden sm:inline-block">สัญญาณวิทยุ (RF) ➔ สถานีฐาน (RAN) ➔ สายไฟเบอร์ (Backhaul) ➔ Core Network</span>
+        </div>
+
+        <!-- SVG System Architecture Flow Diagram -->
+        <div class="w-full overflow-x-auto py-2">
+          <svg viewBox="0 0 920 220" class="w-full min-w-[760px] h-auto select-none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="ueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#4f46e5" stop-opacity="0.25"/>
+                <stop offset="100%" stop-color="#312e81" stop-opacity="0.4"/>
+              </linearGradient>
+              <linearGradient id="ranGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#0284c7" stop-opacity="0.25"/>
+                <stop offset="100%" stop-color="#075985" stop-opacity="0.4"/>
+              </linearGradient>
+              <linearGradient id="coreGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#059669" stop-opacity="0.25"/>
+                <stop offset="100%" stop-color="#064e3b" stop-opacity="0.4"/>
+              </linearGradient>
+              <linearGradient id="cloudGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#d97706" stop-opacity="0.2"/>
+                <stop offset="100%" stop-color="#78350f" stop-opacity="0.3"/>
+              </linearGradient>
+              <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="3" result="blur" />
+                <feComposite in="SourceGraphic" in2="blur" operator="over" />
+              </filter>
+            </defs>
+
+            <!-- 1. UE Section Box -->
+            <rect x="20" y="25" width="190" height="170" rx="16" fill="url(#ueGrad)" stroke="#6366f1" stroke-width="1.8" stroke-dasharray="4 2"/>
+            <text x="115" y="52" fill="#818cf8" font-size="12" font-weight="bold" text-anchor="middle">1. อุปกรณ์ผู้ใช้ (UE)</text>
+
+            <!-- Phone Graphic -->
+            <rect x="75" y="65" width="45" height="85" rx="8" fill="#1e1b4b" stroke="#818cf8" stroke-width="2"/>
+            <rect x="80" y="72" width="35" height="65" rx="4" fill="#0f172a"/>
+            <!-- Phone Screen content -->
+            <circle cx="97" cy="84" r="5" fill="#38bdf8"/>
+            <rect x="87" y="95" width="21" height="3" rx="1.5" fill="#94a3b8"/>
+            <rect x="87" y="102" width="15" height="3" rx="1.5" fill="#64748b"/>
+            <!-- Home Bar -->
+            <rect x="91" y="142" width="13" height="3" rx="1.5" fill="#818cf8"/>
+            <!-- RF Radio Waves from UE to RAN -->
+            <path d="M125 90 A18 18 0 0 1 142 107" fill="none" stroke="#60a5fa" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M130 82 A28 28 0 0 1 155 107" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-dasharray="2 3"/>
+            <path d="M135 74 A38 38 0 0 1 168 107" fill="none" stroke="#93c5fd" stroke-width="1.8" stroke-linecap="round"/>
+            <text x="115" y="172" fill="#cbd5e1" font-size="11" text-anchor="middle">Smartphones / IoT</text>
+            <text x="115" y="188" fill="#94a3b8" font-size="10" text-anchor="middle">SIM Card & RF Module</text>
+
+            <!-- Wireless Link Between UE and RAN -->
+            <line x1="215" y1="110" x2="275" y2="110" stroke="#38bdf8" stroke-width="2.5" stroke-dasharray="5 4"/>
+            <polygon points="278,110 268,105 268,115" fill="#38bdf8"/>
+            <polygon points="212,110 222,105 222,115" fill="#38bdf8"/>
+            <text x="245" y="100" fill="#38bdf8" font-size="10" font-weight="bold" text-anchor="middle">Air Interface</text>
+            <text x="245" y="128" fill="#64748b" font-size="9" text-anchor="middle">(คลื่นวิทยุ RF)</text>
+
+            <!-- 2. RAN Section Box -->
+            <rect x="280" y="25" width="200" height="170" rx="16" fill="url(#ranGrad)" stroke="#0ea5e9" stroke-width="1.8"/>
+            <text x="380" y="52" fill="#38bdf8" font-size="12" font-weight="bold" text-anchor="middle">2. สถานีฐานวิทยุ (RAN)</text>
+            
+            <!-- Cell Tower Graphic -->
+            <!-- Tower Base/Truss -->
+            <line x1="380" y1="65" x2="355" y2="145" stroke="#0284c7" stroke-width="2.5"/>
+            <line x1="380" y1="65" x2="405" y2="145" stroke="#0284c7" stroke-width="2.5"/>
+            <line x1="362" y1="120" x2="398" y2="120" stroke="#38bdf8" stroke-width="1.8"/>
+            <line x1="368" y1="95" x2="392" y2="95" stroke="#38bdf8" stroke-width="1.8"/>
+            <line x1="362" y1="120" x2="392" y2="95" stroke="#0284c7" stroke-width="1.2"/>
+            <line x1="368" y1="95" x2="398" y2="120" stroke="#0284c7" stroke-width="1.2"/>
+            <!-- Antenna Array top -->
+            <rect x="362" y="60" width="36" height="8" rx="2" fill="#38bdf8"/>
+            <line x1="380" y1="55" x2="380" y2="60" stroke="#e0f2fe" stroke-width="2.5"/>
+            <circle cx="380" cy="54" r="3" fill="#ef4444" filter="url(#glow)"/>
+            <!-- Radio Waves from Tower -->
+            <path d="M405 60 A14 14 0 0 1 418 78" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round"/>
+            <path d="M410 53 A24 24 0 0 1 428 78" fill="none" stroke="#7dd3fc" stroke-width="1.8" stroke-linecap="round"/>
+            <text x="380" y="165" fill="#e0f2fe" font-size="11" font-weight="bold" text-anchor="middle">eNodeB (4G) / gNodeB (5G)</text>
+            <text x="380" y="182" fill="#94a3b8" font-size="10" text-anchor="middle">Massive MIMO & Antennas</text>
+
+            <!-- Backhaul Link Between RAN and Core -->
+            <line x1="485" y1="110" x2="545" y2="110" stroke="#10b981" stroke-width="3"/>
+            <polygon points="548,110 538,105 538,115" fill="#10b981"/>
+            <polygon points="482,110 492,105 492,115" fill="#10b981"/>
+            <text x="515" y="98" fill="#34d399" font-size="10" font-weight="bold" text-anchor="middle">Fiber Backhaul</text>
+            <text x="515" y="128" fill="#64748b" font-size="9" text-anchor="middle">(สายใยแก้วนำแสง)</text>
+
+            <!-- 3. Core Network Section Box -->
+            <rect x="550" y="25" width="200" height="170" rx="16" fill="url(#coreGrad)" stroke="#10b981" stroke-width="1.8"/>
+            <text x="650" y="52" fill="#34d399" font-size="12" font-weight="bold" text-anchor="middle">3. เครือข่ายแกนกลาง (Core)</text>
+
+            <!-- Server Rack / Core Modules Graphic -->
+            <g transform="translate(615, 65)">
+              <!-- Server 1 (Auth / Control) -->
+              <rect x="0" y="0" width="70" height="18" rx="3" fill="#064e3b" stroke="#10b981" stroke-width="1.2"/>
+              <circle cx="8" cy="9" r="2.5" fill="#34d399"/>
+              <circle cx="16" cy="9" r="2.5" fill="#6ee7b7"/>
+              <line x1="28" y1="9" x2="62" y2="9" stroke="#047857" stroke-width="2"/>
+              <!-- Server 2 (Mobility Mgmt) -->
+              <rect x="0" y="24" width="70" height="18" rx="3" fill="#064e3b" stroke="#10b981" stroke-width="1.2"/>
+              <circle cx="8" cy="33" r="2.5" fill="#34d399"/>
+              <circle cx="16" cy="33" r="2.5" fill="#6ee7b7"/>
+              <line x1="28" y1="33" x2="62" y2="33" stroke="#047857" stroke-width="2"/>
+              <!-- Server 3 (User Plane Gateway) -->
+              <rect x="0" y="48" width="70" height="18" rx="3" fill="#064e3b" stroke="#10b981" stroke-width="1.2"/>
+              <circle cx="8" cy="57" r="2.5" fill="#34d399"/>
+              <circle cx="16" cy="57" r="2.5" fill="#6ee7b7"/>
+              <line x1="28" y1="57" x2="62" y2="57" stroke="#047857" stroke-width="2"/>
+            </g>
+            <text x="650" y="162" fill="#a7f3d0" font-size="10.5" font-weight="bold" text-anchor="middle">5GC (AMF / UPF / UDM)</text>
+            <text x="650" y="180" fill="#94a3b8" font-size="10" text-anchor="middle">Authentication & Routing</text>
+
+            <!-- Link to Internet / Cloud -->
+            <line x1="755" y1="110" x2="795" y2="110" stroke="#f59e0b" stroke-width="2.5" stroke-dasharray="4 3"/>
+            <polygon points="798,110 788,105 788,115" fill="#f59e0b"/>
+
+            <!-- 4. Internet / External World Cloud -->
+            <rect x="800" y="55" width="105" height="110" rx="16" fill="url(#cloudGrad)" stroke="#f59e0b" stroke-width="1.6"/>
+            <!-- Cloud Icon inside -->
+            <path d="M835 105 A12 12 0 0 1 855 95 A16 16 0 0 1 878 105 A10 10 0 0 1 870 120 L835 120 Z" fill="#b45309" stroke="#fbbf24" stroke-width="1.5"/>
+            <text x="852.5" y="138" fill="#fde68a" font-size="11" font-weight="bold" text-anchor="middle">Internet</text>
+            <text x="852.5" y="152" fill="#fef3c7" font-size="9" text-anchor="middle">Cloud & Web</text>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Architecture Interactive Cards with Detailed Graphics -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+        <!-- Part 1: UE Card with Graphic -->
+        <div onclick="showArchInfo('ue')" class="cursor-pointer group bg-slate-800/40 hover:bg-slate-800/70 border border-slate-700 hover:border-indigo-500/60 rounded-2xl p-6 transition flex flex-col justify-between shadow-lg">
+          <div>
+            <!-- Visual Graphic Banner for UE -->
+            <div class="w-full h-32 rounded-xl bg-gradient-to-br from-indigo-950/60 via-slate-900 to-slate-950 border border-indigo-900/40 flex items-center justify-center p-3 mb-4 group-hover:border-indigo-500/50 transition">
+              <svg viewBox="0 0 200 100" class="w-full h-full max-h-24">
+                <!-- Smartphone silhouette -->
+                <rect x="35" y="10" width="45" height="80" rx="7" fill="#1e1b4b" stroke="#818cf8" stroke-width="1.8"/>
+                <rect x="40" y="16" width="35" height="60" rx="3" fill="#0f172a"/>
+                <circle cx="57" cy="26" r="4" fill="#38bdf8"/>
+                <line x1="46" y1="38" x2="68" y2="38" stroke="#818cf8" stroke-width="2"/>
+                <line x1="46" y1="45" x2="62" y2="45" stroke="#6366f1" stroke-width="2"/>
+                <rect x="52" y="82" width="11" height="2" rx="1" fill="#a5b4fc"/>
+                <!-- IoT Smart Module -->
+                <rect x="115" y="25" width="55" height="50" rx="6" fill="#1e1b4b" stroke="#6366f1" stroke-width="1.5"/>
+                <rect x="127" y="35" width="31" height="30" rx="3" fill="#090d16" stroke="#4338ca"/>
+                <circle cx="142" cy="50" r="3" fill="#10b981"/>
+                <!-- SIM Chip Graphic -->
+                <rect x="87" y="45" width="22" height="28" rx="2" fill="#d97706" stroke="#fbbf24" stroke-width="1"/>
+                <rect x="91" y="52" width="14" height="14" rx="1" fill="#78350f"/>
+                <line x1="91" y1="58" x2="105" y2="58" stroke="#fcd34d" stroke-width="1"/>
+                <line x1="97" y1="52" x2="97" y2="66" stroke="#fcd34d" stroke-width="1"/>
+                <!-- Transmit waves -->
+                <path d="M78 30 A12 12 0 0 1 88 42" fill="none" stroke="#818cf8" stroke-width="2"/>
+                <path d="M82 23 A20 20 0 0 1 97 42" fill="none" stroke="#a5b4fc" stroke-width="1.5"/>
+              </svg>
+            </div>
+
+            <span class="text-xs uppercase tracking-wider text-indigo-400 font-semibold">User Equipment</span>
+            <h3 class="text-lg font-bold text-white mt-1 group-hover:text-indigo-300 transition">UE (โทรศัพท์ / โมดูล)</h3>
+            <p class="text-slate-400 text-xs mt-2 leading-relaxed">
+              เครื่องโทรศัพท์เคลื่อนที่หรืออุปกรณ์ IoT ที่มี SIM Card และชิปเซ็ตภาครับ-ส่งคลื่นความถี่วิทยุ (RF Transceiver) แปลงเสียง/ข้อมูลเป็นคลื่นวิทยุ
+            </p>
+          </div>
+          <div class="mt-4 pt-4 border-t border-slate-700/60 text-xs text-indigo-300 font-medium flex items-center justify-between">
+            <span>คลิกดูการทำงานละเอียด</span>
+            <span>&rarr;</span>
+          </div>
+        </div>
+
+        <!-- Part 2: RAN Card with Graphic -->
+        <div onclick="showArchInfo('ran')" class="cursor-pointer group bg-slate-800/40 hover:bg-slate-800/70 border border-slate-700 hover:border-blue-500/60 rounded-2xl p-6 transition flex flex-col justify-between shadow-lg">
+          <div>
+            <!-- Visual Graphic Banner for RAN -->
+            <div class="w-full h-32 rounded-xl bg-gradient-to-br from-sky-950/60 via-slate-900 to-slate-950 border border-sky-900/40 flex items-center justify-center p-3 mb-4 group-hover:border-blue-500/50 transition">
+              <svg viewBox="0 0 200 100" class="w-full h-full max-h-24">
+                <!-- Cell Tower Structure -->
+                <line x1="100" y1="12" x2="78" y2="88" stroke="#0284c7" stroke-width="2.2"/>
+                <line x1="100" y1="12" x2="122" y2="88" stroke="#0284c7" stroke-width="2.2"/>
+                <line x1="84" y1="65" x2="116" y2="65" stroke="#38bdf8" stroke-width="1.6"/>
+                <line x1="89" y1="44" x2="111" y2="44" stroke="#38bdf8" stroke-width="1.6"/>
+                <line x1="84" y1="65" x2="111" y2="44" stroke="#0369a1" stroke-width="1.2"/>
+                <line x1="89" y1="44" x2="116" y2="65" stroke="#0369a1" stroke-width="1.2"/>
+                <!-- Sector Antennas -->
+                <rect x="85" y="8" width="30" height="6" rx="1.5" fill="#38bdf8"/>
+                <line x1="100" y1="2" x2="100" y2="8" stroke="#f87171" stroke-width="2"/>
+                <circle cx="100" cy="2" r="2.5" fill="#ef4444"/>
+                <!-- Massive MIMO Beamforming Waves -->
+                <path d="M118 10 A16 16 0 0 1 132 28" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round"/>
+                <path d="M123 5 A26 26 0 0 1 145 28" fill="none" stroke="#7dd3fc" stroke-width="1.8" stroke-linecap="round"/>
+                <path d="M82 10 A16 16 0 0 0 68 28" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round"/>
+                <path d="M77 5 A26 26 0 0 0 55 28" fill="none" stroke="#7dd3fc" stroke-width="1.8" stroke-linecap="round"/>
+                <!-- Base Station Cabinet (BBU) -->
+                <rect x="68" y="74" width="16" height="15" rx="2" fill="#0c4a6e" stroke="#0284c7" stroke-width="1"/>
+                <circle cx="73" cy="79" r="1.5" fill="#10b981"/>
+              </svg>
+            </div>
+
+            <span class="text-xs uppercase tracking-wider text-blue-400 font-semibold">Radio Access Network</span>
+            <h3 class="text-lg font-bold text-white mt-1 group-hover:text-blue-300 transition">RAN (สถานีฐานวิทยุ)</h3>
+            <p class="text-slate-400 text-xs mt-2 leading-relaxed">
+              โครงข่ายการเข้าถึงทางวิทยุ เช่น BTS (2G), NodeB (3G), eNodeB (4G) และ gNodeB (5G) ทำหน้าที่จัดสรรความถี่ กระจายสัญญาณ และจัดการ Handover
+            </p>
+          </div>
+          <div class="mt-4 pt-4 border-t border-slate-700/60 text-xs text-blue-300 font-medium flex items-center justify-between">
+            <span>คลิกดูการทำงานละเอียด</span>
+            <span>&rarr;</span>
+          </div>
+        </div>
+
+        <!-- Part 3: Core Network Card with Graphic -->
+        <div onclick="showArchInfo('core')" class="cursor-pointer group bg-slate-800/40 hover:bg-slate-800/70 border border-slate-700 hover:border-emerald-500/60 rounded-2xl p-6 transition flex flex-col justify-between shadow-lg">
+          <div>
+            <!-- Visual Graphic Banner for Core Network -->
+            <div class="w-full h-32 rounded-xl bg-gradient-to-br from-emerald-950/60 via-slate-900 to-slate-950 border border-emerald-900/40 flex items-center justify-center p-3 mb-4 group-hover:border-emerald-500/50 transition">
+              <svg viewBox="0 0 200 100" class="w-full h-full max-h-24">
+                <!-- Datacenter Server Racks -->
+                <rect x="45" y="15" width="45" height="70" rx="4" fill="#064e3b" stroke="#10b981" stroke-width="1.6"/>
+                <line x1="45" y1="36" x2="90" y2="36" stroke="#047857" stroke-width="1.2"/>
+                <line x1="45" y1="58" x2="90" y2="58" stroke="#047857" stroke-width="1.2"/>
+                <!-- Server LED Indicators -->
+                <circle cx="53" cy="26" r="2" fill="#34d399"/>
+                <circle cx="59" cy="26" r="2" fill="#6ee7b7"/>
+                <circle cx="53" cy="47" r="2" fill="#34d399"/>
+                <circle cx="59" cy="47" r="2" fill="#6ee7b7"/>
+                <circle cx="53" cy="69" r="2" fill="#34d399"/>
+                <circle cx="59" cy="69" r="2" fill="#6ee7b7"/>
+                <!-- Core Interconnect Network Lines -->
+                <circle cx="140" cy="50" r="24" fill="#022c22" stroke="#34d399" stroke-width="1.8"/>
+                <circle cx="140" cy="50" r="10" fill="#065f46" stroke="#6ee7b7" stroke-width="1.2"/>
+                <!-- Connection cables -->
+                <path d="M90 26 C110 26, 115 42, 130 45" fill="none" stroke="#10b981" stroke-width="1.8"/>
+                <path d="M90 69 C110 69, 115 58, 130 55" fill="none" stroke="#34d399" stroke-width="1.8"/>
+                <line x1="140" y1="26" x2="140" y2="74" stroke="#6ee7b7" stroke-width="1" stroke-dasharray="2 2"/>
+                <line x1="116" y1="50" x2="164" y2="50" stroke="#6ee7b7" stroke-width="1" stroke-dasharray="2 2"/>
+              </svg>
+            </div>
+
+            <span class="text-xs uppercase tracking-wider text-emerald-400 font-semibold">Core Network</span>
+            <h3 class="text-lg font-bold text-white mt-1 group-hover:text-emerald-300 transition">Core Network (ระบบแกนกลาง)</h3>
+            <p class="text-slate-400 text-xs mt-2 leading-relaxed">
+              ศูนย์รวมการควบคุม การยืนยันตัวตน (Authentication), คิดค่าบริการ, จัดการความต่อเนื่องของสัญญาณ (Mobility) และส่งข้อมูลออกสู่ Internet
+            </p>
+          </div>
+          <div class="mt-4 pt-4 border-t border-slate-700/60 text-xs text-emerald-300 font-medium flex items-center justify-between">
+            <span>คลิกดูการทำงานละเอียด</span>
+            <span>&rarr;</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Architecture Dynamic Detail Box -->
+      <div id="arch-info-box" class="bg-slate-800/60 border border-slate-700 rounded-2xl p-6">
+        <h4 id="arch-info-title" class="text-base font-bold text-white">เลือกคลิกที่การ์ดด้านบนเพื่อดูข้อมูลส่วนประกอบโครงข่าย</h4>
+        <p id="arch-info-body" class="text-sm text-slate-300 mt-2">
+          ระบบโทรศัพท์เคลื่อนที่เชื่อมต่อกันด้วยสัญญาณวิทยุระหว่าง UE กับ RAN และเชื่อมต่อจาก RAN เข้าสู่ Core Network ผ่านโครงข่ายสายใยแก้วนำแสง (Fiber Optic Backhaul)
+        </p>
+      </div>
+
+      <!-- Network Types Comparison Section -->
+      <div class="bg-slate-800/40 border border-slate-700 rounded-2xl p-6">
+        <h3 class="text-lg font-bold text-white mb-4">ประเภทของโครงข่ายตามลักษณะการใช้งาน</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+          <div class="bg-slate-900/60 border border-slate-800 p-4 rounded-xl">
+            <h4 class="font-semibold text-blue-400 mb-1">1. Public Mobile Network (โครงข่ายสาธารณะ)</h4>
+            <p class="text-slate-300 text-xs">ให้บริการแก่ประชาชนทั่วไป ดำเนินการโดยผู้ให้บริการเครือข่ายโทรศัพท์เคลื่อนที่ (เช่น AIS, TRUE/DTAC, NT) มีความครอบคลุมทั่วประเทศ</p>
+          </div>
+          <div class="bg-slate-900/60 border border-slate-800 p-4 rounded-xl">
+            <h4 class="font-semibold text-purple-400 mb-1">2. Private 5G / Dedicated Network (โครงข่ายเฉพาะกิจ)</h4>
+            <p class="text-slate-300 text-xs">โครงข่ายที่สร้างขึ้นเพื่อใช้งานภายในโรงงานอุตสาหกรรม ท่าเรือ หรือคลังสินค้า เพื่อความปลอดภัยสูง ความหน่วงต่ำพิเศษ และการควบคุมข้อมูลเป็นส่วนตัว</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: Comparison -->
+    <section id="tab-comparison" class="space-y-6 hidden">
+      <div class="bg-slate-800/50 border border-slate-700/60 rounded-2xl p-6">
+        <h2 class="text-xl font-bold text-white mb-2">ตารางเปรียบเทียบมาตรฐานโครงข่ายแต่ละยุค (Comparison Matrix)</h2>
+        <p class="text-slate-400 text-sm">สรุปเปรียบเทียบเชิงวิศวกรรม ตั้งแต่เทคโนโลยีสัญญาณ แบนด์วิดท์ จนถึงบริการเด่น</p>
+      </div>
+
+      <div class="overflow-x-auto rounded-2xl border border-slate-700 bg-slate-800/40">
+        <table class="w-full text-left text-sm text-slate-300">
+          <thead class="bg-slate-900/80 text-xs uppercase text-slate-400 border-b border-slate-700">
+            <tr>
+              <th scope="col" class="px-6 py-4">ยุค (Gen)</th>
+              <th scope="col" class="px-6 py-4">เทคโนโลยีหลัก</th>
+              <th scope="col" class="px-6 py-4">วิธีการมอดูเลชัน / ส่งสัญญาณ</th>
+              <th scope="col" class="px-6 py-4">ความเร็วสูงสุด</th>
+              <th scope="col" class="px-6 py-4">ความหน่วง (Latency)</th>
+              <th scope="col" class="px-6 py-4">บริการเด่น</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-800">
+            <tr class="hover:bg-slate-800/50">
+              <td class="px-6 py-4 font-bold text-amber-400">1G</td>
+              <td class="px-6 py-4">AMPS, NMT, TACS</td>
+              <td class="px-6 py-4">Analog FM (FDMA)</td>
+              <td class="px-6 py-4">~2.4 kbps</td>
+              <td class="px-6 py-4">สูงมาก (ไม่ระบุ)</td>
+              <td class="px-6 py-4">สนทนาเสียงอย่างเดียว</td>
+            </tr>
+            <tr class="hover:bg-slate-800/50">
+              <td class="px-6 py-4 font-bold text-blue-400">2G / 2.5G</td>
+              <td class="px-6 py-4">GSM, CDMA (IS-95), GPRS, EDGE</td>
+              <td class="px-6 py-4">Digital GMSK / 8-PSK (TDMA/FDMA)</td>
+              <td class="px-6 py-4">64 kbps - 384 kbps</td>
+              <td class="px-6 py-4">~300 - 500 ms</td>
+              <td class="px-6 py-4">เสียงชัดขึ้น, SMS, ข้อความ MMS</td>
+            </tr>
+            <tr class="hover:bg-slate-800/50">
+              <td class="px-6 py-4 font-bold text-emerald-400">3G</td>
+              <td class="px-6 py-4">WCDMA, UMTS, HSPA+</td>
+              <td class="px-6 py-4">CDMA (Spread Spectrum), QPSK, 16QAM</td>
+              <td class="px-6 py-4">384 kbps - 42 Mbps</td>
+              <td class="px-6 py-4">~100 - 150 ms</td>
+              <td class="px-6 py-4">Mobile Web, Video Call, โหลดเพลง</td>
+            </tr>
+            <tr class="hover:bg-slate-800/50">
+              <td class="px-6 py-4 font-bold text-cyan-400">4G</td>
+              <td class="px-6 py-4">LTE, LTE-Advanced</td>
+              <td class="px-6 py-4">OFDMA (Downlink), SC-FDMA (Uplink), 64QAM</td>
+              <td class="px-6 py-4">100 Mbps - 1 Gbps</td>
+              <td class="px-6 py-4">~30 - 50 ms</td>
+              <td class="px-6 py-4">Streaming HD/4K, เกมออนไลน์, All-IP Voice (VoLTE)</td>
+            </tr>
+            <tr class="hover:bg-slate-800/50">
+              <td class="px-6 py-4 font-bold text-purple-400">5G</td>
+              <td class="px-6 py-4">5G NR (New Radio), Standalone (SA)</td>
+              <td class="px-6 py-4">Scalable OFDMA, 256QAM, Massive MIMO, Beamforming</td>
+              <td class="px-6 py-4">10 Gbps - 20 Gbps</td>
+              <td class="px-6 py-4">&lt; 1 - 5 ms</td>
+              <td class="px-6 py-4">eMBB (ความเร็วสูง), URLLC (ควบคุมระยะไกล), mMTC (IoT นับล้านตัว)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- TAB 4: Quiz -->
+    <section id="tab-quiz" class="space-y-6 hidden">
+      <div class="bg-slate-800/50 border border-slate-700/60 rounded-2xl p-6">
+        <h2 class="text-xl font-bold text-white mb-2">แบบทดสอบท้ายหน่วยการเรียนรู้ที่ 1</h2>
+        <p class="text-slate-400 text-sm">ทดสอบความเข้าใจเกี่ยวกับวิวัฒนาการและประเภทโครงข่ายโทรศัพท์เคลื่อนที่ (5 ข้อ)</p>
+      </div>
+
+      <!-- Student Info Form -->
+      <div class="bg-slate-800/40 border border-slate-700/80 rounded-2xl p-6">
+        <h3 class="text-sm font-semibold text-blue-400 mb-3 flex items-center space-x-2">
+          <span>👤</span>
+          <span>ข้อมูลผู้ทำแบบทดสอบ (สำหรับบันทึกคะแนน)</span>
+        </h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">รหัสนักศึกษา / เลขประจำตัว</label>
+            <div class="relative">
+              <input type="text" id="student-id" placeholder="เช่น 66309010001" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white focus:outline-none focus:border-blue-500 transition">
+              <span id="student-id-spinner" class="hidden absolute right-3 top-2.5 text-xs text-amber-400 animate-spin">⏳</span>
+            </div>
+            <p id="student-id-status" class="text-xs mt-1.5 hidden"></p>
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">ชื่อ - นามสกุล</label>
+            <input type="text" id="student-name" placeholder="เช่น สมชาย ใจดี" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white focus:outline-none focus:border-blue-500 transition">
+          </div>
+        </div>
+      </div>
+
+      <div id="quiz-container" class="space-y-4">
+        <!-- Injected via JavaScript -->
+      </div>
+
+      <div class="flex items-center justify-between pt-4">
+        <button onclick="calculateQuizScore()" class="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 font-semibold text-white shadow-lg shadow-blue-600/30 transition">
+          ตรวจคำตอบและประเมินผล
+        </button>
+        <button onclick="resetQuiz()" class="px-4 py-2 rounded-xl border border-slate-700 hover:bg-slate-800 text-slate-300 text-sm transition">
+          ทำใหม่อีกครั้ง
+        </button>
+      </div>
+
+      <!-- Quiz Score Modal/Banner -->
+      <div id="quiz-result-card" class="hidden bg-slate-800 border border-slate-700 rounded-2xl p-6 transition space-y-4">
+        <div>
+          <h3 class="text-lg font-bold text-white" id="quiz-result-title"></h3>
+          <p class="text-sm text-slate-300 mt-1" id="quiz-result-detail"></p>
+        </div>
+
+        <!-- Submit to Google Sheet Action -->
+        <div id="submit-sheet-section" class="pt-3 border-t border-slate-700/80 flex flex-wrap items-center justify-between gap-3">
+          <div class="text-xs text-slate-400" id="sheet-status-text">
+            💡 กดปุ่มด้านขวาเพื่อส่งผลคะแนนเข้าสู่ระบบ Google Sheet ของอาจารย์ผู้สอน
+          </div>
+          <button id="btn-send-sheet" onclick="sendScoreToGoogleSheet()" class="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 font-medium text-white text-sm shadow-lg shadow-emerald-600/20 flex items-center space-x-2 transition">
+            <span>📊</span>
+            <span>ส่งคะแนนไปยัง Google Sheet</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Modal สำหรับครูผู้สอน (Teacher Settings Modal) -->
+  <div id="teacher-modal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-xl w-full p-6 shadow-2xl relative space-y-5">
+      
+      <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+        <div class="flex items-center space-x-2.5">
+          <div class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold">
+            ⚙️
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-white">ตั้งค่าสำหรับครูผู้สอน</h3>
+            <p class="text-xs text-slate-400">เชื่อมต่อ Google Sheet สำหรับจัดเก็บคะแนนของนักศึกษา</p>
+          </div>
+        </div>
+        <button onclick="toggleTeacherModal(false)" class="text-slate-400 hover:text-white p-1 text-lg leading-none">
+          &times;
+        </button>
+      </div>
+
+      <!-- Google Apps Script URL Input -->
+      <div class="space-y-2">
+        <label class="block text-xs font-medium text-slate-300">
+          Google Apps Script Web App URL (ลิงก์เว็บแอปที่ Deploy จากชีต)
+        </label>
+        <input type="url" id="teacher-sheet-url" placeholder="https://script.google.com/macros/s/.../exec" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white focus:outline-none focus:border-amber-500 transition font-mono">
+        <p class="text-[11px] text-slate-500 leading-relaxed">
+          * ระบบจะบันทึก URL ไว้ใน Local Storage ของบราวเซอร์นี้อัตโนมัติ เพื่อใช้นักเรียนส่งคะแนน
+        </p>
+      </div>
+
+      <!-- Buttons -->
+      <div class="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-800">
+        <!-- Download Code.gs Button -->
+        <a href="Code.gs" download="Code.gs" class="inline-flex items-center space-x-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-blue-400 border border-slate-700 text-xs font-medium transition">
+          <span>📥</span>
+          <span>ดาวน์โหลด Code.gs</span>
+        </a>
+
+        <div class="flex items-center space-x-2">
+          <button onclick="toggleTeacherModal(false)" class="px-4 py-2 rounded-xl border border-slate-700 text-slate-400 hover:bg-slate-800 text-xs transition">
+            ยกเลิก
+          </button>
+          <button onclick="saveTeacherSettings()" class="px-5 py-2 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-medium text-xs shadow-md transition">
+            บันทึกการตั้งค่า
+          </button>
+        </div>
+      </div>
+
+      <!-- Guide Box -->
+      <div class="bg-slate-950/60 border border-slate-800 p-4 rounded-xl text-xs space-y-2 text-slate-400">
+        <div class="font-semibold text-slate-200">📖 ขั้นตอนเตรียม Google Sheet:</div>
+        <ol class="list-decimal list-inside space-y-1 leading-relaxed">
+          <li>เปิด Google Sheet ใหม่ หรือชีตเดิมที่ต้องการ</li>
+          <li>ไปที่เมนู <strong>ส่วนขยาย (Extensions) &gt; Apps Script</strong></li>
+          <li>กดปุ่ม <strong>"ดาวน์โหลด Code.gs"</strong> แล้วนำโค้ดไปวางแทนที่โค้ดเดิม</li>
+          <li>กดปุ่ม <strong>การทำให้ใช้งานได้ (Deploy) &gt; รายการใหม่ (New deployment)</strong> เลือก Web App</li>
+          <li>ตั้งค่า Who has access เป็น <strong>Anyone (ทุกคน)</strong> แล้วคัดลอก URL มาวางในช่องด้านบน</li>
+        </ol>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // Data: Generations
+    const genData = {
+      '1G': {
+        title: 'ยุคที่ 1 (1G) : สื่อสารเสียงด้วยสัญญาณแอนะล็อก (Analog Voice)',
+        period: 'ช่วงทศวรรษ 1980 (พ.ศ. 2523 - 2532)',
+        speed: 'ความเร็วส่งข้อมูล ~ 2.4 kbps',
+        tech: 'AMPS (สหรัฐฯ), NMT (ยุโรปเหนือ), TACS (อังกฤษ)',
+        modulation: 'แอนะล็อก FM สำหรับสัญญาณเสียง และ FSK สำหรับสัญญาณควบคุม',
+        coreFeature: 'โทรออก-รับสายด้วยเสียงเท่านั้น โทรศัพท์มีขนาดใหญ่คล้ายกระดูกหมู (Brick Phone) ไม่มีการเข้ารหัสความปลอดภัย สัญญาณถูกดักฟังและรบกวนได้ง่าย',
+        strengths: ['เป็นจุดเริ่มต้นของการสื่อสารไร้สายเคลื่อนที่', 'โทรได้โดยไม่ต้องมีสายเคเบิล'],
+        weaknesses: ['แบตเตอรี่ใช้งานได้สั้น เครื่องมีน้ำหนักมาก', 'ไม่มีความปลอดภัยด้านข้อมูล (ดักฟังง่าย)', 'รองรับจำนวนผู้ใช้งานต่อช่องสัญญาณได้น้อย']
+      },
+      '2G': {
+        title: 'ยุคที่ 2 (2G / 2.5G) : ยุคดิจิทัลและข้อความสั้น (Digital Voice & SMS)',
+        period: 'ช่วงทศวรรษ 1990 (พ.ศ. 2533 - 2542)',
+        speed: '9.6 kbps (2G) จนถึง 384 kbps (2.75G EDGE)',
+        tech: 'GSM (900/1800 MHz), CDMAone (IS-95), GPRS (2.5G), EDGE (2.75G)',
+        modulation: 'GMSK (Gaussian Minimum Shift Keying) และ 8-PSK',
+        coreFeature: 'เปลี่ยนการส่งสัญญาณเป็นดิจิทัลเต็มรูปแบบ มี SIM Card สำหรับระบุตัวตน เริ่มมีบริการส่งข้อความสั้น (SMS) และส่งรูปภาพ (MMS) รวมถึงเริ่มเชื่อมต่ออินเทอร์เน็ตแบบ WAP',
+        strengths: ['เสียงสนทนาคมชัดขึ้นมาก', 'มีการเข้ารหัสความปลอดภัย ป้องกันการดักฟัง', 'ตัวเครื่องเล็กลง พกพาสะดวก แบตเตอรี่ใช้งานได้ยาวนาน'],
+        weaknesses: ['ความเร็วอินเทอร์เน็ตต่ำมาก ไม่สามารถเปิดเว็บหรือดูวิดีโอได้จริงจัง']
+      },
+      '3G': {
+        title: 'ยุคที่ 3 (3G) : อินเทอร์เน็ตบนมือถือและมัลติมีเดีย (Mobile Broadband)',
+        period: 'ช่วงทศวรรษ 2000 (พ.ศ. 2544 - 2552)',
+        speed: '384 kbps - 42 Mbps (HSPA+)',
+        tech: 'WCDMA, UMTS, HSDPA, HSUPA, CDMA2000 1xEV-DO',
+        modulation: 'WCDMA (Wideband CDMA), QPSK, 16-QAM',
+        coreFeature: 'รองรับการส่งข้อมูลความเร็วสูงขึ้นอย่างก้าวกระโดด ทำให้สมาร์ตโฟน (Smartphones) เริ่มแพร่หลาย รองรับการเปิดหน้าเว็บเพจ, วิดีโอคอล (Video Call) และแอปพลิเคชัน Social Media ยุคแรก',
+        strengths: ['เริ่มเปิดประสบการณ์ท่องเว็บและมัลติมีเดียบนมือถือ', 'รองรับการโทรและการใช้อินเทอร์เน็ตพร้อมกัน'],
+        weaknesses: ['อัตราความหน่วง (Latency) ยังสูง ส่งผลให้การสตรีมวิดีโอยังสะดุด', 'สิ้นเปลืองพลังงานแบตเตอรี่ในอุปกรณ์รุ่นแรกๆ']
+      },
+      '4G': {
+        title: 'ยุคที่ 4 (4G LTE) : เครือข่าย All-IP และวิดีโอสตรีมมิ่งความคมชัดสูง',
+        period: 'ช่วงทศวรรษ 2010 (พ.ศ. 2553 - 2562)',
+        speed: '100 Mbps - 1 Gbps (LTE-Advanced)',
+        tech: 'LTE (Long Term Evolution), LTE-A, VoLTE, Carrier Aggregation (CA)',
+        modulation: 'OFDMA (ดาวน์ลิงก์), SC-FDMA (อัปลิงก์), 64QAM / 256QAM, MIMO 2x2/4x4',
+        coreFeature: 'สถาปัตยกรรมโครงข่ายแบบ IP ทั้งหมด (All-IP Network) ไม่มีวงจร Circuit-Switched แบบเดิม การโทรใช้ VoLTE (Voice over LTE) รองรับการสตรีม YouTube/Netflix ระดับ Full HD/4K และโมบายล์เกมมิ่ง',
+        strengths: ['ความเร็วสูงมาก ความหน่วงต่ำ (ต่ำกว่า 50 ms)', 'รองรับการรวมคลื่นความถี่ (Carrier Aggregation) เพิ่มแบนด์วิดท์'],
+        weaknesses: ['การรองรับอุปกรณ์ IoT หนาแน่นสูงยังจำกัด', 'ไม่เหมาะกับการใช้งานที่ต้องการความหน่วงต่ำระดับมิลลิวินาที (Mission-Critical)']
+      },
+      '5G': {
+        title: 'ยุคที่ 5 (5G NR) : ขีดสุดแห่งความเร็ว ความหน่วงต่ำ และการเชื่อมต่อสรรพสิ่ง (IoT)',
+        period: 'ช่วงทศวรรษ 2020 (พ.ศ. 2563 - ปัจจุบัน)',
+        speed: '1 Gbps - 20 Gbps',
+        tech: '5G NR (New Radio), Standalone (SA) / Non-Standalone (NSA), Network Slicing',
+        modulation: 'Flexible OFDMA, 256QAM, Massive MIMO (32T32R, 64T64R), Beamforming',
+        coreFeature: 'ครอบคลุม 3 เสาหลัก: 1) eMBB (เน็ตเร็วระดับกิกะบิต), 2) URLLC (ความหน่วงต่ำมาก < 1ms สำหรับผ่าตัดทางไกล รถยนต์ไร้คนขับ), 3) mMTC (เชื่อมต่ออุปกรณ์ IoT ได้ 1 ล้านชิ้น/ตร.กม.)',
+        strengths: ['ความหน่วงต่ำระดับเสี้ยววินาที', 'รองรับคลื่นย่าน mmWave (24-40 GHz)', 'ตัดแบ่งทรัพยากรเครือข่ายเสมือน (Network Slicing) ให้เหมาะกับแต่ละงาน'],
+        weaknesses: ['คลื่นความถี่สูง (mmWave) ทะลุทะลวงสิ่งกีดขวางได้ต่ำ ต้องตั้งสถานีฐานจำนวนมาก']
+      },
+      '6G': {
+        title: 'ยุคที่ 6 (6G) : ปัญญาประดิษฐ์ไร้รอยต่อและการสื่อสารระดับเทระเฮิรตซ์ (อนาคต)',
+        period: 'คาดการณ์ปี 2030 (พ.ศ. 2573 เป็นต้นไป)',
+        speed: '100 Gbps - 1 Tbps (เร็วกว่า 5G ถึง 50-100 เท่า)',
+        tech: 'THz Frequency Bands (0.1 - 10 THz), Integrated AI-Native Networks, Holographic Comms',
+        modulation: 'Advanced Waveforms, Reconfigurable Intelligent Surfaces (RIS)',
+        coreFeature: 'ผสมผสานปัญญาประดิษฐ์ (AI-Native) ในทุกส่วนของเครือข่าย รองรับการสื่อสารภาพโฮโลแกรม 3 มิติแบบเรียลไทม์ และผสานเครือข่ายดาวเทียมวงโคจรต่ำ (NTN - Non-Terrestrial Network) ครอบคลุมทั่วโลกทั้งบนบก ทะเล และอวกาศ',
+        strengths: ['ความเร็วระดับ Terabit และ Latency ต่ำกว่าไมโครวินาที', 'ครอบคลุมพื้นที่ 100% ทั่วโลกด้วยการรวมโครงข่ายอวกาศ'],
+        weaknesses: ['ยังอยู่ระหว่างการวิจัยและพัฒนามาตรฐานสากล (3GPP Rel-21+)']
+      }
+    };
+
+    // Tab Switcher
+    function switchTab(tabId) {
+      const tabs = ['evolution', 'architecture', 'comparison', 'quiz'];
+      tabs.forEach(t => {
+        document.getElementById(`tab-${t}`).classList.add('hidden');
+        const btn = document.getElementById(`tab-btn-${t}`);
+        btn.classList.remove('active');
+        btn.classList.add('bg-slate-800/40', 'text-slate-400');
+        btn.classList.remove('bg-blue-600', 'text-white');
+      });
+      document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+      const activeBtn = document.getElementById(`tab-btn-${tabId}`);
+      activeBtn.classList.add('active', 'bg-blue-600', 'text-white');
+      activeBtn.classList.remove('bg-slate-800/40', 'text-slate-400');
+    }
+
+    // Show Generation Detail
+    function showGen(genKey) {
+      document.querySelectorAll('.gen-btn').forEach(b => {
+        b.classList.remove('border-blue-500', 'bg-blue-600/20', 'text-white');
+        b.classList.add('border-slate-700', 'bg-slate-800/60', 'text-slate-300');
+      });
+      const activeBtn = document.getElementById(`btn-gen-${genKey}`);
+      if (activeBtn) {
+        activeBtn.classList.add('border-blue-500', 'bg-blue-600/20', 'text-white');
+        activeBtn.classList.remove('border-slate-700', 'bg-slate-800/60', 'text-slate-300');
+      }
+
+      const item = genData[genKey];
+      const card = document.getElementById('gen-detail-card');
+      card.innerHTML = `
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-700/60 pb-4">
+          <div>
+            <span class="text-xs font-semibold px-2.5 py-1 rounded-md bg-blue-500/20 text-blue-400 border border-blue-500/30">${item.period}</span>
+            <h3 class="text-xl font-bold text-white mt-2">${item.title}</h3>
+          </div>
+          <div class="text-right">
+            <span class="text-xs text-slate-400">อัตราการส่งข้อมูล</span>
+            <div class="text-base font-semibold text-emerald-400">${item.speed}</div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+          <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-4">
+            <div class="text-xs text-slate-400 font-medium">มาตรฐานและเทคโนโลยี</div>
+            <div class="text-white font-medium mt-1">${item.tech}</div>
+          </div>
+          <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-4">
+            <div class="text-xs text-slate-400 font-medium">สัญญาณและการมอดูเลชัน</div>
+            <div class="text-white font-medium mt-1">${item.modulation}</div>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="text-sm font-semibold text-slate-200 mb-2">ลักษณะสำคัญและการใช้งาน:</h4>
+          <p class="text-sm text-slate-300 leading-relaxed bg-slate-900/30 p-4 rounded-xl border border-slate-800/80">
+            ${item.coreFeature}
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+          <div class="bg-emerald-950/20 border border-emerald-800/40 rounded-xl p-4">
+            <h5 class="text-xs font-bold text-emerald-400 uppercase tracking-wider mb-2">✓ จุดเด่น / ข้อได้เปรียบ</h5>
+            <ul class="text-xs text-slate-300 space-y-1.5 list-disc list-inside">
+              ${item.strengths.map(s => `<li>${s}</li>`).join('')}
+            </ul>
+          </div>
+          <div class="bg-rose-950/20 border border-rose-800/40 rounded-xl p-4">
+            <h5 class="text-xs font-bold text-rose-400 uppercase tracking-wider mb-2">⚠ ข้อจำกัด / ปัญหาในยุคนั้น</h5>
+            <ul class="text-xs text-slate-300 space-y-1.5 list-disc list-inside">
+              ${item.weaknesses.map(w => `<li>${w}</li>`).join('')}
+            </ul>
+          </div>
+        </div>
+      `;
+    }
+
+    // Architecture Info Box Handler
+    function showArchInfo(type) {
+      const title = document.getElementById('arch-info-title');
+      const body = document.getElementById('arch-info-body');
+      if (type === 'ue') {
+        title.innerHTML = '📱 เจาะลึก User Equipment (UE)';
+        body.innerHTML = `
+          ประกอบด้วยส่วนประกอบสำคัญ 3 ส่วน:
+          <br>1. <strong>RF Front-End:</strong> เสาอากาศและวงจรกระจายคลื่นวิทยุรับส่งกับสถานีฐาน
+          <br>2. <strong>Baseband Processor:</strong> ชิปประมวลผลสัญญาณดิจิทัล มอดูเลชัน และเข้ารหัสสัญญาณ
+          <br>3. <strong>USIM / eSIM:</strong> หน่วยความจำสำหรับเก็บข้อมูลความปลอดภัย รหัส IMSI และคีย์การเข้ารหัสเพื่อยืนยันตัวตนกับเครือข่าย
+        `;
+      } else if (type === 'ran') {
+        title.innerHTML = '📡 เจาะลึก Radio Access Network (RAN)';
+        body.innerHTML = `
+          ทำหน้าที่เชื่อมโยงระหว่างอุปกรณ์ลูกข่ายและเครือข่ายหลักผ่านคลื่นวิทยุ:
+          <br>• ใน 2G เรียกว่า <strong>BTS</strong> ควบคุมโดย BSC
+          <br>• ใน 3G เรียกว่า <strong>NodeB</strong> ควบคุมโดย RNC
+          <br>• ใน 4G เรียกว่า <strong>eNodeB (E-UTRAN)</strong> ซึ่งรวมการควบคุมและการกระจายสัญญาณไว้ด้วยกัน ลดความหน่วงของระบบ
+          <br>• ใน 5G เรียกว่า <strong>gNodeB (NG-RAN)</strong> ที่แยกส่วนเป็น CU (Central Unit) และ DU (Distributed Unit) พร้อมใช้ Massive MIMO และ Beamforming ชี้สัญญาณตรงไปยังผู้รับ
+        `;
+      } else if (type === 'core') {
+        title.innerHTML = '🌐 เจาะลึก Core Network';
+        body.innerHTML = `
+          หัวใจหลักของเครือข่าย ทำหน้าที่:
+          <br>• <strong>Authentication & Security:</strong> ตรวจสอบสิทธิผู้ใช้ (HLR/HSS หรือ AUSF/UDM ใน 5G)
+          <br>• <strong>Mobility Management:</strong> ติดตามตำแหน่งของผู้ใช้ขณะเคลื่อนที่ระหว่างสถานีฐาน (MME ใน 4G หรือ AMF ใน 5G)
+          <br>• <strong>User Plane / Data Gateway:</strong> ส่งผ่านข้อมูลไปยังเครือข่ายอินเทอร์เน็ตภายนอก (SGW/PGW ใน 4G หรือ UPF ใน 5G) พร้อมตัดคิดค่าบริการ
+        `;
+      }
+    }
+
+    // Quiz Questions Data
+    const quizQuestions = [
+      {
+        q: '1. ระบบโทรศัพท์เคลื่อนที่ในยุคใดที่เริ่มต้นนำเทคโนโลยีการส่งสัญญาณแบบ "ดิจิทัล (Digital)" และมีบริการข้อความ SMS?',
+        options: ['1G', '2G', '3G', '4G'],
+        answer: 1,
+        explain: '2G (เช่น มาตรฐาน GSM) เป็นยุคแรกที่เปลี่ยนการส่งสัญญาณเป็นดิจิทัล และเริ่มมีบริการ SMS'
+      },
+      {
+        q: '2. สถาปัตยกรรมเครือข่ายแบบ "All-IP Network" ที่ส่งข้อมูลและเสียงผ่านโปรโตคอล IP ทั้งหมด เริ่มต้นใช้งานจริงในยุคใด?',
+        options: ['2G', '3G', '4G (LTE)', '1G'],
+        answer: 2,
+        explain: '4G LTE ตัดระบบ Circuit-Switched แบบเดิมทิ้งทั้งหมด และเปลี่ยนเป็น Packet Switched (IP) ล้วน โดยบริการเสียงจะใช้ VoLTE'
+      },
+      {
+        q: '3. คุณสมบัติหลัก 3 เสาหลักของการใช้งานระบบ 5G (5G Pillars) ได้แก่อะไรบ้าง?',
+        options: [
+          'eMBB, URLLC, mMTC',
+          'FDMA, TDMA, CDMA',
+          'GSM, GPRS, EDGE',
+          'AMPS, NMT, TACS'
+        ],
+        answer: 0,
+        explain: '5G แบ่งการบริการออกเป็น eMBB (ความเร็วสูง), URLLC (ความหน่วงต่ำพิเศษ), และ mMTC (เชื่อมต่ออุปกรณ์ IoT หนาแน่นสูง)'
+      },
+      {
+        q: '4. สถานีฐาน (Base Station) ในระบบเครือข่าย 5G มีชื่อเรียกตามมาตรฐานสากลว่าอะไร?',
+        options: ['BTS (Base Transceiver Station)', 'NodeB', 'eNodeB', 'gNodeB'],
+        answer: 3,
+        explain: '2G = BTS, 3G = NodeB, 4G = eNodeB, 5G = gNodeB (Next Generation NodeB)'
+      },
+      {
+        q: '5. ข้อใดคือประโยชน์เด่นของโครงข่าย Private 5G (โครงข่ายเฉพาะกิจ)?',
+        options: [
+          'ให้บุคคลทั่วไปเชื่อมต่อได้ฟรีโดยไม่ต้องลงทะเบียน',
+          'มีความปลอดภัยสูง ควบคุมการรับส่งข้อมูลภายในองค์กรได้เอง และมีความหน่วงต่ำเฉพาะทาง',
+          'ส่งผ่านสายทองแบบเดิม ไม่ใช้คลื่นวิทยุ',
+          'ใช้งานได้เฉพาะการโทรด้วยเสียงแอนะล็อกเท่านั้น'
+        ],
+        answer: 1,
+        explain: 'Private 5G ออกแบบมาเพื่อธุรกิจและอุตสาหกรรมที่ต้องการควบคุมความปลอดภัยของข้อมูลเองและต้องการความเสถียร/Latency ต่ำเป็นพิเศษ'
+      }
+    ];
+
+    // Render Quiz
+    function renderQuiz() {
+      const container = document.getElementById('quiz-container');
+      container.innerHTML = quizQuestions.map((item, idx) => `
+        <div class="bg-slate-800/40 border border-slate-700/80 rounded-xl p-5">
+          <p class="font-medium text-white text-sm mb-3">${item.q}</p>
+          <div class="space-y-2">
+            ${item.options.map((opt, optIdx) => `
+              <label class="flex items-center space-x-3 p-2.5 rounded-lg bg-slate-900/40 hover:bg-slate-900/80 border border-slate-800 cursor-pointer text-xs sm:text-sm text-slate-300 transition">
+                <input type="radio" name="question-${idx}" value="${optIdx}" class="text-blue-500 focus:ring-blue-500 bg-slate-800 border-slate-700">
+                <span>${opt}</span>
+              </label>
+            `).join('')}
+          </div>
+          <div id="quiz-explain-${idx}" class="hidden mt-3 text-xs p-3 rounded-lg"></div>
+        </div>
+      `).join('');
+    }
+
+    // Calculate Quiz Score (บอกเฉพาะคะแนนและข้อที่ตอบผิด ไม่แสดงเฉลย)
+    function calculateQuizScore() {
+      let score = 0;
+      let wrongQuestions = [];
+      let unansweredQuestions = [];
+
+      quizQuestions.forEach((item, idx) => {
+        const selected = document.querySelector(`input[name="question-${idx}"]:checked`);
+        const explainBox = document.getElementById(`quiz-explain-${idx}`);
+        explainBox.classList.remove('hidden', 'bg-emerald-950/40', 'border-emerald-700/50', 'text-emerald-300', 'bg-rose-950/40', 'border-rose-700/50', 'text-rose-300');
+        
+        if (!selected) {
+          unansweredQuestions.push(idx + 1);
+          explainBox.classList.add('bg-amber-950/40', 'border', 'border-amber-700/50', 'text-amber-300');
+          explainBox.innerHTML = `⚠️ ข้อนี้ยังไม่ได้เลือกคำตอบ`;
+        } else if (parseInt(selected.value) === item.answer) {
+          score++;
+          explainBox.classList.add('bg-emerald-950/40', 'border', 'border-emerald-700/50', 'text-emerald-300');
+          explainBox.innerHTML = `✓ ตอบถูกต้อง`;
+        } else {
+          wrongQuestions.push(idx + 1);
+          explainBox.classList.add('bg-rose-950/40', 'border', 'border-rose-700/50', 'text-rose-300');
+          explainBox.innerHTML = `✗ ข้อนี้ตอบไม่ถูกต้อง (ลองทบทวนเนื้อหาแล้วเลือกใหม่)`;
+        }
+      });
+
+      const resultCard = document.getElementById('quiz-result-card');
+      const title = document.getElementById('quiz-result-title');
+      const detail = document.getElementById('quiz-result-detail');
+
+      resultCard.classList.remove('hidden');
+      title.innerText = `คะแนนที่คุณได้: ${score} / ${quizQuestions.length} คะแนน`;
+
+      if (wrongQuestions.length === 0 && unansweredQuestions.length === 0) {
+        title.className = "text-lg font-bold text-emerald-400";
+        detail.innerHTML = `🎉 <strong>ยอดเยี่ยมมาก!</strong> คุณตอบถูกครบทุกข้อ (${score}/${quizQuestions.length} คะแนน)`;
+      } else {
+        title.className = score >= 3 ? "text-lg font-bold text-amber-400" : "text-lg font-bold text-rose-400";
+        
+        let feedback = [];
+        if (wrongQuestions.length > 0) {
+          feedback.push(`ข้อที่ตอบผิด ได้แก่ <strong>ข้อ ${wrongQuestions.join(', ')}</strong>`);
+        }
+        if (unansweredQuestions.length > 0) {
+          feedback.push(`ข้อที่ยังไม่ได้ทำ ได้แก่ <strong>ข้อ ${unansweredQuestions.join(', ')}</strong>`);
+        }
+        feedback.push(`กรุณาทบทวนเนื้อหาในบทเรียนเพื่อหาคำตอบที่ถูกต้อง แล้วกดส่งคะแนน`);
+        detail.innerHTML = feedback.join(' | ');
+      }
+
+      resultCard.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Teacher Settings & Google Sheet Integration
+    const TEACHER_SHEET_KEY = 'mobile_unit1_teacher_sheet_url';
+
+    function toggleTeacherModal(show) {
+      const modal = document.getElementById('teacher-modal');
+      if (show) {
+        modal.classList.remove('hidden');
+        const savedUrl = localStorage.getItem(TEACHER_SHEET_KEY) || '';
+        document.getElementById('teacher-sheet-url').value = savedUrl;
+      } else {
+        modal.classList.add('hidden');
+      }
+    }
+
+    function saveTeacherSettings() {
+      const urlInput = document.getElementById('teacher-sheet-url').value.trim();
+      if (!urlInput) {
+        alert('กรุณากรอก URL ของ Google Apps Script หรือปล่อยว่างหากไม่ต้องการบันทึก');
+      }
+      localStorage.setItem(TEACHER_SHEET_KEY, urlInput);
+      alert('บันทึกการตั้งค่าลิงก์ Google Sheet เรียบร้อยแล้ว!');
+      toggleTeacherModal(false);
+    }
+
+    async function sendScoreToGoogleSheet() {
+      const scriptUrl = localStorage.getItem(TEACHER_SHEET_KEY) || '';
+      const statusText = document.getElementById('sheet-status-text');
+      const sendBtn = document.getElementById('btn-send-sheet');
+
+      if (!scriptUrl) {
+        alert('⚠️ ยังไม่ได้กำหนดลิงก์ Google Sheet สำหรับเก็บคะแนน\nกรุณาแจ้งอาจารย์ผู้สอนให้กดที่ปุ่ม "⚙️ สำหรับครูผู้สอน" เพื่อตั้งค่าลิงก์ก่อนครับ');
+        toggleTeacherModal(true);
+        return;
+      }
+
+      const studentId = document.getElementById('student-id').value.trim();
+      const studentName = document.getElementById('student-name').value.trim();
+
+      if (!studentId || !studentName) {
+        alert('⚠️ กรุณากรอกรหัสนักศึกษาและชื่อ-นามสกุล ในช่องด้านบนของแบบทดสอบก่อนส่งคะแนนครับ');
+        document.getElementById('student-id').focus();
+        return;
+      }
+
+      // 1. ตรวจสอบใน Client Storage ก่อนว่าเครื่องนี้ส่งรหัสนี้ไปแล้วหรือไม่
+      const submittedIds = JSON.parse(localStorage.getItem('submitted_student_ids') || '[]');
+      if (submittedIds.includes(studentId)) {
+        alert(`❌ รหัสประจำตัว "${studentId}" เคยส่งแบบทดสอบไปแล้วบนเครื่องนี้\n(ไม่อนุญาตให้ส่งคะแนนซ้ำ)`);
+        statusText.innerHTML = `❌ รหัส ${studentId} เคยส่งแบบทดสอบไปแล้ว (ไม่อนุญาตให้ส่งซ้ำ)`;
+        statusText.className = 'text-xs text-rose-400 font-semibold';
+        return;
+      }
+
+      // Calculate current score
+      let score = 0;
+      quizQuestions.forEach((item, idx) => {
+        const selected = document.querySelector(`input[name="question-${idx}"]:checked`);
+        if (selected && parseInt(selected.value) === item.answer) {
+          score++;
+        }
+      });
+
+      sendBtn.disabled = true;
+      sendBtn.classList.add('opacity-50', 'cursor-not-allowed');
+      statusText.innerHTML = '⏳ กำลังตรวจสอบสิทธิ์และส่งผลคะแนนเข้าสู่ระบบ Google Sheet...';
+      statusText.className = 'text-xs text-amber-400 font-medium';
+
+      const payload = {
+        studentId: studentId,
+        studentName: studentName,
+        score: score,
+        totalScore: quizQuestions.length,
+        unitTitle: 'หน่วยที่ 1: วิวัฒนาการและประเภทโครงข่ายโทรศัพท์เคลื่อนที่'
+      };
+
+      try {
+        // Send request using no-cors mode to prevent CORS blocking from Google Script redirects
+        await fetch(scriptUrl, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+
+        // บันทึกรหัสที่ส่งแล้วลง LocalStorage
+        submittedIds.push(studentId);
+        localStorage.setItem('submitted_student_ids', JSON.stringify(submittedIds));
+
+        // ปิดปุ่มส่งคะแนนป้องกันกดซ้ำ
+        sendBtn.disabled = true;
+        sendBtn.classList.add('opacity-50', 'cursor-not-allowed');
+        sendBtn.innerHTML = '<span>🔒</span><span>ส่งคะแนนแล้วเรียบร้อย</span>';
+
+        statusText.innerHTML = `✅ บันทึกคะแนนสำเร็จ! (${studentId} ${studentName} ได้ ${score}/${quizQuestions.length} คะแนน)`;
+        statusText.className = 'text-xs text-emerald-400 font-semibold';
+
+        const idStatus = document.getElementById('student-id-status');
+        idStatus.classList.remove('hidden');
+        idStatus.className = 'text-xs mt-1.5 text-emerald-400 font-medium';
+        idStatus.innerHTML = '✅ รหัสนี้ส่งผลคะแนนเข้าสู่ระบบเรียบร้อยแล้ว';
+
+        alert(`🎉 บันทึกผลคะแนนเข้าสู่ Google Sheet ของอาจารย์เรียบร้อยแล้ว!\n\nผู้เรียน: ${studentName}\nคะแนน: ${score}/${quizQuestions.length}`);
+
+      } catch (err) {
+        console.error(err);
+        statusText.innerHTML = '❌ เกิดข้อผิดพลาดในการส่งข้อมูล โปรดตรวจสอบความถูกต้องของ URL';
+        statusText.className = 'text-xs text-rose-400 font-semibold';
+        alert('❌ เกิดข้อผิดพลาดในการส่งข้อมูล โปรดตรวจสอบ URL ของ Google Script');
+        sendBtn.disabled = false;
+        sendBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+      }
+    }
+
+    // ฟังก์ชันตรวจสอบสิทธิ์รหัสนักศึกษา (ป้องกันการส่งซ้ำ) เมื่อพิมพ์เสร็จ
+    async function checkStudentDuplicateStatus() {
+      const idInput = document.getElementById('student-id');
+      const val = idInput.value.trim();
+      const statusEl = document.getElementById('student-id-status');
+      const spinnerEl = document.getElementById('student-id-spinner');
+      const sendBtn = document.getElementById('btn-send-sheet');
+
+      if (!val) {
+        statusEl.classList.add('hidden');
+        return;
+      }
+
+      // เช็ค Local Storage ก่อน
+      const submittedIds = JSON.parse(localStorage.getItem('submitted_student_ids') || '[]');
+      if (submittedIds.includes(val)) {
+        statusEl.classList.remove('hidden');
+        statusEl.className = 'text-xs mt-1.5 text-rose-400 font-semibold flex items-center space-x-1';
+        statusEl.innerHTML = '<span>❌</span><span>รหัสนี้เคยส่งแบบทดสอบไปแล้ว (ไม่อนุญาตให้ส่งซ้ำ)</span>';
+        if (sendBtn) {
+          sendBtn.disabled = true;
+          sendBtn.classList.add('opacity-50', 'cursor-not-allowed');
+        }
+        return;
+      }
+
+      // ถ้าครูตั้ง URL ไว้ ตรวจสอบกับ Google Sheet Server
+      const scriptUrl = localStorage.getItem(TEACHER_SHEET_KEY) || '';
+      if (scriptUrl) {
+        spinnerEl.classList.remove('hidden');
+        statusEl.classList.remove('hidden');
+        statusEl.className = 'text-xs mt-1.5 text-slate-400';
+        statusEl.innerHTML = '🔍 กำลังตรวจสอบสิทธิ์รหัสนักศึกษากับระบบชีต...';
+
+        try {
+          const checkUrl = `${scriptUrl}?action=check&studentId=${encodeURIComponent(val)}`;
+          const res = await fetch(checkUrl);
+          const data = await res.json();
+          spinnerEl.classList.add('hidden');
+
+          if (data && data.duplicate) {
+            statusEl.className = 'text-xs mt-1.5 text-rose-400 font-semibold flex items-center space-x-1';
+            statusEl.innerHTML = `<span>❌</span><span>${data.message || 'รหัสนี้เคยส่งแบบทดสอบไปแล้ว'}</span>`;
+            if (sendBtn) {
+              sendBtn.disabled = true;
+              sendBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            }
+            return;
+          } else {
+            statusEl.className = 'text-xs mt-1.5 text-emerald-400 font-medium flex items-center space-x-1';
+            statusEl.innerHTML = '<span>✅</span><span>รหัสนี้มีสิทธิ์ทำและส่งแบบทดสอบ (ยังไม่เคยส่งคำตอบ)</span>';
+            if (sendBtn) {
+              sendBtn.disabled = false;
+              sendBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            }
+          }
+        } catch (e) {
+          // หาก cross-origin ขัดขวาง GET ให้ fallback ถือว่าพร้อมใช้งาน
+          spinnerEl.classList.add('hidden');
+          statusEl.className = 'text-xs mt-1.5 text-slate-400';
+          statusEl.innerHTML = 'ℹ️ บันทึกรหัสประจำตัวเรียบร้อย';
+        }
+      } else {
+        statusEl.classList.remove('hidden');
+        statusEl.className = 'text-xs mt-1.5 text-slate-400';
+        statusEl.innerHTML = 'ℹ️ พร้อมทำแบบทดสอบ';
+      }
+    }
+
+    // Reset Quiz
+    function resetQuiz() {
+      document.querySelectorAll('input[type="radio"]').forEach(el => el.checked = false);
+      quizQuestions.forEach((_, idx) => {
+        const box = document.getElementById(`quiz-explain-${idx}`);
+        box.classList.add('hidden');
+      });
+      document.getElementById('quiz-result-card').classList.add('hidden');
+      document.getElementById('sheet-status-text').innerHTML = '💡 กดปุ่มด้านขวาเพื่อส่งผลคะแนนเข้าสู่ระบบ Google Sheet ของอาจารย์ผู้สอน';
+      document.getElementById('sheet-status-text').className = 'text-xs text-slate-400';
+      
+      const sendBtn = document.getElementById('btn-send-sheet');
+      if (sendBtn) {
+        sendBtn.disabled = false;
+        sendBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+        sendBtn.innerHTML = '<span>📊</span><span>ส่งคะแนนไปยัง Google Sheet</span>';
+      }
+    }
+
+    // Init
+    window.addEventListener('DOMContentLoaded', () => {
+      showGen('1G');
+      renderQuiz();
+
+      // ผูก Event ตรวจสอบรหัสซ้ำ
+      const studentIdInput = document.getElementById('student-id');
+      if (studentIdInput) {
+        studentIdInput.addEventListener('blur', checkStudentDuplicateStatus);
+        studentIdInput.addEventListener('input', () => {
+          const statusEl = document.getElementById('student-id-status');
+          statusEl.classList.add('hidden');
+          const sendBtn = document.getElementById('btn-send-sheet');
+          if (sendBtn) {
+            sendBtn.disabled = false;
+            sendBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>
