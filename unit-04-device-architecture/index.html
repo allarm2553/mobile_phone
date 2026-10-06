@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>หน่วยที่ 4: สถาปัตยกรรม คุณสมบัติ และระบบปฏิบัติการของเครื่องโทรศัพท์เคลื่อนที่</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Prompt', sans-serif; }
+    .tab-btn.active {
+      background-color: #6366f1;
+      color: #ffffff;
+      border-color: transparent;
+    }
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen">
+
+  <!-- Header & Nav -->
+  <header class="border-b border-slate-800 bg-slate-950/80 backdrop-blur sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center font-bold text-white shadow-lg shadow-indigo-500/20">
+          U4
+        </div>
+        <div>
+          <h1 class="text-lg font-bold text-white tracking-wide">วิชาโทรศัพท์เคลื่อนที่ (Mobile Phone Technology)</h1>
+          <p class="text-xs text-indigo-400">หน่วยที่ 4: สถาปัตยกรรม คุณสมบัติ และระบบปฏิบัติการของเครื่องโทรศัพท์เคลื่อนที่</p>
+        </div>
+      </div>
+      <div class="flex items-center space-x-2">
+        <button onclick="toggleTeacherModal(true)" class="flex items-center space-x-1.5 text-xs px-3 py-1.5 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 transition">
+          <span>⚙️</span>
+          <span>สำหรับครูผู้สอน</span>
+        </button>
+        <span class="text-xs px-2.5 py-1 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 hidden sm:inline-block">
+          Hardware & OS Lab
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Navigation Tabs -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-6">
+    <div class="flex overflow-x-auto space-x-2 pb-2 border-b border-slate-800">
+      <button onclick="switchTab('block-diagram')" id="tab-btn-block-diagram" class="tab-btn active px-4 py-2.5 rounded-lg text-sm font-medium border border-slate-700 bg-slate-800 text-slate-200 transition">
+        🧩 บล็อกไดอะแกรมการทำงาน (Block Diagram)
+      </button>
+      <button onclick="switchTab('hardware-soc')" id="tab-btn-hardware-soc" class="tab-btn px-4 py-2.5 rounded-lg text-sm font-medium border border-slate-700 bg-slate-800/40 text-slate-400 hover:text-white transition">
+        ⚡ ชิ้นส่วนฮาร์ดแวร์ & SoC (Mainboard Parts)
+      </button>
+      <button onclick="switchTab('mobile-os')" id="tab-btn-mobile-os" class="tab-btn px-4 py-2.5 rounded-lg text-sm font-medium border border-slate-700 bg-slate-800/40 text-slate-400 hover:text-white transition">
+        🤖 ระบบปฏิบัติการมือถือ (Android & iOS Stack)
+      </button>
+      <button onclick="switchTab('quiz')" id="tab-btn-quiz" class="tab-btn px-4 py-2.5 rounded-lg text-sm font-medium border border-slate-700 bg-slate-800/40 text-slate-400 hover:text-white transition">
+        📝 แบบทดสอบเก็บคะแนน (Quiz)
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Content Area -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+
+    <!-- ========================================== -->
+    <!-- TAB 1: Functional Block Diagram -->
+    <!-- ========================================== -->
+    <section id="tab-block-diagram" class="space-y-6">
+      <div class="bg-slate-800/50 border border-slate-700/60 rounded-2xl p-6">
+        <h2 class="text-xl font-bold text-white mb-2">บล็อกไดอะแกรมการทำงานของเครื่องโทรศัพท์เคลื่อนที่ (Functional Block Diagram)</h2>
+        <p class="text-slate-400 text-sm">การทำงานประสานกันของ 4 ภาคหลัก: ภาควิทยุ (RF Section), ภาคประมวลผลเบสแบนด์และแอพพลิเคชัน (Baseband/AP), ภาคจัดการพลังงาน (PMIC) และภาคส่วนติดต่อผู้ใช้ (UI/Sensors)</p>
+      </div>
+
+      <!-- Interactive Block Diagram Graphic -->
+      <div class="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 border border-slate-700/80 rounded-2xl p-6 shadow-xl">
+        <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
+          <div>
+            <span class="text-xs font-semibold px-2.5 py-1 rounded bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">Interactive Hardware Topology</span>
+            <h3 class="text-base font-bold text-white mt-1.5">แผนผังระบบฮาร์ดแวร์สมาร์ตโฟน (คลิกแต่ละบล็อกเพื่อดูรายละเอียด)</h3>
+          </div>
+          <span class="text-xs text-slate-400">คลิกที่กล่องเพื่อสลับข้อมูลอธิบายด้านล่าง</span>
+        </div>
+
+        <div class="w-full overflow-x-auto py-2">
+          <svg viewBox="0 0 880 280" class="w-full min-w-[760px] h-auto select-none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="rfGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#0284c7" stop-opacity="0.3"/>
+                <stop offset="100%" stop-color="#0369a1" stop-opacity="0.5"/>
+              </linearGradient>
+              <linearGradient id="bbGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#4f46e5" stop-opacity="0.3"/>
+                <stop offset="100%" stop-color="#3730a3" stop-opacity="0.5"/>
+              </linearGradient>
+              <linearGradient id="pmicGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#d97706" stop-opacity="0.3"/>
+                <stop offset="100%" stop-color="#92400e" stop-opacity="0.5"/>
+              </linearGradient>
+              <linearGradient id="uiGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#10b981" stop-opacity="0.3"/>
+                <stop offset="100%" stop-color="#047857" stop-opacity="0.5"/>
+              </linearGradient>
+            </defs>
+
+            <!-- 1. Antenna & RF Section (Left) -->
+            <g onclick="showBlockInfo('rf')" class="cursor-pointer">
+              <!-- Antenna Icon -->
+              <path d="M 40,70 L 40,110 M 25,55 L 40,70 L 55,55" stroke="#38bdf8" stroke-width="2.5" fill="none"/>
+              <rect x="70" y="40" width="180" height="150" rx="14" fill="url(#rfGrad)" stroke="#38bdf8" stroke-width="2"/>
+              <text x="160" y="68" fill="#38bdf8" font-size="13" font-weight="bold" text-anchor="middle">1. ภาควิทยุ (RF Section)</text>
+              
+              <!-- Sub blocks inside RF -->
+              <rect x="85" y="85" width="70" height="40" rx="6" fill="#0f172a" stroke="#0284c7" stroke-width="1.2"/>
+              <text x="120" y="103" fill="#e0f2fe" font-size="9" text-anchor="middle">PA (Power Amp)</text>
+              <text x="120" y="117" fill="#7dd3fc" font-size="8" text-anchor="middle">LNA (Low Noise)</text>
+
+              <rect x="165" y="85" width="70" height="40" rx="6" fill="#0f172a" stroke="#0284c7" stroke-width="1.2"/>
+              <text x="200" y="103" fill="#e0f2fe" font-size="9" text-anchor="middle">RF Transceiver</text>
+              <text x="200" y="117" fill="#7dd3fc" font-size="8" text-anchor="middle">(Up/Down Conv)</text>
+
+              <text x="160" y="155" fill="#94a3b8" font-size="9" text-anchor="middle">Duplexer / Switch / Filters</text>
+              <text x="160" y="175" fill="#38bdf8" font-size="10" font-weight="bold" text-anchor="middle">คลิกเพื่อดูหน้าที่ &rarr;</text>
+            </g>
+
+            <!-- I/Q Signal Bus Arrow between RF and Baseband -->
+            <line x1="250" y1="115" x2="310" y2="115" stroke="#818cf8" stroke-width="3"/>
+            <polygon points="314,115 304,110 304,120" fill="#818cf8"/>
+            <polygon points="246,115 256,110 256,120" fill="#818cf8"/>
+            <text x="280" y="105" fill="#a5b4fc" font-size="9" font-weight="bold" text-anchor="middle">I/Q Data</text>
+            <text x="280" y="132" fill="#64748b" font-size="8" text-anchor="middle">(Analog/Dig)</text>
+
+            <!-- 2. Application Processor & Baseband Modem (Center) -->
+            <g onclick="showBlockInfo('ap-bb')" class="cursor-pointer">
+              <rect x="315" y="40" width="250" height="150" rx="14" fill="url(#bbGrad)" stroke="#6366f1" stroke-width="2"/>
+              <text x="440" y="68" fill="#a5b4fc" font-size="13" font-weight="bold" text-anchor="middle">2. ชิปประมวลผลหลัก (SoC)</text>
+
+              <rect x="330" y="85" width="105" height="50" rx="6" fill="#1e1b4b" stroke="#818cf8" stroke-width="1.2"/>
+              <text x="382.5" y="105" fill="#c7d2fe" font-size="10" font-weight="bold" text-anchor="middle">Baseband Modem</text>
+              <text x="382.5" y="122" fill="#818cf8" font-size="8.5" text-anchor="middle">4G/5G DSP & Protocol</text>
+
+              <rect x="445" y="85" width="105" height="50" rx="6" fill="#1e1b4b" stroke="#818cf8" stroke-width="1.2"/>
+              <text x="497.5" y="105" fill="#c7d2fe" font-size="10" font-weight="bold" text-anchor="middle">CPU & GPU (AP)</text>
+              <text x="497.5" y="122" fill="#818cf8" font-size="8.5" text-anchor="middle">OS / Apps / Graphics</text>
+
+              <!-- Memory bus -->
+              <rect x="330" y="145" width="220" height="25" rx="4" fill="#0f172a" stroke="#4f46e5" stroke-width="1"/>
+              <text x="440" y="162" fill="#cbd5e1" font-size="9" text-anchor="middle">LPDDR RAM & UFS Storage</text>
+            </g>
+
+            <!-- Bus between AP and Peripherals -->
+            <line x1="565" y1="115" x2="625" y2="115" stroke="#34d399" stroke-width="3"/>
+            <polygon points="628,115 618,110 618,120" fill="#34d399"/>
+            <polygon points="562,115 572,110 572,120" fill="#34d399"/>
+            <text x="595" y="105" fill="#6ee7b7" font-size="9" font-weight="bold" text-anchor="middle">MIPI / I2C</text>
+
+            <!-- 3. Peripherals & UI/Sensors (Right) -->
+            <g onclick="showBlockInfo('ui')" class="cursor-pointer">
+              <rect x="630" y="40" width="220" height="150" rx="14" fill="url(#uiGrad)" stroke="#10b981" stroke-width="2"/>
+              <text x="740" y="68" fill="#34d399" font-size="13" font-weight="bold" text-anchor="middle">3. ภาคติดต่อผู้ใช้ & เซนเซอร์</text>
+
+              <rect x="645" y="85" width="90" height="30" rx="4" fill="#064e3b" stroke="#059669" stroke-width="1"/>
+              <text x="690" y="104" fill="#a7f3d0" font-size="9" text-anchor="middle">Display (OLED/LCD)</text>
+
+              <rect x="745" y="85" width="90" height="30" rx="4" fill="#064e3b" stroke="#059669" stroke-width="1"/>
+              <text x="790" y="104" fill="#a7f3d0" font-size="9" text-anchor="middle">Touch Panel & Cam</text>
+
+              <rect x="645" y="125" width="90" height="30" rx="4" fill="#064e3b" stroke="#059669" stroke-width="1"/>
+              <text x="690" y="144" fill="#a7f3d0" font-size="8.5" text-anchor="middle">Audio Codec / Mic</text>
+
+              <rect x="745" y="125" width="90" height="30" rx="4" fill="#064e3b" stroke="#059669" stroke-width="1"/>
+              <text x="790" y="144" fill="#a7f3d0" font-size="8.5" text-anchor="middle">Gyro, Accel, Biometric</text>
+            </g>
+
+            <!-- 4. Power Management IC (Bottom Center) -->
+            <g onclick="showBlockInfo('pmic')" class="cursor-pointer">
+              <rect x="315" y="215" width="250" height="55" rx="10" fill="url(#pmicGrad)" stroke="#f59e0b" stroke-width="2"/>
+              <text x="440" y="238" fill="#fbbf24" font-size="12" font-weight="bold" text-anchor="middle">4. PMIC & Power Section</text>
+              <text x="440" y="255" fill="#fde68a" font-size="9.5" text-anchor="middle">Battery 3.8V &rarr; Buck/Boost แปลงไฟ DC หลายระดับ (1.2V, 1.8V, 2.8V)</text>
+
+              <!-- Power Distribution Lines up to BB and RF -->
+              <line x1="400" y1="215" x2="400" y2="190" stroke="#f59e0b" stroke-width="2" stroke-dasharray="3 2"/>
+              <line x1="480" y1="215" x2="480" y2="190" stroke="#f59e0b" stroke-width="2" stroke-dasharray="3 2"/>
+              <line x1="315" y1="242" x2="200" y2="242" stroke="#f59e0b" stroke-width="2" stroke-dasharray="3 2"/>
+              <line x1="200" y1="242" x2="200" y2="190" stroke="#f59e0b" stroke-width="2" stroke-dasharray="3 2"/>
+            </g>
+
+            <!-- Battery Graphic Left Bottom -->
+            <g transform="translate(180, 215)">
+              <rect x="0" y="5" width="55" height="35" rx="4" fill="#1e293b" stroke="#f59e0b" stroke-width="1.5"/>
+              <rect x="55" y="15" width="5" height="15" fill="#f59e0b"/>
+              <text x="27.5" y="27" fill="#fbbf24" font-size="9" font-weight="bold" text-anchor="middle">Li-ion</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Dynamic Block Detail Card -->
+      <div id="block-detail-card" class="bg-slate-800/60 border border-slate-700 rounded-2xl p-6 transition">
+        <!-- Rendered by JS -->
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 2: Hardware & SoC Anatomy -->
+    <!-- ========================================== -->
+    <section id="tab-hardware-soc" class="space-y-6 hidden">
+      <div class="bg-slate-800/50 border border-slate-700/60 rounded-2xl p-6">
+        <h2 class="text-xl font-bold text-white mb-2">เจาะลึกชิ้นส่วนฮาร์ดแวร์บนเมนบอร์ด (SoC & Key Components)</h2>
+        <p class="text-slate-400 text-sm">สถาปัตยกรรมชิปเซ็ตแบบ System-on-Chip (SoC) เช่น Qualcomm Snapdragon, Apple A-Series, MediaTek Dimensity</p>
+      </div>
+
+      <!-- Hardware Components Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <div class="bg-slate-800/40 border border-slate-700 rounded-2xl p-6 space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center text-indigo-400 text-xl font-bold">
+            🧠
+          </div>
+          <h4 class="font-bold text-white text-base">SoC (System-on-Chip)</h4>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            รวมหน่วยประมวลผลหลักไว้ในซิลิคอนชิปเดียว:
+            <br>• <strong>CPU:</strong> แกนประมวลผลสถาปัตยกรรม ARM (Cortex-X / Cortex-A)
+            <br>• <strong>GPU:</strong> ประมวลผลกราฟิกและเกม (Adreno / Mali)
+            <br>• <strong>NPU:</strong> ประมวลผลโมเดล AI / Deep Learning บนอุปกรณ์
+            <br>• <strong>ISP:</strong> ประมวลผลภาพถ่ายและวิดีโอจากกล้อง
+          </p>
+        </div>
+
+        <div class="bg-slate-800/40 border border-slate-700 rounded-2xl p-6 space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400 text-xl font-bold">
+            📶
+          </div>
+          <h4 class="font-bold text-white text-base">Modem & RF Front-End (RFFE)</h4>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            ประกอบด้วยชิปโมเด็ม 5G (เช่น Snapdragon X65/X70) แปลงข้อมูลดิจิทัลเป็นคลื่น และแผง RFFE ซึ่งรวมชิปขยายสัญญาณ (PA), สวิตช์สลับสายอากาศ (Antenna Switch), และโมดูลจูนเนอร์ความถี่ เพื่อรองรับคลื่นทั่วโลกหลายสิบแบนด์
+          </p>
+        </div>
+
+        <div class="bg-slate-800/40 border border-slate-700 rounded-2xl p-6 space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-xl font-bold">
+            🔋
+          </div>
+          <h4 class="font-bold text-white text-base">PMIC & Fuel Gauge (ระบบจัดการพลังงาน)</h4>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            ทำหน้าที่ควบคุมการชาร์จไฟเร็ว (Fast Charging เช่น PD, QC), แปลงแรงดันแบตเตอรี่ลงเป็นแรงดันย่อยหลายสิบชุด (Core Voltage 0.8V, RAM 1.1V, I/O 1.8V) และคอยตรวจวัดสุขภาพแบตเตอรี่เพื่อตัดวงจรเมื่อเกิดความร้อนสูงหรือไฟฟ้าลัดวงจร
+          </p>
+        </div>
+
+        <div class="bg-slate-800/40 border border-slate-700 rounded-2xl p-6 space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 text-xl font-bold">
+            💾
+          </div>
+          <h4 class="font-bold text-white text-base">Memory & Storage (PoP Architecture)</h4>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            นิยมใช้วิธีต่อชิปแบบ <strong>Package-on-Package (PoP)</strong> คือประกบชิป LPDDR RAM ทับบนหลังชิป SoC โดยตรงเพื่อลดระยะทางลายวงจร เพิ่มความเร็วบัส และใช้ชิปหน่วยความจำแฟลช UFS 3.1 / 4.0 หรือ NVMe สำหรับเก็บ OS และข้อมูล
+          </p>
+        </div>
+
+        <div class="bg-slate-800/40 border border-slate-700 rounded-2xl p-6 space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400 text-xl font-bold">
+            🧭
+          </div>
+          <h4 class="font-bold text-white text-base">Sensors Array (ชุดเซนเซอร์)</h4>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            ชิปเซนเซอร์ขนาดจิ๋วแบบ MEMS:
+            <br>• Accelerometer & Gyroscope (ตรวจจับการเอียง/หมุน)
+            <br>• Proximity Sensor (ดับหน้าจอขณะแนบหู)
+            <br>• Ambient Light Sensor (ปรับความสว่างจออัตโนมัติ)
+            <br>• Magnetometer / Barometer (เข็มทิศดิจิทัลและวัดความกดอากาศ)
+          </p>
+        </div>
+
+        <div class="bg-slate-800/40 border border-slate-700 rounded-2xl p-6 space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-400 text-xl font-bold">
+            💳
+          </div>
+          <h4 class="font-bold text-white text-base">SIM / eSIM / Secure Enclave</h4>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            ชิปความปลอดภัยพิเศษสำหรับยืนยันตัวตนในโครงข่ายเซลลูลาร์ (eSIM/iSIM) และจัดเก็บกุญแจเข้ารหัสลับ ลายนิ้วมือ ใบหน้า Face ID เพื่อป้องกันการดักแฮกข้อมูลในระดับฮาร์ดแวร์
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 3: Mobile OS Architecture -->
+    <!-- ========================================== -->
+    <section id="tab-mobile-os" class="space-y-6 hidden">
+      <div class="bg-slate-800/50 border border-slate-700/60 rounded-2xl p-6">
+        <h2 class="text-xl font-bold text-white mb-2">สถาปัตยกรรมระบบปฏิบัติการโทรศัพท์เคลื่อนที่ (Mobile Operating Systems)</h2>
+        <p class="text-slate-400 text-sm">เปรียบเทียบโครงสร้างชั้นสถาปัตยกรรมซอฟต์แวร์ของ Android (Linux-based) และ iOS (Darwin/XNU-based)</p>
+      </div>
+
+      <!-- OS Stack Comparison Diagram -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        
+        <!-- Android Stack -->
+        <div class="bg-slate-800/40 border border-slate-700 rounded-2xl p-6 space-y-4">
+          <div class="flex items-center space-x-2">
+            <span class="text-2xl">🤖</span>
+            <h3 class="text-lg font-bold text-emerald-400">Android Architecture Stack</h3>
+          </div>
+          
+          <div class="space-y-2 text-xs">
+            <div class="bg-emerald-950/40 border border-emerald-800/60 p-3 rounded-xl">
+              <span class="font-bold text-emerald-300 block">1. Applications (System & User Apps)</span>
+              <p class="text-slate-400 mt-0.5">Phone, Messages, Browser, Third-party Apps (Kotlin/Java)</p>
+            </div>
+            <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl">
+              <span class="font-bold text-white block">2. Java API Framework</span>
+              <p class="text-slate-400 mt-0.5">Activity Manager, Telephony Manager, Location Manager, Window Manager</p>
+            </div>
+            <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl">
+              <span class="font-bold text-white block">3. Android Runtime (ART) & Native C/C++ Libraries</span>
+              <p class="text-slate-400 mt-0.5">AOT/JIT Compilation, SQLite, OpenGL ES, WebKit, Media Framework</p>
+            </div>
+            <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl">
+              <span class="font-bold text-white block">4. Hardware Abstraction Layer (HAL)</span>
+              <p class="text-slate-400 mt-0.5">บริดจ์เชื่อมต่อระหว่างเฟรมเวิร์กกับไดรเวอร์ฮาร์ดแวร์ (Camera, Audio, RIL สำหรับโมเด็ม)</p>
+            </div>
+            <div class="bg-indigo-950/40 border border-indigo-800/60 p-3 rounded-xl">
+              <span class="font-bold text-indigo-300 block">5. Linux Kernel</span>
+              <p class="text-slate-400 mt-0.5">จัดการหน่วยความจำ (Memory), โพรเซส (Process), ความปลอดภัย, ไดรเวอร์อุปกรณ์ (Hardware Drivers)</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- iOS Stack -->
+        <div class="bg-slate-800/40 border border-slate-700 rounded-2xl p-6 space-y-4">
+          <div class="flex items-center space-x-2">
+            <span class="text-2xl">🍎</span>
+            <h3 class="text-lg font-bold text-sky-400">iOS Architecture Stack</h3>
+          </div>
+
+          <div class="space-y-2 text-xs">
+            <div class="bg-sky-950/40 border border-sky-800/60 p-3 rounded-xl">
+              <span class="font-bold text-sky-300 block">1. Cocoa Touch (Application Layer)</span>
+              <p class="text-slate-400 mt-0.5">UIKit, SwiftUI, MapKit, Push Notifications, Multitasking</p>
+            </div>
+            <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl">
+              <span class="font-bold text-white block">2. Media Layer</span>
+              <p class="text-slate-400 mt-0.5">Core Graphics, Metal, Core Audio, AVFoundation</p>
+            </div>
+            <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl">
+              <span class="font-bold text-white block">3. Core Services</span>
+              <p class="text-slate-400 mt-0.5">Core Foundation, Core Data, Core Location, CloudKit, Security</p>
+            </div>
+            <div class="bg-indigo-950/40 border border-indigo-800/60 p-3 rounded-xl">
+              <span class="font-bold text-indigo-300 block">4. Core OS / Darwin Kernel (XNU)</span>
+              <p class="text-slate-400 mt-0.5">Mach Microkernel, BSD Unix Subsystem, I/O Kit Drivers, Power Management</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Baseband OS Note -->
+      <div class="bg-slate-800/40 border border-slate-700 rounded-2xl p-6">
+        <h4 class="text-base font-bold text-white mb-2">💡 ข้อเท็จจริงสำคัญ: ชิปโมเด็มมี OS ของตัวเอง (Real-Time OS)!</h4>
+        <p class="text-xs text-slate-300 leading-relaxed">
+          ในเครื่องโทรศัพท์เคลื่อนที่ ชิป Baseband Modem จะทำงานแยกจาก Main OS (Android/iOS) อย่างเด็ดขาด และรันระบบปฏิบัติการแบบเรียลไทม์ (RTOS เช่น Nucleus, ThreadX หรือ Linux-based RTOS) เพื่อให้สามารถตอบสนองและประมวลผลคำสั่งจากเสาสถานีฐานได้ภายในเสี้ยวไมโครวินาที โดยติดต่อกับ Android/iOS ผ่าน <strong>Radio Interface Layer (RIL)</strong>
+        </p>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 4: Quiz -->
+    <!-- ========================================== -->
+    <section id="tab-quiz" class="space-y-6 hidden">
+      <div class="bg-slate-800/50 border border-slate-700/60 rounded-2xl p-6">
+        <h2 class="text-xl font-bold text-white mb-2">แบบทดสอบท้ายหน่วยการเรียนรู้ที่ 4</h2>
+        <p class="text-slate-400 text-sm">ทดสอบความเข้าใจเกี่ยวกับบล็อกไดอะแกรมฮาร์ดแวร์ ชิปเซ็ต SoC ระบบจัดการพลังงาน และ Mobile OS (5 ข้อ)</p>
+      </div>
+
+      <!-- Student Info Form -->
+      <div class="bg-slate-800/40 border border-slate-700/80 rounded-2xl p-6">
+        <h3 class="text-sm font-semibold text-indigo-400 mb-3 flex items-center space-x-2">
+          <span>👤</span>
+          <span>ข้อมูลผู้ทำแบบทดสอบ (สำหรับบันทึกคะแนน)</span>
+        </h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">รหัสนักศึกษา / เลขประจำตัว</label>
+            <div class="relative">
+              <input type="text" id="student-id" placeholder="เช่น 66309010001" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
+              <span id="student-id-spinner" class="hidden absolute right-3 top-2.5 text-xs text-amber-400 animate-spin">⏳</span>
+            </div>
+            <p id="student-id-status" class="text-xs mt-1.5 hidden"></p>
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">ชื่อ - นามสกุล</label>
+            <input type="text" id="student-name" placeholder="เช่น สมชาย ใจดี" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
+          </div>
+        </div>
+      </div>
+
+      <div id="quiz-container" class="space-y-4">
+        <!-- Injected via JavaScript -->
+      </div>
+
+      <div class="flex items-center justify-between pt-4">
+        <button onclick="calculateQuizScore()" class="px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 font-semibold text-white shadow-lg shadow-indigo-600/30 transition">
+          ตรวจคำตอบและประเมินผล
+        </button>
+        <button onclick="resetQuiz()" class="px-4 py-2 rounded-xl border border-slate-700 hover:bg-slate-800 text-slate-300 text-sm transition">
+          ทำใหม่อีกครั้ง
+        </button>
+      </div>
+
+      <!-- Quiz Score Modal/Banner -->
+      <div id="quiz-result-card" class="hidden bg-slate-800 border border-slate-700 rounded-2xl p-6 transition space-y-4">
+        <div>
+          <h3 class="text-lg font-bold text-white" id="quiz-result-title"></h3>
+          <p class="text-sm text-slate-300 mt-1" id="quiz-result-detail"></p>
+        </div>
+
+        <!-- Submit to Google Sheet Action -->
+        <div id="submit-sheet-section" class="pt-3 border-t border-slate-700/80 flex flex-wrap items-center justify-between gap-3">
+          <div class="text-xs text-slate-400" id="sheet-status-text">
+            💡 กดปุ่มด้านขวาเพื่อส่งผลคะแนนเข้าสู่ระบบ Google Sheet ของอาจารย์ผู้สอน
+          </div>
+          <button id="btn-send-sheet" onclick="sendScoreToGoogleSheet()" class="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 font-medium text-white text-sm shadow-lg shadow-emerald-600/20 flex items-center space-x-2 transition">
+            <span>📊</span>
+            <span>ส่งคะแนนไปยัง Google Sheet</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Teacher Settings Modal -->
+  <div id="teacher-modal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-xl w-full p-6 shadow-2xl relative space-y-5">
+      
+      <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+        <div class="flex items-center space-x-2.5">
+          <div class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold">
+            ⚙️
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-white">ตั้งค่าสำหรับครูผู้สอน (หน่วยที่ 4)</h3>
+            <p class="text-xs text-slate-400">เชื่อมต่อ Google Sheet สำหรับจัดเก็บคะแนนของนักศึกษา</p>
+          </div>
+        </div>
+        <button onclick="toggleTeacherModal(false)" class="text-slate-400 hover:text-white p-1 text-lg leading-none">
+          &times;
+        </button>
+      </div>
+
+      <!-- Google Apps Script URL Input -->
+      <div class="space-y-2">
+        <label class="block text-xs font-medium text-slate-300">
+          Google Apps Script Web App URL (ลิงก์เว็บแอปที่ Deploy จากชีต)
+        </label>
+        <input type="url" id="teacher-sheet-url" placeholder="https://script.google.com/macros/s/.../exec" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white focus:outline-none focus:border-amber-500 transition font-mono">
+        <p class="text-[11px] text-slate-500 leading-relaxed">
+          * ระบบจะบันทึก URL ไว้ใน Local Storage ของบราวเซอร์นี้อัตโนมัติ เพื่อใช้นักเรียนส่งคะแนน
+        </p>
+      </div>
+
+      <!-- Student Web App Link for sharing -->
+      <div class="space-y-2 pt-2 border-t border-slate-800">
+        <label class="block text-xs font-medium text-indigo-300 flex items-center justify-between">
+          <span>🔗 ลิงก์สำหรับส่งให้นักศึกษาเข้าเรียน / ทำแบบทดสอบ</span>
+          <span id="copy-badge" class="text-[11px] text-emerald-400 font-normal hidden">✓ คัดลอกสำเร็จ!</span>
+        </label>
+        <div class="flex items-center space-x-2">
+          <input type="text" id="student-share-link" readonly class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-xs text-slate-300 font-mono focus:outline-none">
+          <button onclick="copyStudentLink()" class="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-xs whitespace-nowrap shadow-md shadow-indigo-600/30 flex items-center space-x-1.5 transition">
+            <span>📋</span>
+            <span>คัดลอกลิงก์</span>
+          </button>
+        </div>
+        <p class="text-[11px] text-slate-500 leading-relaxed">
+          * เมื่อโฮสต์ขึ้น GitHub Pages คุณครูสามารถกดปุ่มนี้เพื่อคัดลอกส่งเข้า LINE/Google Classroom ให้นักเรียนได้ทันที
+        </p>
+      </div>
+
+      <!-- Buttons -->
+      <div class="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-800">
+        <a href="Code.gs" download="Code.gs" class="inline-flex items-center space-x-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-indigo-400 border border-slate-700 text-xs font-medium transition">
+          <span>📥</span>
+          <span>ดาวน์โหลด Code.gs</span>
+        </a>
+
+        <div class="flex items-center space-x-2">
+          <button onclick="toggleTeacherModal(false)" class="px-4 py-2 rounded-xl border border-slate-700 text-slate-400 hover:bg-slate-800 text-xs transition">
+            ปิด
+          </button>
+          <button onclick="saveTeacherSettings()" class="px-5 py-2 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-medium text-xs shadow-md transition">
+            บันทึกการตั้งค่า
+          </button>
+        </div>
+      </div>
+
+      <!-- Guide Box -->
+      <div class="bg-slate-950/60 border border-slate-800 p-4 rounded-xl text-xs space-y-2 text-slate-400">
+        <div class="font-semibold text-slate-200">📖 ขั้นตอนเตรียม Google Sheet:</div>
+        <ol class="list-decimal list-inside space-y-1 leading-relaxed">
+          <li>เปิด Google Sheet เดิมหรือชีตใหม่</li>
+          <li>ไปที่เมนู <strong>ส่วนขยาย (Extensions) &gt; Apps Script</strong></li>
+          <li>กดปุ่ม <strong>"ดาวน์โหลด Code.gs"</strong> นำโค้ดไปวางแทนที่</li>
+          <li>กด <strong>Deploy &gt; New deployment</strong> เลือก Web App (Who has access: <strong>Anyone</strong>)</li>
+          <li>นำ URL มาบันทึกในช่องด้านบน</li>
+        </ol>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // Tab Switcher
+    function switchTab(tabId) {
+      const tabs = ['block-diagram', 'hardware-soc', 'mobile-os', 'quiz'];
+      tabs.forEach(t => {
+        document.getElementById(`tab-${t}`).classList.add('hidden');
+        const btn = document.getElementById(`tab-btn-${t}`);
+        btn.classList.remove('active');
+        btn.classList.add('bg-slate-800/40', 'text-slate-400');
+        btn.classList.remove('bg-indigo-600', 'text-white');
+      });
+      document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+      const activeBtn = document.getElementById(`tab-btn-${tabId}`);
+      activeBtn.classList.add('active', 'bg-indigo-600', 'text-white');
+      activeBtn.classList.remove('bg-slate-800/40', 'text-slate-400');
+    }
+
+    // Dynamic Block Information Data
+    const blockData = {
+      'rf': {
+        title: '📡 ภาควิทยุ (RF Section - Radio Frequency)',
+        items: [
+          '<strong>Antenna (สายอากาศ):</strong> รับและแพร่กระจายคลื่นแม่เหล็กไฟฟ้า โดยในสมาร์ตโฟนปัจจุบันมีเสาอากาศหลายตัวรอบเฟรมเครื่องเพื่อทำ MIMO',
+          '<strong>Power Amplifier (PA):</strong> ขยายกำลังสัญญาณวิทยุให้แรงพอก่อนยิงออกจากเสาไปยังสถานีฐาน เป็นส่วนที่กินไฟสูงมาก',
+          '<strong>Low Noise Amplifier (LNA):</strong> ขยายสัญญาณวิทยุที่รับเข้ามาอย่างอ่อนแรง โดยไม่เพิ่มสัญญาณรบกวน (Noise)',
+          '<strong>RF Transceiver:</strong> ตัวผสมและแปลงความถี่ (Up-conversion สำหรับส่ง / Down-conversion สำหรับรับ) แปลงระหว่างความถี่ RF ระดับ GHz กับสัญญาณ I/Q Baseband'
+        ]
+      },
+      'ap-bb': {
+        title: '🧠 ชิปประมวลผลหลัก (SoC: Baseband & Application Processor)',
+        items: [
+          '<strong>Baseband Modem:</strong> จัดการเรื่องการสื่อสารไร้สายทั้งหมด การถอดรหัสสัญญาณ, การเข้าถึงช่องสัญญาณ (OFDMA/CDMA), และโพรโตคอลสแต็ก 3GPP',
+          '<strong>Application Processor (AP / CPU):</strong> ประมวลผลระบบปฏิบัติการ (Android/iOS) และรันแอปพลิเคชันของผู้ใช้',
+          '<strong>GPU & NPU:</strong> ชิปกราฟิกสำหรับเรนเดอร์หน้าจอ และชิปประสาทเทียมสำหรับประมวลผล AI ถ่ายภาพและการรู้จำเสียง',
+          '<strong>PoP LPDDR RAM:</strong> แรมความเร็วสูงที่ประกบอยู่บนหลังชิป SoC เพื่อให้ส่งถ่ายข้อมูลได้เร็วที่สุด'
+        ]
+      },
+      'pmic': {
+        title: '🔋 ภาคจ่ายไฟและจัดการพลังงาน (PMIC & Battery)',
+        items: [
+          '<strong>Power Management IC (PMIC):</strong> แปลงแรงดันไฟจากแบตเตอรี่ (3.8V - 4.2V) ออกเป็นระดับแรงดันย่อยๆ ที่ชิปแต่ละตัวต้องการ เช่น 0.8V สำหรับ CPU core, 1.1V สำหรับ RAM, 1.8V สำหรับ I/O',
+          '<strong>Fuel Gauge:</strong> คอยตรวจวัดระดับประจุไฟที่เหลืออยู่อย่างแม่นยำ (คำนวณเป็นเปอร์เซ็นต์ % แบตเตอรี่)',
+          '<strong>Fast Charging Circuit:</strong> ควบคุมกระแสและแรงดันในการชาร์จไฟเร็ว พร้อมวงจรป้องกันอุณหภูมิเกิน'
+        ]
+      },
+      'ui': {
+        title: '📱 ภาคส่วนติดต่อผู้ใช้งานและเซนเซอร์ (UI & Sensors)',
+        items: [
+          '<strong>Display & Touch Panel:</strong> แผงหน้าจอ OLED/LCD แสดงผล และ Digitizer IC ตรวจจับการสัมผัสแบบ Multi-touch',
+          '<strong>Audio Codec:</strong> แปลงสัญญาณดิจิทัลเป็นเสียงออกลำโพง และแปลงเสียงไมโครโฟนเป็นดิจิทัล พร้อมระบบตัดเสียงรบกวน (Noise Cancellation)',
+          '<strong>Camera Sensor & ISP:</strong> เซนเซอร์รับภาพ CMOS แปลงแสงเป็นสัญญาณไฟฟ้า ส่งต่อให้ ISP ประมวลผลภาพ',
+          '<strong>MEMS Sensors:</strong> เซนเซอร์ตรวจจับการเคลื่อนไหว, หมุนจอ, สแกนลายนิ้วมือ และตรวจจับระยะห่างใบหน้า'
+        ]
+      }
+    };
+
+    function showBlockInfo(key) {
+      const data = blockData[key];
+      const card = document.getElementById('block-detail-card');
+      card.innerHTML = `
+        <h4 class="text-base font-bold text-white mb-3">${data.title}</h4>
+        <ul class="text-xs text-slate-300 space-y-2 list-disc list-inside leading-relaxed">
+          ${data.items.map(item => `<li>${item}</li>`).join('')}
+        </ul>
+      `;
+    }
+
+    // Quiz Questions Data (5 Questions)
+    const quizQuestions = [
+      {
+        q: '1. ในบล็อกไดอะแกรมของเครื่องโทรศัพท์เคลื่อนที่ อุปกรณ์ Power Amplifier (PA) ทำหน้าที่อะไร?',
+        options: [
+          'แปลงไฟล์ MP3 ให้เป็นเสียงพูด',
+          'ขยายกำลังสัญญาณคลื่นวิทยุก่อนส่งออกสู่อากาศทางสายอากาศเพื่อให้ส่งถึงสถานีฐานได้',
+          'ควบคุมการชาร์จแบตเตอรี่',
+          'ระบายความร้อนให้หน้าจอ'
+        ],
+        answer: 1,
+        explain: 'PA (Power Amplifier) ทำหน้าที่ขยายกำลังสัญญาณความถี่สูงในภาคส่ง (Tx) ก่อนส่งออกสู่สายอากาศ'
+      },
+      {
+        q: '2. ชิปเซ็ตประมวลผลแบบ SoC (System-on-Chip) ในสมาร์ตโฟนยุคปัจจุบัน มีคุณสมบัติเด่นอย่างไร?',
+        options: [
+          'เป็นชิปแยกชิ้นขนาดใหญ่ที่ต้องต่อสายเคเบิลภายนอก',
+          'รวมเอาทั้ง CPU, GPU, NPU, ISP และโมเด็มสื่อสารไว้ในชิปซิลิคอนแผ่นเดียวกันเพื่อประหยัดพื้นที่และพลังงาน',
+          'ทำงานได้เฉพาะสัญญาณวิทยุ FM เท่านั้น',
+          'ใช้สำหรับต่อคีย์บอร์ดภายนอกอย่างเดียว'
+        ],
+        answer: 1,
+        explain: 'SoC รวมวงจรประมวลผลหลักเกือบทั้งหมดลงบนชิปตัวเดียว ช่วยให้บอร์ดมีขนาดกะทัดรัดและประหยัดพลังงาน'
+      },
+      {
+        q: '3. อุปกรณ์ PMIC (Power Management Integrated Circuit) ทำหน้าที่อะไรในตัวเครื่อง?',
+        options: [
+          'ควบคุมระบบเสียงสเตอริโอ',
+          'รับสัญญาณ GPS จากดาวเทียม',
+          'แปลงและควบคุมการจ่ายแรงดันไฟจากแบตเตอรี่เป็นระดับแรงดันย่อยๆ ให้กับชิปและอุปกรณ์แต่ละส่วนในเครื่อง',
+          'ตรวจจับรหัสผ่าน Wi-Fi'
+        ],
+        answer: 2,
+        explain: 'PMIC เป็นหัวใจหลักในการแปลงแรงดันไฟแบตเตอรี่ลงเป็นแรงดันย่อยต่างๆ (เช่น 0.8V, 1.2V, 1.8V, 2.8V) จ่ายให้ชิปต่างๆ'
+      },
+      {
+        q: '4. สถาปัตยกรรมระบบปฏิบัติการ Android มีรากฐานแกนกลางการทำงาน (Core OS Kernel) มาจากระบบปฏิบัติการใด?',
+        options: ['Windows NT', 'MS-DOS', 'Linux Kernel', 'macOS Darwin'],
+        answer: 2,
+        explain: 'Android ทำงานอยู่บนแกนกลางของ Linux Kernel ซึ่งทำหน้าที่ควบคุมการจัดสรรทรัพยากรฮาร์ดแวร์และไดรเวอร์'
+      },
+      {
+        q: '5. เซนเซอร์ชนิดใดที่ทำหน้าที่ตรวจจับการแนบหูของผู้ใช้เพื่อ "ปิดหน้าจออัตโนมัติขณะคุยโทรศัพท์" ป้องกันไม่ให้แก้มไปโดนปุ่มกด?',
+        options: [
+          'Barometer (เซนเซอร์วัดความกดอากาศ)',
+          'Proximity Sensor (เซนเซอร์ตรวจจับวัตถุใกล้เคียง)',
+          'Magnetometer (เข็มทิศแม่เหล็ก)',
+          'Gyroscope (เซนเซอร์วัดการหมุน)'
+        ],
+        answer: 1,
+        explain: 'Proximity Sensor ตรวจจับระยะห่างของวัตถุที่เข้ามาใกล้หน้าผากหรือหู เพื่อสั่งปิดหน้าจอขณะสนทนา'
+      }
+    ];
+
+    // Render Quiz
+    function renderQuiz() {
+      const container = document.getElementById('quiz-container');
+      container.innerHTML = quizQuestions.map((item, idx) => `
+        <div class="bg-slate-800/40 border border-slate-700/80 rounded-xl p-5">
+          <p class="font-medium text-white text-sm mb-3">${item.q}</p>
+          <div class="space-y-2">
+            ${item.options.map((opt, optIdx) => `
+              <label class="flex items-center space-x-3 p-2.5 rounded-lg bg-slate-900/40 hover:bg-slate-900/80 border border-slate-800 cursor-pointer text-xs sm:text-sm text-slate-300 transition">
+                <input type="radio" name="question-${idx}" value="${optIdx}" class="text-indigo-500 focus:ring-indigo-500 bg-slate-800 border-slate-700">
+                <span>${opt}</span>
+              </label>
+            `).join('')}
+          </div>
+          <div id="quiz-explain-${idx}" class="hidden mt-3 text-xs p-3 rounded-lg"></div>
+        </div>
+      `).join('');
+    }
+
+    // Calculate Quiz Score (บอกคะแนนและข้อที่ผิด ไม่แสดงเฉลย)
+    function calculateQuizScore() {
+      let score = 0;
+      let wrongQuestions = [];
+      let unansweredQuestions = [];
+
+      quizQuestions.forEach((item, idx) => {
+        const selected = document.querySelector(`input[name="question-${idx}"]:checked`);
+        const explainBox = document.getElementById(`quiz-explain-${idx}`);
+        explainBox.classList.remove('hidden', 'bg-emerald-950/40', 'border-emerald-700/50', 'text-emerald-300', 'bg-rose-950/40', 'border-rose-700/50', 'text-rose-300');
+        
+        if (!selected) {
+          unansweredQuestions.push(idx + 1);
+          explainBox.classList.add('bg-amber-950/40', 'border', 'border-amber-700/50', 'text-amber-300');
+          explainBox.innerHTML = `⚠️ ข้อนี้ยังไม่ได้เลือกคำตอบ`;
+        } else if (parseInt(selected.value) === item.answer) {
+          score++;
+          explainBox.classList.add('bg-emerald-950/40', 'border', 'border-emerald-700/50', 'text-emerald-300');
+          explainBox.innerHTML = `✓ ตอบถูกต้อง`;
+        } else {
+          wrongQuestions.push(idx + 1);
+          explainBox.classList.add('bg-rose-950/40', 'border', 'border-rose-700/50', 'text-rose-300');
+          explainBox.innerHTML = `✗ ข้อนี้ตอบไม่ถูกต้อง (ลองทบทวนเนื้อหาแล้วเลือกใหม่)`;
+        }
+      });
+
+      const resultCard = document.getElementById('quiz-result-card');
+      const title = document.getElementById('quiz-result-title');
+      const detail = document.getElementById('quiz-result-detail');
+
+      resultCard.classList.remove('hidden');
+      title.innerText = `คะแนนที่คุณได้: ${score} / ${quizQuestions.length} คะแนน`;
+
+      if (wrongQuestions.length === 0 && unansweredQuestions.length === 0) {
+        title.className = "text-lg font-bold text-emerald-400";
+        detail.innerHTML = `🎉 <strong>ยอดเยี่ยมมาก!</strong> คุณตอบถูกครบทุกข้อ (${score}/${quizQuestions.length} คะแนน)`;
+      } else {
+        title.className = score >= 3 ? "text-lg font-bold text-amber-400" : "text-lg font-bold text-rose-400";
+        
+        let feedback = [];
+        if (wrongQuestions.length > 0) {
+          feedback.push(`ข้อที่ตอบผิด ได้แก่ <strong>ข้อ ${wrongQuestions.join(', ')}</strong>`);
+        }
+        if (unansweredQuestions.length > 0) {
+          feedback.push(`ข้อที่ยังไม่ได้ทำ ได้แก่ <strong>ข้อ ${unansweredQuestions.join(', ')}</strong>`);
+        }
+        feedback.push(`กรุณาทบทวนเนื้อหาในบทเรียนเพื่อหาคำตอบที่ถูกต้อง แล้วกดส่งคะแนน`);
+        detail.innerHTML = feedback.join(' | ');
+      }
+
+      resultCard.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Teacher Settings & Google Sheet Integration
+    const TEACHER_SHEET_KEY = 'mobile_unit4_teacher_sheet_url';
+
+    function toggleTeacherModal(show) {
+      const modal = document.getElementById('teacher-modal');
+      if (show) {
+        modal.classList.remove('hidden');
+        const savedUrl = localStorage.getItem(TEACHER_SHEET_KEY) || '';
+        document.getElementById('teacher-sheet-url').value = savedUrl;
+
+        const shareInput = document.getElementById('student-share-link');
+        let currentUrl = window.location.href;
+        if (currentUrl.startsWith('file:///')) {
+          currentUrl = 'https://allarm2553.github.io/mobile_phone/unit-04-device-architecture/';
+        }
+        shareInput.value = currentUrl;
+        document.getElementById('copy-badge').classList.add('hidden');
+      } else {
+        modal.classList.add('hidden');
+      }
+    }
+
+    function copyStudentLink() {
+      const shareInput = document.getElementById('student-share-link');
+      if (!shareInput) return;
+
+      shareInput.select();
+      shareInput.setSelectionRange(0, 99999);
+
+      navigator.clipboard.writeText(shareInput.value).then(() => {
+        const badge = document.getElementById('copy-badge');
+        badge.classList.remove('hidden');
+        setTimeout(() => badge.classList.add('hidden'), 3000);
+      }).catch(() => {
+        document.execCommand('copy');
+        const badge = document.getElementById('copy-badge');
+        badge.classList.remove('hidden');
+        setTimeout(() => badge.classList.add('hidden'), 3000);
+      });
+    }
+
+    function saveTeacherSettings() {
+      const urlInput = document.getElementById('teacher-sheet-url').value.trim();
+      localStorage.setItem(TEACHER_SHEET_KEY, urlInput);
+      alert('บันทึกการตั้งค่าลิงก์ Google Sheet เรียบร้อยแล้ว!');
+      toggleTeacherModal(false);
+    }
+
+    async function sendScoreToGoogleSheet() {
+      const scriptUrl = localStorage.getItem(TEACHER_SHEET_KEY) || '';
+      const statusText = document.getElementById('sheet-status-text');
+      const sendBtn = document.getElementById('btn-send-sheet');
+
+      if (!scriptUrl) {
+        alert('⚠️ ยังไม่ได้กำหนดลิงก์ Google Sheet สำหรับเก็บคะแนน\nกรุณาแจ้งอาจารย์ผู้สอนให้กดที่ปุ่ม "⚙️ สำหรับครูผู้สอน" เพื่อตั้งค่าลิงก์ก่อนครับ');
+        toggleTeacherModal(true);
+        return;
+      }
+
+      const studentId = document.getElementById('student-id').value.trim();
+      const studentName = document.getElementById('student-name').value.trim();
+
+      if (!studentId || !studentName) {
+        alert('⚠️ กรุณากรอกรหัสนักศึกษาและชื่อ-นามสกุล ในช่องด้านบนของแบบทดสอบก่อนส่งคะแนนครับ');
+        document.getElementById('student-id').focus();
+        return;
+      }
+
+      const submittedIds = JSON.parse(localStorage.getItem('submitted_unit4_ids') || '[]');
+      if (submittedIds.includes(studentId)) {
+        alert(`❌ รหัสประจำตัว "${studentId}" เคยส่งแบบทดสอบหน่วยที่ 4 ไปแล้ว\n(ไม่อนุญาตให้ส่งคะแนนซ้ำ)`);
+        statusText.innerHTML = `❌ รหัส ${studentId} เคยส่งแบบทดสอบไปแล้ว (ไม่อนุญาตให้ส่งซ้ำ)`;
+        statusText.className = 'text-xs text-rose-400 font-semibold';
+        return;
+      }
+
+      let score = 0;
+      quizQuestions.forEach((item, idx) => {
+        const selected = document.querySelector(`input[name="question-${idx}"]:checked`);
+        if (selected && parseInt(selected.value) === item.answer) {
+          score++;
+        }
+      });
+
+      sendBtn.disabled = true;
+      sendBtn.classList.add('opacity-50', 'cursor-not-allowed');
+      statusText.innerHTML = '⏳ กำลังตรวจสอบสิทธิ์และส่งผลคะแนนเข้าสู่ระบบ Google Sheet...';
+      statusText.className = 'text-xs text-amber-400 font-medium';
+
+      const payload = {
+        studentId: studentId,
+        studentName: studentName,
+        score: score,
+        totalScore: quizQuestions.length,
+        unitTitle: 'หน่วยที่ 4: สถาปัตยกรรม คุณสมบัติ และระบบปฏิบัติการของเครื่องโทรศัพท์เคลื่อนที่'
+      };
+
+      try {
+        await fetch(scriptUrl, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        submittedIds.push(studentId);
+        localStorage.setItem('submitted_unit4_ids', JSON.stringify(submittedIds));
+
+        sendBtn.disabled = true;
+        sendBtn.classList.add('opacity-50', 'cursor-not-allowed');
+        sendBtn.innerHTML = '<span>🔒</span><span>ส่งคะแนนแล้วเรียบร้อย</span>';
+
+        statusText.innerHTML = `✅ บันทึกคะแนนสำเร็จ! (${studentId} ${studentName} ได้ ${score}/${quizQuestions.length} คะแนน)`;
+        statusText.className = 'text-xs text-emerald-400 font-semibold';
+
+        const idStatus = document.getElementById('student-id-status');
+        idStatus.classList.remove('hidden');
+        idStatus.className = 'text-xs mt-1.5 text-emerald-400 font-medium';
+        idStatus.innerHTML = '✅ รหัสนี้ส่งผลคะแนนเข้าสู่ระบบเรียบร้อยแล้ว';
+
+        alert(`🎉 บันทึกผลคะแนนเข้าสู่ Google Sheet ของอาจารย์เรียบร้อยแล้ว!\n\nผู้เรียน: ${studentName}\nคะแนน: ${score}/${quizQuestions.length}`);
+
+      } catch (err) {
+        console.error(err);
+        statusText.innerHTML = '❌ เกิดข้อผิดพลาดในการส่งข้อมูล โปรดตรวจสอบความถูกต้องของ URL';
+        statusText.className = 'text-xs text-rose-400 font-semibold';
+        alert('❌ เกิดข้อผิดพลาดในการส่งข้อมูล โปรดตรวจสอบ URL ของ Google Script');
+        sendBtn.disabled = false;
+        sendBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+      }
+    }
+
+    async function checkStudentDuplicateStatus() {
+      const idInput = document.getElementById('student-id');
+      const val = idInput.value.trim();
+      const statusEl = document.getElementById('student-id-status');
+      const spinnerEl = document.getElementById('student-id-spinner');
+      const sendBtn = document.getElementById('btn-send-sheet');
+
+      if (!val) {
+        statusEl.classList.add('hidden');
+        return;
+      }
+
+      const submittedIds = JSON.parse(localStorage.getItem('submitted_unit4_ids') || '[]');
+      if (submittedIds.includes(val)) {
+        statusEl.classList.remove('hidden');
+        statusEl.className = 'text-xs mt-1.5 text-rose-400 font-semibold flex items-center space-x-1';
+        statusEl.innerHTML = '<span>❌</span><span>รหัสนี้เคยส่งแบบทดสอบไปแล้ว (ไม่อนุญาตให้ส่งซ้ำ)</span>';
+        if (sendBtn) {
+          sendBtn.disabled = true;
+          sendBtn.classList.add('opacity-50', 'cursor-not-allowed');
+        }
+        return;
+      }
+
+      const scriptUrl = localStorage.getItem(TEACHER_SHEET_KEY) || '';
+      if (scriptUrl) {
+        spinnerEl.classList.remove('hidden');
+        statusEl.classList.remove('hidden');
+        statusEl.className = 'text-xs mt-1.5 text-slate-400';
+        statusEl.innerHTML = '🔍 กำลังตรวจสอบสิทธิ์รหัสนักศึกษากับระบบชีต...';
+
+        try {
+          const checkUrl = `${scriptUrl}?action=check&studentId=${encodeURIComponent(val)}`;
+          const res = await fetch(checkUrl);
+          const data = await res.json();
+          spinnerEl.classList.add('hidden');
+
+          if (data && data.duplicate) {
+            statusEl.className = 'text-xs mt-1.5 text-rose-400 font-semibold flex items-center space-x-1';
+            statusEl.innerHTML = `<span>❌</span><span>${data.message || 'รหัสนี้เคยส่งแบบทดสอบไปแล้ว'}</span>`;
+            if (sendBtn) {
+              sendBtn.disabled = true;
+              sendBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            }
+            return;
+          } else {
+            statusEl.className = 'text-xs mt-1.5 text-emerald-400 font-medium flex items-center space-x-1';
+            statusEl.innerHTML = '<span>✅</span><span>รหัสนี้มีสิทธิ์ทำและส่งแบบทดสอบ (ยังไม่เคยส่งคำตอบ)</span>';
+            if (sendBtn) {
+              sendBtn.disabled = false;
+              sendBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            }
+          }
+        } catch (e) {
+          spinnerEl.classList.add('hidden');
+          statusEl.className = 'text-xs mt-1.5 text-slate-400';
+          statusEl.innerHTML = 'ℹ️ บันทึกรหัสประจำตัวเรียบร้อย';
+        }
+      } else {
+        statusEl.classList.remove('hidden');
+        statusEl.className = 'text-xs mt-1.5 text-slate-400';
+        statusEl.innerHTML = 'ℹ️ พร้อมทำแบบทดสอบ';
+      }
+    }
+
+    function resetQuiz() {
+      document.querySelectorAll('input[type="radio"]').forEach(el => el.checked = false);
+      quizQuestions.forEach((_, idx) => {
+        const box = document.getElementById(`quiz-explain-${idx}`);
+        box.classList.add('hidden');
+      });
+      document.getElementById('quiz-result-card').classList.add('hidden');
+      document.getElementById('sheet-status-text').innerHTML = '💡 กดปุ่มด้านขวาเพื่อส่งผลคะแนนเข้าสู่ระบบ Google Sheet ของอาจารย์ผู้สอน';
+      document.getElementById('sheet-status-text').className = 'text-xs text-slate-400';
+      
+      const sendBtn = document.getElementById('btn-send-sheet');
+      if (sendBtn) {
+        sendBtn.disabled = false;
+        sendBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+        sendBtn.innerHTML = '<span>📊</span><span>ส่งคะแนนไปยัง Google Sheet</span>';
+      }
+    }
+
+    // Init
+    window.addEventListener('DOMContentLoaded', () => {
+      renderQuiz();
+      showBlockInfo('rf');
+
+      const studentIdInput = document.getElementById('student-id');
+      if (studentIdInput) {
+        studentIdInput.addEventListener('blur', checkStudentDuplicateStatus);
+        studentIdInput.addEventListener('input', () => {
+          const statusEl = document.getElementById('student-id-status');
+          statusEl.classList.add('hidden');
+          const sendBtn = document.getElementById('btn-send-sheet');
+          if (sendBtn) {
+            sendBtn.disabled = false;
+            sendBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>
