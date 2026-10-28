@@ -496,13 +496,15 @@
         <!-- Injected via JavaScript -->
       </div>
 
-      <div class="flex items-center justify-between pt-4">
-        <button onclick="calculateQuizScore()" class="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 font-semibold text-white shadow-lg shadow-blue-600/30 transition">
-          ตรวจคำตอบและประเมินผล
+      <div class="flex flex-wrap items-center justify-between gap-3 pt-4">
+        <button id="btn-check-quiz" onclick="calculateQuizScore()" class="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 font-semibold text-white shadow-lg shadow-blue-600/30 transition flex items-center space-x-2">
+          <span>📝</span>
+          <span id="btn-check-text">ตรวจคำตอบและประเมินผล</span>
         </button>
-        <button onclick="resetQuiz()" class="px-4 py-2 rounded-xl border border-slate-700 hover:bg-slate-800 text-slate-300 text-sm transition">
-          ทำใหม่อีกครั้ง
-        </button>
+        <div id="quiz-attempt-badge" class="text-xs px-3.5 py-1.5 rounded-full bg-slate-800 text-blue-300 border border-blue-500/30 flex items-center space-x-1.5">
+          <span>🎯</span>
+          <span id="quiz-attempt-text">สิทธิ์ตรวจคำตอบ: เหลือ 2/2 ครั้ง</span>
+        </div>
       </div>
 
       <!-- Quiz Score Modal/Banner -->
@@ -853,22 +855,85 @@
       `).join('');
     }
 
-    // Calculate Quiz Score (บอกเฉพาะคะแนนและข้อที่ตอบผิด ไม่แสดงเฉลย)
-    function calculateQuizScore() {
+    // Quiz Check Attempts Tracking (ตรวจได้สูงสุด 2 ครั้ง จากนั้นบังคับส่ง)
+    let quizCheckCount = parseInt(sessionStorage.getItem('mobile_u1_check_count') || '0');
+
+    function updateCheckAttemptBadge() {
+      const badgeText = document.getElementById('quiz-attempt-text');
+      const badgeContainer = document.getElementById('quiz-attempt-badge');
+      const btnText = document.getElementById('btn-check-text');
+      const btn = document.getElementById('btn-check-quiz');
+
+      if (quizCheckCount === 0) {
+        if (badgeText) badgeText.textContent = 'สิทธิ์ตรวจคำตอบ: เหลือ 2/2 ครั้ง';
+        if (badgeContainer) badgeContainer.className = 'text-xs px-3.5 py-1.5 rounded-full bg-slate-800 text-blue-300 border border-blue-500/30 flex items-center space-x-1.5';
+        if (btnText) btnText.textContent = 'ตรวจคำตอบและประเมินผล';
+        if (btn) {
+          btn.disabled = false;
+          btn.classList.remove('opacity-50', 'cursor-not-allowed');
+        }
+      } else if (quizCheckCount === 1) {
+        if (badgeText) badgeText.textContent = 'สิทธิ์ตรวจคำตอบ: เหลือ 1/2 ครั้ง (ครั้งสุดท้าย)';
+        if (badgeContainer) badgeContainer.className = 'text-xs px-3.5 py-1.5 rounded-full bg-amber-950/60 text-amber-300 border border-amber-500/40 flex items-center space-x-1.5';
+        if (btnText) btnText.textContent = 'ตรวจคำตอบครั้งที่ 2 (ครั้งสุดท้าย)';
+        if (btn) {
+          btn.disabled = false;
+          btn.classList.remove('opacity-50', 'cursor-not-allowed');
+        }
+      } else {
+        if (badgeText) badgeText.textContent = '🔒 ใช้สิทธิ์ตรวจครบ 2 ครั้งแล้ว (ส่งคะแนนแล้ว)';
+        if (badgeContainer) badgeContainer.className = 'text-xs px-3.5 py-1.5 rounded-full bg-rose-950/60 text-rose-300 border border-rose-500/40 flex items-center space-x-1.5';
+        if (btnText) btnText.textContent = 'ตรวจคำตอบครบ 2 ครั้งแล้ว';
+        if (btn) {
+          btn.disabled = true;
+          btn.classList.add('opacity-50', 'cursor-not-allowed');
+        }
+        document.querySelectorAll('#quiz-container input[type="radio"]').forEach(el => el.disabled = true);
+      }
+    }
+
+    // Calculate Quiz Score (บอกเฉพาะคะแนนและข้อที่ผิด ตรวจได้ 2 ครั้งแล้วบังคับส่ง)
+    async function calculateQuizScore() {
+      if (quizCheckCount >= 2) {
+        alert('❌ คุณใช้สิทธิ์ตรวจคำตอบครบ 2 ครั้งแล้ว ระบบได้ส่งคะแนนไปแล้ว');
+        return;
+      }
+
+      // ตรวจสอบว่าตอบครบทุกข้อหรือไม่ก่อน
+      let unansweredQuestions = [];
+      quizQuestions.forEach((_, idx) => {
+        if (!document.querySelector(`input[name="question-${idx}"]:checked`)) {
+          unansweredQuestions.push(idx + 1);
+        }
+      });
+
+      if (unansweredQuestions.length > 0) {
+        alert(`⚠️ กรุณาเลือกคำตอบให้ครบทุกข้อก่อนตรวจคำตอบ (ยังไม่ได้ทำข้อ: ${unansweredQuestions.join(', ')})`);
+        return;
+      }
+
+      // ตรวจสอบว่ากรอกรหัสและชื่อหรือยัง
+      const studentId = document.getElementById('student-id')?.value.trim();
+      const studentName = document.getElementById('student-name')?.value.trim();
+      if (!studentId || !studentName) {
+        alert('⚠️ กรุณากรอกรหัสนักศึกษาและชื่อ-นามสกุล ด้านบนแบบทดสอบก่อนตรวจคำตอบครับ');
+        document.getElementById('student-id')?.focus();
+        return;
+      }
+
+      quizCheckCount++;
+      sessionStorage.setItem('mobile_u1_check_count', String(quizCheckCount));
+      updateCheckAttemptBadge();
+
       let score = 0;
       let wrongQuestions = [];
-      let unansweredQuestions = [];
 
       quizQuestions.forEach((item, idx) => {
         const selected = document.querySelector(`input[name="question-${idx}"]:checked`);
         const explainBox = document.getElementById(`quiz-explain-${idx}`);
         explainBox.classList.remove('hidden', 'bg-emerald-950/40', 'border-emerald-700/50', 'text-emerald-300', 'bg-rose-950/40', 'border-rose-700/50', 'text-rose-300');
         
-        if (!selected) {
-          unansweredQuestions.push(idx + 1);
-          explainBox.classList.add('bg-amber-950/40', 'border', 'border-amber-700/50', 'text-amber-300');
-          explainBox.innerHTML = `⚠️ ข้อนี้ยังไม่ได้เลือกคำตอบ`;
-        } else if (parseInt(selected.value) === item.answer) {
+        if (parseInt(selected.value) === item.answer) {
           score++;
           explainBox.classList.add('bg-emerald-950/40', 'border', 'border-emerald-700/50', 'text-emerald-300');
           explainBox.innerHTML = `✓ ตอบถูกต้อง`;
@@ -882,28 +947,44 @@
       const resultCard = document.getElementById('quiz-result-card');
       const title = document.getElementById('quiz-result-title');
       const detail = document.getElementById('quiz-result-detail');
-
       resultCard.classList.remove('hidden');
-      title.innerText = `คะแนนที่คุณได้: ${score} / ${quizQuestions.length} คะแนน`;
 
-      if (wrongQuestions.length === 0 && unansweredQuestions.length === 0) {
-        title.className = "text-lg font-bold text-emerald-400";
-        detail.innerHTML = `🎉 <strong>ยอดเยี่ยมมาก!</strong> คุณตอบถูกครบทุกข้อ (${score}/${quizQuestions.length} คะแนน)`;
-      } else {
+      if (quizCheckCount === 1) {
+        title.innerText = `คะแนนตรวจครั้งที่ 1: ${score} / ${quizQuestions.length} คะแนน`;
         title.className = score >= 3 ? "text-lg font-bold text-amber-400" : "text-lg font-bold text-rose-400";
         
-        let feedback = [];
+        let feedback = [`🎯 <strong>คุณตรวจคำตอบครั้งที่ 1 แล้ว (เหลือโอกาสตรวจแก้ข้อที่ผิดอีก 1 ครั้ง)</strong>`];
         if (wrongQuestions.length > 0) {
-          feedback.push(`ข้อที่ตอบผิด ได้แก่ <strong>ข้อ ${wrongQuestions.join(', ')}</strong>`);
+          feedback.push(`ข้อที่ตอบผิด ได้แก่ <strong>ข้อ ${wrongQuestions.join(', ')}</strong> (ระบบไม่แสดงเฉลย)`);
+          feedback.push(`💡 คุณสามารถทบทวนเนื้อหาและปรับเปลี่ยนคำตอบได้อีก 1 ครั้ง เมื่อกดตรวจครั้งที่ 2 ระบบจะบังคับส่งคะแนนทันที`);
+        } else {
+          feedback.push(`🎉 <strong>ยอดเยี่ยมมาก!</strong> คุณตอบถูกต้องครบทุกข้อ คุณสามารถกดปุ่มส่งคะแนนเข้า Google Sheet ได้เลยครับ`);
         }
-        if (unansweredQuestions.length > 0) {
-          feedback.push(`ข้อที่ยังไม่ได้ทำ ได้แก่ <strong>ข้อ ${unansweredQuestions.join(', ')}</strong>`);
-        }
-        feedback.push(`กรุณาทบทวนเนื้อหาในบทเรียนเพื่อหาคำตอบที่ถูกต้อง แล้วกดส่งคะแนน`);
-        detail.innerHTML = feedback.join(' | ');
-      }
+        detail.innerHTML = feedback.join('<br>');
+        resultCard.scrollIntoView({ behavior: 'smooth' });
 
-      resultCard.scrollIntoView({ behavior: 'smooth' });
+        alert(`💡 คุณตรวจคำตอบครั้งที่ 1 แล้ว (ได้ ${score}/${quizQuestions.length} คะแนน)\n\nเหลือโอกาสตรวจแก้คำตอบอีก 1 ครั้งเท่านั้น\nเมื่อตรวจครั้งที่ 2 ระบบจะล็อกคำตอบและส่งผลคะแนนเข้า Google Sheet ทันทีครับ`);
+
+      } else if (quizCheckCount >= 2) {
+        title.innerText = `คะแนนสุดท้าย (ตรวจครบ 2 ครั้ง): ${score} / ${quizQuestions.length} คะแนน`;
+        title.className = score >= 3 ? "text-lg font-bold text-emerald-400" : "text-lg font-bold text-rose-400";
+
+        // ล็อกตัวเลือกทั้งหมดทันที
+        document.querySelectorAll('#quiz-container input[type="radio"]').forEach(el => el.disabled = true);
+
+        let feedback = [
+          `🔒 <strong>คุณใช้สิทธิ์ตรวจคำตอบครบ 2 ครั้งแล้ว</strong>`,
+          wrongQuestions.length > 0 ? `ข้อที่ตอบผิด ได้แก่ <strong>ข้อ ${wrongQuestions.join(', ')}</strong>` : `🎉 ตอบถูกครบทุกข้อ!`,
+          `<span class="text-emerald-400 font-semibold">⚡ ระบบกำลังทำการส่งคะแนน (${score}/${quizQuestions.length}) เข้าสู่ระบบ Google Sheet โดยอัตโนมัติ...</span>`
+        ];
+        detail.innerHTML = feedback.join('<br>');
+        resultCard.scrollIntoView({ behavior: 'smooth' });
+
+        alert(`⚠️ คุณใช้สิทธิ์ตรวจคำตอบครบ 2 ครั้งแล้ว!\n\nระบบจะล็อกคำตอบทั้งหมดและส่งผลคะแนน (${score}/${quizQuestions.length} คะแนน) เข้าสู่ระบบ Google Sheet ให้โดยอัตโนมัติครับ`);
+
+        // บังคับส่งคะแนนทันที
+        await sendScoreToGoogleSheet(true);
+      }
     }
 
     // Teacher Settings & Google Sheet Integration
@@ -1006,6 +1087,13 @@
     function resetStudentQuizPermission() {
       if (!confirm('⚠️ ต้องการรีเซ็ตสิทธิ์การทำแบบทดสอบบนเครื่องนี้เพื่อให้นักเรียนทำใหม่ใช่หรือไม่?')) return;
       localStorage.removeItem('submitted_student_ids');
+      sessionStorage.removeItem('mobile_u1_check_count');
+      quizCheckCount = 0;
+      updateCheckAttemptBadge();
+      document.querySelectorAll('#quiz-container input[type="radio"]').forEach(el => {
+        el.disabled = false;
+        el.checked = false;
+      });
       resetQuiz();
       const idInput = document.getElementById('student-id');
       if (idInput) idInput.value = '';
@@ -1017,7 +1105,7 @@
       toggleTeacherModal(false);
     }
 
-    async function sendScoreToGoogleSheet() {
+    async function sendScoreToGoogleSheet(isAutoSubmit = false) {
       const scriptUrl = localStorage.getItem(TEACHER_SHEET_KEY) || '';
       const statusText = document.getElementById('sheet-status-text');
       const sendBtn = document.getElementById('btn-send-sheet');
@@ -1213,6 +1301,7 @@
 
       showGen('1G');
       renderQuiz();
+      updateCheckAttemptBadge();
 
       // ผูก Event ตรวจสอบรหัสซ้ำ
       const studentIdInput = document.getElementById('student-id');
