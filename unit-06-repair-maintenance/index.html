@@ -847,13 +847,17 @@
     // Check URL parameters for gas url
     window.addEventListener('DOMContentLoaded', () => {
       const params = new URLSearchParams(window.location.search);
-      const urlGas = params.get('gas');
+      const urlGas = params.get('gas') || params.get('sheetUrl');
       if (urlGas) {
         localStorage.setItem(STORAGE_KEY_GAS, urlGas);
       }
       
       const savedGas = localStorage.getItem(STORAGE_KEY_GAS) || '';
-      document.getElementById('teacher-gas-url').value = savedGas;
+      const inputEl = document.getElementById('teacher-gas-url');
+      if (inputEl) {
+        inputEl.value = savedGas;
+        inputEl.addEventListener('input', updateStudentShareLink);
+      }
       updateStudentShareLink();
 
       // Check if already completed locally
@@ -1310,10 +1314,14 @@
     }
 
     function updateStudentShareLink() {
-      const gasUrl = localStorage.getItem(STORAGE_KEY_GAS) || '';
-      const currentUrl = window.location.href.split('?')[0];
-      const link = gasUrl ? `${currentUrl}?gas=${encodeURIComponent(gasUrl)}` : currentUrl;
-      document.getElementById('student-share-link').value = link;
+      const gasUrl = (document.getElementById('teacher-gas-url')?.value || localStorage.getItem(STORAGE_KEY_GAS) || '').trim();
+      let currentUrl = window.location.href.split('?')[0];
+      if (currentUrl.startsWith('file:///')) {
+        currentUrl = 'https://allarm2553.github.io/mobile_phone/unit-06-repair-maintenance/';
+      }
+      const link = gasUrl ? `${currentUrl}?sheetUrl=${encodeURIComponent(gasUrl)}` : currentUrl;
+      const shareInput = document.getElementById('student-share-link');
+      if (shareInput) shareInput.value = link;
     }
 
     function copyStudentLink() {

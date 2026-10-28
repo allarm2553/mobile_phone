@@ -785,6 +785,18 @@
     // Teacher Settings & Google Sheet Integration
     const TEACHER_SHEET_KEY = 'mobile_unit5_teacher_sheet_url';
 
+    function updateStudentShareLink() {
+      const sheetUrl = (document.getElementById('teacher-sheet-url')?.value || localStorage.getItem(TEACHER_SHEET_KEY) || '').trim();
+      let currentUrl = window.location.href.split('?')[0];
+      if (currentUrl.startsWith('file:///')) {
+        currentUrl = 'https://allarm2553.github.io/mobile_phone/unit-05-installation-testing/';
+      }
+      const shareInput = document.getElementById('student-share-link');
+      if (shareInput) {
+        shareInput.value = sheetUrl ? `${currentUrl}?sheetUrl=${encodeURIComponent(sheetUrl)}` : currentUrl;
+      }
+    }
+
     function toggleTeacherModal(show) {
       const modal = document.getElementById('teacher-modal');
       if (show) {
@@ -798,13 +810,7 @@
         modal.classList.remove('hidden');
         const savedUrl = localStorage.getItem(TEACHER_SHEET_KEY) || '';
         document.getElementById('teacher-sheet-url').value = savedUrl;
-
-        const shareInput = document.getElementById('student-share-link');
-        let currentUrl = window.location.href;
-        if (currentUrl.startsWith('file:///')) {
-          currentUrl = 'https://allarm2553.github.io/mobile_phone/unit-05-installation-testing/';
-        }
-        shareInput.value = currentUrl;
+        updateStudentShareLink();
         document.getElementById('copy-badge').classList.add('hidden');
       } else {
         modal.classList.add('hidden');
@@ -833,7 +839,8 @@
     function saveTeacherSettings() {
       const urlInput = document.getElementById('teacher-sheet-url').value.trim();
       localStorage.setItem(TEACHER_SHEET_KEY, urlInput);
-      alert('บันทึกการตั้งค่าลิงก์ Google Sheet เรียบร้อยแล้ว!');
+      updateStudentShareLink();
+      alert('✅ บันทึกการตั้งค่าลิงก์ Google Sheet เรียบร้อยแล้ว!\nลิงก์สำหรับส่งให้นักศึกษาได้รับการอัปเดตพร้อมแนบลิงก์ชีตแล้วครับ');
       toggleTeacherModal(false);
     }
 
@@ -1005,6 +1012,20 @@
 
     // Init
     window.addEventListener('DOMContentLoaded', () => {
+      // ตรวจสอบพารามิเตอร์ sheetUrl หรือ gas จาก URL สำหรับนักเรียน
+      const urlParams = new URLSearchParams(window.location.search);
+      const sheetFromUrl = urlParams.get('sheetUrl') || urlParams.get('gas');
+      if (sheetFromUrl) {
+        localStorage.setItem(TEACHER_SHEET_KEY, sheetFromUrl);
+        const inputEl = document.getElementById('teacher-sheet-url');
+        if (inputEl) inputEl.value = sheetFromUrl;
+      }
+
+      const teacherInput = document.getElementById('teacher-sheet-url');
+      if (teacherInput) {
+        teacherInput.addEventListener('input', updateStudentShareLink);
+      }
+
       renderQuiz();
       drawSpectrum();
       updateDriveTest(20);
