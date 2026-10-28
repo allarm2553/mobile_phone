@@ -801,12 +801,17 @@
           <p class="text-[11px] text-slate-400 mt-1">วาง Web App URL ที่ได้จากการ Deploy สคริปต์ Code.gs เพื่อรับคะแนนเข้า Google Sheet</p>
         </div>
 
-        <div class="flex items-center space-x-2">
+        <div class="flex flex-wrap items-center gap-2">
           <button onclick="saveTeacherSettings()" class="flex-1 py-2 rounded-lg bg-rose-600 hover:bg-rose-500 font-bold text-white text-xs transition">
             บันทึกการตั้งค่า
           </button>
-          <button onclick="testTeacherConnection()" class="px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs border border-slate-700 transition">
-            ทดสอบเชื่อมต่อ
+          <button onclick="testTeacherConnection()" class="px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs border border-slate-700 transition flex items-center space-x-1">
+            <span>⚡</span>
+            <span>ทดสอบเชื่อมต่อ</span>
+          </button>
+          <button type="button" onclick="resetStudentQuizPermission()" class="px-3 py-2 rounded-lg bg-rose-950/40 hover:bg-rose-900/40 text-rose-300 border border-rose-800/60 text-xs font-medium transition flex items-center space-x-1">
+            <span>🔄</span>
+            <span>รีเซ็ตสิทธิ์ทำใหม่</span>
           </button>
         </div>
 
@@ -1303,14 +1308,40 @@
         alert('กรุณากรอก Web App URL ก่อนทดสอบ');
         return;
       }
-      fetch(`${url}?action=ping`)
+      fetch(`${url}?action=check&studentId=test_ping_${Date.now()}`)
         .then(res => res.json())
         .then(data => {
-          alert('เชื่อมต่อสำเร็จ! Google Apps Script พร้อมทำงาน');
+          alert('✅ เชื่อมต่อสำเร็จ! Google Apps Script พร้อมทำงาน');
         })
         .catch(() => {
-          alert('เชื่อมต่อสำเร็จหรือระบบพร้อมรับข้อมูล (CORS Mode)');
+          alert('⚠️ เชื่อมต่อระบบชีตได้ (หรือติด CORS)\nกรุณาตรวจสอบว่าในขั้นตอน Deploy ได้ตั้งค่า Who has access เป็น "Anyone (ทุกคน)"');
         });
+    }
+
+    function resetStudentQuizPermission() {
+      if (!confirm('⚠️ ต้องการรีเซ็ตสิทธิ์การทำแบบทดสอบบนเครื่องนี้เพื่อให้นักเรียนทำใหม่ใช่หรือไม่?')) return;
+      localStorage.removeItem(STORAGE_KEY_DONE);
+      document.getElementById('quiz-result-card')?.classList.add('hidden');
+      document.getElementById('quiz-form-card')?.classList.add('hidden');
+      document.getElementById('quiz-reg-card')?.classList.remove('hidden');
+
+      const form = document.getElementById('quiz-form');
+      if (form) form.reset();
+      const idInput = document.getElementById('std-id');
+      if (idInput) idInput.value = '';
+      const nameInput = document.getElementById('std-name');
+      if (nameInput) nameInput.value = '';
+      const grpInput = document.getElementById('std-group');
+      if (grpInput) grpInput.value = '';
+
+      const submitBtn = document.getElementById('btn-submit-quiz');
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'ส่งคำตอบและบันทึกคะแนน';
+      }
+
+      alert('✅ รีเซ็ตสิทธิ์เรียบร้อยแล้ว! นักเรียนสามารถกรอกรหัสและทำแบบทดสอบใหม่ได้ทันที');
+      toggleTeacherModal(false);
     }
 
     function updateStudentShareLink() {

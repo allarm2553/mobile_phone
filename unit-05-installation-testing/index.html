@@ -432,6 +432,16 @@
           Google Apps Script Web App URL (ลิงก์เว็บแอปที่ Deploy จากชีต)
         </label>
         <input type="url" id="teacher-sheet-url" placeholder="https://script.google.com/macros/s/.../exec" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white focus:outline-none focus:border-amber-500 transition font-mono">
+        <div class="flex flex-wrap items-center gap-2 pt-1">
+          <button type="button" onclick="testTeacherConnection()" class="px-3.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-medium transition flex items-center space-x-1.5">
+            <span>⚡</span>
+            <span>ทดสอบการเชื่อมต่อชีต</span>
+          </button>
+          <button type="button" onclick="resetStudentQuizPermission()" class="px-3.5 py-1.5 rounded-lg bg-rose-950/40 hover:bg-rose-900/40 text-rose-300 border border-rose-800/60 text-xs font-medium transition flex items-center space-x-1.5">
+            <span>🔄</span>
+            <span>รีเซ็ตสิทธิ์ให้นักเรียนทำใหม่</span>
+          </button>
+        </div>
         <p class="text-[11px] text-slate-500 leading-relaxed">
           * ระบบจะบันทึก URL ไว้ใน Local Storage ของบราวเซอร์นี้อัตโนมัติ เพื่อใช้นักเรียนส่งคะแนน
         </p>
@@ -841,6 +851,47 @@
       localStorage.setItem(TEACHER_SHEET_KEY, urlInput);
       updateStudentShareLink();
       alert('✅ บันทึกการตั้งค่าลิงก์ Google Sheet เรียบร้อยแล้ว!\nลิงก์สำหรับส่งให้นักศึกษาได้รับการอัปเดตพร้อมแนบลิงก์ชีตแล้วครับ');
+      toggleTeacherModal(false);
+    }
+
+    function testTeacherConnection() {
+      const url = (document.getElementById('teacher-sheet-url')?.value || localStorage.getItem(TEACHER_SHEET_KEY) || '').trim();
+      if (!url) {
+        alert('กรุณากรอก Web App URL ของ Google Apps Script ก่อนทดสอบ');
+        return;
+      }
+      const testBtn = event?.target;
+      if (testBtn) {
+        testBtn.disabled = true;
+        testBtn.textContent = '⏳ กำลังทดสอบ...';
+      }
+      fetch(`${url}?action=check&studentId=test_ping_${Date.now()}`)
+        .then(res => res.json())
+        .then(data => {
+          alert('✅ เชื่อมต่อ Google Apps Script สำเร็จ!\nระบบพร้อมรับคะแนนและตรวจสิทธิ์');
+        })
+        .catch(() => {
+          alert('⚠️ เชื่อมต่อระบบชีตได้ (หรือติด CORS)\nกรุณาตรวจสอบว่าในขั้นตอน Deploy ได้ตั้งค่า Who has access เป็น "Anyone (ทุกคน)"');
+        })
+        .finally(() => {
+          if (testBtn) {
+            testBtn.disabled = false;
+            testBtn.innerHTML = '<span>⚡</span><span>ทดสอบการเชื่อมต่อชีต</span>';
+          }
+        });
+    }
+
+    function resetStudentQuizPermission() {
+      if (!confirm('⚠️ ต้องการรีเซ็ตสิทธิ์การทำแบบทดสอบบนเครื่องนี้เพื่อให้นักเรียนทำใหม่ใช่หรือไม่?')) return;
+      localStorage.removeItem('submitted_unit5_ids');
+      resetQuiz();
+      const idInput = document.getElementById('student-id');
+      if (idInput) idInput.value = '';
+      const nameInput = document.getElementById('student-name');
+      if (nameInput) nameInput.value = '';
+      const statusEl = document.getElementById('student-id-status');
+      if (statusEl) statusEl.classList.add('hidden');
+      alert('✅ รีเซ็ตสิทธิ์เรียบร้อยแล้ว! นักเรียนสามารถกรอกรหัสและทำแบบทดสอบใหม่ได้ทันที');
       toggleTeacherModal(false);
     }
 
