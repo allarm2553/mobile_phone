@@ -1271,6 +1271,13 @@
     function toggleTeacherModal(show) {
       const modal = document.getElementById('teacher-modal');
       if (show) {
+        const pwd = prompt('🔐 กรุณากรอกรหัสผ่านสำหรับครูผู้สอน:');
+        if (pwd !== '1234') {
+          if (pwd !== null && pwd !== '') {
+            alert('❌ รหัสผ่านไม่ถูกต้อง! ไม่อนุญาตให้เข้าถึงการตั้งค่าสำหรับครูผู้สอน');
+          }
+          return;
+        }
         modal.classList.remove('hidden');
         updateStudentShareLink();
       } else {
